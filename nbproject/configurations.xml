@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="90">
+  <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
+    <logicalFolder name="HeaderFiles"
+                   displayName="Header Files"
+                   projectFiles="true">
+      <itemPath>y.tab.h</itemPath>
+    </logicalFolder>
+    <logicalFolder name="ResourceFiles"
+                   displayName="Resource Files"
+                   projectFiles="true">
+    </logicalFolder>
+    <logicalFolder name="SourceFiles"
+                   displayName="Source Files"
+                   projectFiles="true">
+      <itemPath>lex.yy.c</itemPath>
+      <itemPath>token.l</itemPath>
+      <itemPath>token.y</itemPath>
+      <itemPath>y.tab.c</itemPath>
+    </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false">
+      <itemPath>Makefile</itemPath>
+    </logicalFolder>
+  </logicalFolder>
+  <projectmakefile>Makefile</projectmakefile>
+  <confs>
+    <conf name="Debug" type="1">
+      <toolsSet>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+      </compileType>
+      <item path="lex.yy.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="token.l" ex="false" tool="3" flavor2="0">
+        <customTool>
+          <customToolCommandline>flex token.l</customToolCommandline>
+          <customToolDescription>Running flex...</customToolDescription>
+          <customToolOutputs>lex.yy.c</customToolOutputs>
+          <customToolAdditionalDep>y.tab.h</customToolAdditionalDep>
+        </customTool>
+      </item>
+      <item path="token.y" ex="false" tool="3" flavor2="0">
+        <customTool>
+          <customToolCommandline>yacc -d token.y</customToolCommandline>
+          <customToolDescription>Running yacc...</customToolDescription>
+          <customToolOutputs>y.tab.c y.tab.h</customToolOutputs>
+        </customTool>
+      </item>
+      <item path="y.tab.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="y.tab.h" ex="false" tool="3" flavor2="0">
+      </item>
+    </conf>
+  </confs>
+</configurationDescriptor>
