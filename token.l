@@ -17,6 +17,7 @@
 "("   return OP;
 ")"   return CP;
 "="   return ASSIGN;
+"=="  return EQUALS;
 [0-9] return DIGIT;
 [a-z] return LOWERCASELETTER;
 [A-Z] return UPPERCASELETTER;
