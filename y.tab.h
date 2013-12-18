@@ -45,7 +45,8 @@
      ALBERT = 263,
      CP = 264,
      OP = 265,
-     ASSIGN = 266
+     ASSIGN = 266,
+     EQUALS = 267
    };
 #endif
 /* Tokens.  */
@@ -58,6 +59,7 @@
 #define CP 264
 #define OP 265
 #define ASSIGN 266
+#define EQUALS 267
 
 
 
