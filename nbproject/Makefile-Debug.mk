@@ -57,11 +57,11 @@ LDLIBSOPTIONS=
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
-	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/daialbert
+	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/dai-albert
 
-${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/daialbert: ${OBJECTFILES}
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/dai-albert: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
-	${LINK.c} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/daialbert ${OBJECTFILES} ${LDLIBSOPTIONS}
+	${LINK.c} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/dai-albert ${OBJECTFILES} ${LDLIBSOPTIONS}
 
 ${OBJECTDIR}/lex.yy.o: lex.yy.c 
 	${MKDIR} -p ${OBJECTDIR}
@@ -88,7 +88,7 @@ ${OBJECTDIR}/y.tab.o: y.tab.c
 # Clean Targets
 .clean-conf: ${CLEAN_SUBPROJECTS}
 	${RM} -r ${CND_BUILDDIR}/${CND_CONF}
-	${RM} ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/daialbert
+	${RM} ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/dai-albert
 	${RM} lex.yy.c
 	${RM} y.tab.c y.tab.h
 

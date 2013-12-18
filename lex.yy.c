@@ -467,10 +467,12 @@ char *yytext;
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted.
  *
+ * * Albers Mama isch sou fett...
+ *
  */
-#line 10 "token.l"
+#line 12 "token.l"
 #include "y.tab.h"
-#line 474 "lex.yy.c"
+#line 476 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -657,9 +659,9 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
     
-#line 12 "token.l"
+#line 14 "token.l"
 
-#line 663 "lex.yy.c"
+#line 665 "lex.yy.c"
 
 	if ( !(yy_init) )
 		{
@@ -744,55 +746,55 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 13 "token.l"
+#line 15 "token.l"
 return STOP;
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 14 "token.l"
+#line 16 "token.l"
 return ALBERT;
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 15 "token.l"
+#line 17 "token.l"
 return OP;
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 16 "token.l"
+#line 18 "token.l"
 return CP;
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 17 "token.l"
+#line 19 "token.l"
 return ASSIGN;
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 18 "token.l"
+#line 20 "token.l"
 return DIGIT;
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 19 "token.l"
+#line 21 "token.l"
 return LOWERCASELETTER;
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 20 "token.l"
+#line 22 "token.l"
 return UPPERCASELETTER;
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 21 "token.l"
+#line 23 "token.l"
 return OTHER;
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 22 "token.l"
+#line 24 "token.l"
 ECHO;
 	YY_BREAK
-#line 796 "lex.yy.c"
+#line 798 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1790,7 +1792,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 22 "token.l"
+#line 24 "token.l"
 
 
 
