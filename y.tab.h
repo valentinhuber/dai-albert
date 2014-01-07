@@ -37,35 +37,53 @@
    /* Put the tokens into the symbol table, so that GDB and other debuggers
       know about them.  */
    enum yytokentype {
-     DIGIT = 258,
-     LOWERCASELETTER = 259,
-     UPPERCASELETTER = 260,
-     OTHER = 261,
-     STOP = 262,
-     ALBERT = 263,
-     CP = 264,
-     OP = 265,
-     ASSIGN = 266,
-     EQUALS = 267
+     INTEGER = 258,
+     VARIABLE = 259,
+     WHILE = 260,
+     IF = 261,
+     PRINT = 262,
+     IFX = 263,
+     ELSE = 264,
+     NE = 265,
+     EQ = 266,
+     LE = 267,
+     GE = 268,
+     UMINUS = 269
    };
 #endif
 /* Tokens.  */
-#define DIGIT 258
-#define LOWERCASELETTER 259
-#define UPPERCASELETTER 260
-#define OTHER 261
-#define STOP 262
-#define ALBERT 263
-#define CP 264
-#define OP 265
-#define ASSIGN 266
-#define EQUALS 267
+#define INTEGER 258
+#define VARIABLE 259
+#define WHILE 260
+#define IF 261
+#define PRINT 262
+#define IFX 263
+#define ELSE 264
+#define NE 265
+#define EQ 266
+#define LE 267
+#define GE 268
+#define UMINUS 269
 
 
 
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-typedef int YYSTYPE;
+typedef union YYSTYPE
+{
+
+/* Line 2068 of yacc.c  */
+#line 20 "token.y"
+
+    int iValue;                 /* integer value */
+    char sIndex;                /* symbol table index */
+    nodeType *nPtr;             /* node pointer */
+
+
+
+/* Line 2068 of yacc.c  */
+#line 86 "y.tab.h"
+} YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1

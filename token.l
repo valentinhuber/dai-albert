@@ -1,25 +1,44 @@
-/*
- * Dai Albert Compiler 1.0
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted.
- *
- * * Albers Mama isch sou fett...Putana Dai Albert
- *
- */
-
 %{
+#include <stdlib.h>
+#include "includes.h"
 #include "y.tab.h"
+void yyerror(char *);
 %}
+
 %%
-"q"   return STOP;
-"a"   return ALBERT;
-"("   return OP;
-")"   return CP;
-"="   return ASSIGN;
-"=="  return EQUALS;
-[0-9] return DIGIT;
-[a-z] return LOWERCASELETTER;
-[A-Z] return UPPERCASELETTER;
-.     return OTHER;
+
+[a-z]       { 
+                yylval.sIndex = *yytext - 'a';
+                return VARIABLE;
+            }
+
+0           {
+                yylval.iValue = atoi(yytext);
+                return INTEGER;
+            }
+
+[1-9][0-9]* {
+                yylval.iValue = atoi(yytext);
+                return INTEGER;
+            }
+
+[-()<>=+*/;{}.] {
+                return *yytext;
+             }
+
+">="            return GE;
+"<="            return LE;
+"=="            return EQ;
+"!="            return NE;
+"while"         return WHILE;
+"if"            return IF;
+"else"          return ELSE;
+"print"         return PRINT;
+
+[ \t\n]+        ;       /* ignore whitespace */
+
+.               yyerror("Unknown character");
 %%
+int yywrap(void) {
+    return 1;
+}

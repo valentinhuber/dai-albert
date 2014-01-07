@@ -13,9 +13,11 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
+      <itemPath>includes.h</itemPath>
       <itemPath>lex.yy.c</itemPath>
       <itemPath>token.l</itemPath>
       <itemPath>token.y</itemPath>
+      <itemPath>tokenInterpreter.c</itemPath>
       <itemPath>y.tab.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
@@ -34,6 +36,8 @@
       </toolsSet>
       <compileType>
       </compileType>
+      <item path="includes.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="lex.yy.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="token.l" ex="false" tool="3" flavor2="0">
@@ -50,6 +54,8 @@
           <customToolDescription>Running yacc...</customToolDescription>
           <customToolOutputs>y.tab.c y.tab.h</customToolOutputs>
         </customTool>
+      </item>
+      <item path="tokenInterpreter.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="y.tab.c" ex="false" tool="0" flavor2="0">
       </item>

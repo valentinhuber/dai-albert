@@ -36,6 +36,7 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 # Object Files
 OBJECTFILES= \
 	${OBJECTDIR}/lex.yy.o \
+	${OBJECTDIR}/tokenInterpreter.o \
 	${OBJECTDIR}/y.tab.o
 
 
@@ -65,8 +66,8 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/dai-albert: ${OBJECTFILES}
 
 ${OBJECTDIR}/lex.yy.o: lex.yy.c 
 	${MKDIR} -p ${OBJECTDIR}
-	${RM} $@.d
-	$(COMPILE.c) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/lex.yy.o lex.yy.c
+	${RM} "$@.d"
+	$(COMPILE.c) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/lex.yy.o lex.yy.c
 
 lex.yy.c: token.l y.tab.h
 	@echo Running flex...
@@ -77,10 +78,15 @@ y.tab.c y.tab.h: token.y
 	@echo Running yacc...
 	yacc -d token.y
 
+${OBJECTDIR}/tokenInterpreter.o: tokenInterpreter.c 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.c) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/tokenInterpreter.o tokenInterpreter.c
+
 ${OBJECTDIR}/y.tab.o: y.tab.c 
 	${MKDIR} -p ${OBJECTDIR}
-	${RM} $@.d
-	$(COMPILE.c) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/y.tab.o y.tab.c
+	${RM} "$@.d"
+	$(COMPILE.c) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/y.tab.o y.tab.c
 
 # Subprojects
 .build-subprojects:
