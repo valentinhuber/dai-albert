@@ -43,7 +43,7 @@ program:
         ;
 
 function:
-          function stmt         { printf("Result:  %i\n", atoi($2)); freeNode($2); }
+          function stmt         { ex($2); freeNode($2); }
         | /* NULL */
         ;
 
