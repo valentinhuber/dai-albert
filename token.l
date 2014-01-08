@@ -1,3 +1,13 @@
+/*
+ * Dai Albert Compiler 1.0
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted.
+ *
+ * * Albers Mama isch sou fett
+ *
+ */
+
 %{
 #include <stdlib.h>
 #include "includes.h"
