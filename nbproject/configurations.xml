@@ -4,6 +4,7 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <itemPath>symboltable.h</itemPath>
       <itemPath>y.tab.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
@@ -16,7 +17,6 @@
       <itemPath>includes.h</itemPath>
       <itemPath>lex.yy.c</itemPath>
       <itemPath>symboltable.c</itemPath>
-      <itemPath>symboltable.h</itemPath>
       <itemPath>token.l</itemPath>
       <itemPath>token.y</itemPath>
       <itemPath>tokenInterpreter.c</itemPath>

@@ -38,5 +38,6 @@ table *makeTable(table *parent);
 void enter(table *t, char *name, int type);
 void addWidth(table *t, int width);
 void enterProc(table *t, char *name, table *newTable);
+node* findNode(char *name, table *t);
 #endif	/* SYMBOLTABLE_H */
 
