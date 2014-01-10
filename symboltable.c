@@ -23,9 +23,32 @@ table *makeTable(table *parent) {
     t->child = NULL;
     t->name = NULL;
     t->first = NULL;
+    
+    currentTable = t;
+    
+    return currentTable;
 }
-void enter(table *t, char *name, int type, int offset) {
-
+void enter(table *t, char *name, int type) {
+    node *p;
+    
+    
+    p = t->first;
+    
+    while(p != NULL && p->next != NULL) {
+        p = p->next;
+    }
+    
+    node *n;
+    n = (node *)malloc(sizeof(node));
+    
+    
+    n->name = name;
+    n->type = type;
+    n->next = NULL;
+    
+    p = n;
+    
+    currentTable = t;
 }
 
 void addWidth(table *t, int width) {
@@ -33,7 +56,8 @@ void addWidth(table *t, int width) {
 }
 
 void enterProc(table *t, char *name, table *newTable) {
-
+    t->child = newTable;
+    t->child->name = name;
 }
 
 /**
@@ -53,8 +77,22 @@ int getWidth(table *t) {
 /*
  * 
  */
-int main(int argc, char** argv) {
-
+int main() {
+    table *t;
+    
+    t = makeTable(NULL);
+    enter(currentTable, "first node", 0);
+    
+    printf("%p node %p", currentTable, currentTable->first);
+    printf("\n");
+    
+    table *newTable;
+    printf("%p", newTable);
+    newTable = makeTable(currentTable);
+    enterProc(currentTable, "second table", newTable);
+    
+    printf("%p node %p child %p", currentTable, currentTable->first, currentTable->child);
+    
     return (EXIT_SUCCESS);
 }
 

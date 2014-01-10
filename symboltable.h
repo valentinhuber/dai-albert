@@ -35,7 +35,7 @@ typedef struct node {
  * Holbegs a symbol table
  */
 table *makeTable(table *parent);
-void enter(table *t, char *name, int type, int offset);
+void enter(table *t, char *name, int type);
 void addWidth(table *t, int width);
 void enterProc(table *t, char *name, table *newTable);
 #endif	/* SYMBOLTABLE_H */
