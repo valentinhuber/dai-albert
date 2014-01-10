@@ -479,12 +479,19 @@ int yy_flex_debug = 0;
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
 #line 1 "token.l"
-#line 2 "token.l"
+/*
+ * Dai Albert Compiler 1.0
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted.
+ *
+ */
+#line 10 "token.l"
 #include <stdlib.h>
 #include "includes.h"
 #include "y.tab.h"
 void yyerror(char *);
-#line 488 "lex.yy.c"
+#line 495 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -671,10 +678,10 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
     
-#line 8 "token.l"
+#line 16 "token.l"
 
 
-#line 678 "lex.yy.c"
+#line 685 "lex.yy.c"
 
 	if ( !(yy_init) )
 		{
@@ -759,7 +766,7 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 10 "token.l"
+#line 18 "token.l"
 { 
                 yylval.sIndex = *yytext - 'a';
                 return VARIABLE;
@@ -767,7 +774,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 15 "token.l"
+#line 23 "token.l"
 {
                 yylval.iValue = atoi(yytext);
                 return INTEGER;
@@ -775,7 +782,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 20 "token.l"
+#line 28 "token.l"
 {
                 yylval.iValue = atoi(yytext);
                 return INTEGER;
@@ -783,68 +790,68 @@ YY_RULE_SETUP
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 25 "token.l"
+#line 33 "token.l"
 {
                 return *yytext;
              }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 29 "token.l"
+#line 37 "token.l"
 return GE;
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 30 "token.l"
+#line 38 "token.l"
 return LE;
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 31 "token.l"
+#line 39 "token.l"
 return EQ;
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 32 "token.l"
+#line 40 "token.l"
 return NE;
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 33 "token.l"
+#line 41 "token.l"
 return WHILE;
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 34 "token.l"
+#line 42 "token.l"
 return IF;
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 35 "token.l"
+#line 43 "token.l"
 return ELSE;
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 36 "token.l"
+#line 44 "token.l"
 return PRINT;
 	YY_BREAK
 case 13:
 /* rule 13 can match eol */
 YY_RULE_SETUP
-#line 38 "token.l"
+#line 46 "token.l"
 ;       /* ignore whitespace */
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 40 "token.l"
+#line 48 "token.l"
 yyerror("Unknown character");
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 41 "token.l"
+#line 49 "token.l"
 ECHO;
 	YY_BREAK
-#line 848 "lex.yy.c"
+#line 855 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1842,7 +1849,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 41 "token.l"
+#line 49 "token.l"
 
 
 int yywrap(void) {

@@ -15,6 +15,8 @@
                    projectFiles="true">
       <itemPath>includes.h</itemPath>
       <itemPath>lex.yy.c</itemPath>
+      <itemPath>symboltable.c</itemPath>
+      <itemPath>symboltable.h</itemPath>
       <itemPath>token.l</itemPath>
       <itemPath>token.y</itemPath>
       <itemPath>tokenInterpreter.c</itemPath>
@@ -39,6 +41,10 @@
       <item path="includes.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="lex.yy.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="symboltable.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="symboltable.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="token.l" ex="false" tool="3" flavor2="0">
         <customTool>

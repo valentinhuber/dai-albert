@@ -1452,7 +1452,7 @@ yyreduce:
 
 /* Line 1806 of yacc.c  */
 #line 46 "token.y"
-    { printf("Result:  %i\n", atoi((yyvsp[(2) - (2)].nPtr))); freeNode((yyvsp[(2) - (2)].nPtr)); }
+    { ex((yyvsp[(2) - (2)].nPtr)); freeNode((yyvsp[(2) - (2)].nPtr)); }
     break;
 
   case 5:
@@ -1928,8 +1928,8 @@ void yyerror(char *s) {
 
 
 extern int yy_flex_debug;
-int main(void) {
-    printf("\n");
-    return(yyparse());
-}
+//int main(void) {
+  //  printf("\n");
+   // return(yyparse());
+//}
 

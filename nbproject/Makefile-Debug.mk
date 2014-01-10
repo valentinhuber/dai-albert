@@ -36,6 +36,7 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 # Object Files
 OBJECTFILES= \
 	${OBJECTDIR}/lex.yy.o \
+	${OBJECTDIR}/symboltable.o \
 	${OBJECTDIR}/tokenInterpreter.o \
 	${OBJECTDIR}/y.tab.o
 
@@ -68,6 +69,11 @@ ${OBJECTDIR}/lex.yy.o: lex.yy.c
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.c) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/lex.yy.o lex.yy.c
+
+${OBJECTDIR}/symboltable.o: symboltable.c 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.c) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/symboltable.o symboltable.c
 
 lex.yy.c: token.l y.tab.h
 	@echo Running flex...

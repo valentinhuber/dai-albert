@@ -150,7 +150,7 @@ void yyerror(char *s) {
 
 
 extern int yy_flex_debug;
-int main(void) {
-    printf("\n");
-    return(yyparse());
-}
+//int main(void) {
+  //  printf("\n");
+   // return(yyparse());
+//}
