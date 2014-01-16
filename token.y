@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
-#include "includes.h"
+#include "symboltable.h"
 
 
 /* prototypes */
@@ -23,6 +23,7 @@ int sym[26];                    /* symbol table */
     nodeType *nPtr;             /* node pointer */
 };
 
+%token MAIN
 %token <iValue> INTEGER
 %token <sIndex> VARIABLE
 %token WHILE IF PRINT
@@ -34,8 +35,9 @@ int sym[26];                    /* symbol table */
 %left '*' '/'
 %nonassoc UMINUS
 
+/*
 %type <nPtr> stmt expr stmt_list
-
+*/
 %%
 
 program:
@@ -43,10 +45,16 @@ program:
         ;
 
 function:
-          function stmt         { ex($2); freeNode($2); }
+          MAIN scope         { printf("main"); }
         | /* NULL */
         ;
 
+scope:
+          '{' scope '}'         { printf("scope"); }
+        | /* NULL */
+        ;
+
+/*
 stmt:
           ';'                            { $$ = opr(';', 2, NULL, NULL); }
         | expr ';'                       { $$ = $1; }
@@ -79,7 +87,7 @@ expr:
         | expr EQ expr          { $$ = opr(EQ, 2, $1, $3); }
         | '(' expr ')'          { $$ = $2; }
         ;
-
+*/
 %%
 
 nodeType *con(int value) {
@@ -150,7 +158,7 @@ void yyerror(char *s) {
 
 
 extern int yy_flex_debug;
-//int main(void) {
-  //  printf("\n");
-   // return(yyparse());
-//}
+int main(void) {
+    printf("\n");
+    return(yyparse());
+}

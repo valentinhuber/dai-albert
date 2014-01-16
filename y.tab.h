@@ -1,8 +1,8 @@
-/* A Bison parser, made by GNU Bison 2.5.  */
+/* A Bison parser, made by GNU Bison 2.7.12-4996.  */
 
 /* Bison interface for Yacc-like parsers in C
    
-      Copyright (C) 1984, 1989-1990, 2000-2011 Free Software Foundation, Inc.
+      Copyright (C) 1984, 1989-1990, 2000-2013 Free Software Foundation, Inc.
    
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -30,6 +30,15 @@
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
+#ifndef YY_YY_Y_TAB_H_INCLUDED
+# define YY_YY_Y_TAB_H_INCLUDED
+/* Enabling traces.  */
+#ifndef YYDEBUG
+# define YYDEBUG 0
+#endif
+#if YYDEBUG
+extern int yydebug;
+#endif
 
 /* Tokens.  */
 #ifndef YYTOKENTYPE
@@ -37,42 +46,42 @@
    /* Put the tokens into the symbol table, so that GDB and other debuggers
       know about them.  */
    enum yytokentype {
-     INTEGER = 258,
-     VARIABLE = 259,
-     WHILE = 260,
-     IF = 261,
-     PRINT = 262,
-     IFX = 263,
-     ELSE = 264,
-     NE = 265,
-     EQ = 266,
-     LE = 267,
-     GE = 268,
-     UMINUS = 269
+     MAIN = 258,
+     INTEGER = 259,
+     VARIABLE = 260,
+     WHILE = 261,
+     IF = 262,
+     PRINT = 263,
+     IFX = 264,
+     ELSE = 265,
+     NE = 266,
+     EQ = 267,
+     LE = 268,
+     GE = 269,
+     UMINUS = 270
    };
 #endif
 /* Tokens.  */
-#define INTEGER 258
-#define VARIABLE 259
-#define WHILE 260
-#define IF 261
-#define PRINT 262
-#define IFX 263
-#define ELSE 264
-#define NE 265
-#define EQ 266
-#define LE 267
-#define GE 268
-#define UMINUS 269
-
+#define MAIN 258
+#define INTEGER 259
+#define VARIABLE 260
+#define WHILE 261
+#define IF 262
+#define PRINT 263
+#define IFX 264
+#define ELSE 265
+#define NE 266
+#define EQ 267
+#define LE 268
+#define GE 269
+#define UMINUS 270
 
 
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
 {
-
-/* Line 2068 of yacc.c  */
+/* Line 2053 of yacc.c  */
 #line 20 "token.y"
 
     int iValue;                 /* integer value */
@@ -80,9 +89,8 @@ typedef union YYSTYPE
     nodeType *nPtr;             /* node pointer */
 
 
-
-/* Line 2068 of yacc.c  */
-#line 86 "y.tab.h"
+/* Line 2053 of yacc.c  */
+#line 94 "y.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -91,4 +99,18 @@ typedef union YYSTYPE
 
 extern YYSTYPE yylval;
 
+#ifdef YYPARSE_PARAM
+#if defined __STDC__ || defined __cplusplus
+int yyparse (void *YYPARSE_PARAM);
+#else
+int yyparse ();
+#endif
+#else /* ! YYPARSE_PARAM */
+#if defined __STDC__ || defined __cplusplus
+int yyparse (void);
+#else
+int yyparse ();
+#endif
+#endif /* ! YYPARSE_PARAM */
 
+#endif /* !YY_YY_Y_TAB_H_INCLUDED  */

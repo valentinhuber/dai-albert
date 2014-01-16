@@ -99,6 +99,7 @@ int getWidth(table *t) {
 /*
  * 
  */
+/*
 int main() {
     table *t;
     
@@ -120,4 +121,4 @@ int main() {
     
     return (EXIT_SUCCESS);
 }
-
+*/

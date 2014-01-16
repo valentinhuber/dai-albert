@@ -37,7 +37,6 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 OBJECTFILES= \
 	${OBJECTDIR}/lex.yy.o \
 	${OBJECTDIR}/symboltable.o \
-	${OBJECTDIR}/tokenInterpreter.o \
 	${OBJECTDIR}/y.tab.o
 
 
@@ -83,11 +82,6 @@ lex.yy.c: token.l y.tab.h
 y.tab.c y.tab.h: token.y 
 	@echo Running yacc...
 	yacc -d token.y
-
-${OBJECTDIR}/tokenInterpreter.o: tokenInterpreter.c 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.c) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/tokenInterpreter.o tokenInterpreter.c
 
 ${OBJECTDIR}/y.tab.o: y.tab.c 
 	${MKDIR} -p ${OBJECTDIR}
