@@ -6,47 +6,53 @@
  *
  */
 
+%option noyywrap nodefault yylineno
+
 %{
-#include <stdlib.h>
-#include "includes.h"
+#include "symboltable.h"
 #include "y.tab.h"
-void yyerror(char *);
 %}
 
 %%
 
-[a-z]       { 
-                yylval.sIndex = *yytext - 'a';
-                return VARIABLE;
-            }
 
-0           {
-                yylval.iValue = atoi(yytext);
-                return INTEGER;
-            }
 
-[1-9][0-9]* {
-                yylval.iValue = atoi(yytext);
-                return INTEGER;
-            }
+ /* single character ops */
+"+" |
+"-" |
+"*" |
+"/" |
+"=" |
+"," |
+";" |
+"(" |
+")"     { return yytext[0]; }
 
-[-()<>=+*/;{}.] {
-                return *yytext;
-             }
 
-">="            return GE;
-"<="            return LE;
-"=="            return EQ;
-"!="            return NE;
-"while"         return WHILE;
-"if"            return IF;
-"else"          return ELSE;
-"print"         return PRINT;
+"if"    { return IF; }
+"then"  { return THEN; }
+"else"  { return ELSE; }
+"while" { return WHILE; }
+"do"    { return DO; }
+"let"   { return LET; }
+"true"  { return TRUE; }
+"false" { return FALSE; }
 
-[ \t\n]+        ;       /* ignore whitespace */
+">"     { yylval.fn = 1; return CMP; }
+"<"     { yylval.fn = 2; return CMP; }
+"<>"    { yylval.fn = 3; return CMP; }
+"=="    { yylval.fn = 4; return CMP; }
+">="    { yylval.fn = 5; return CMP; }
+"<="    { yylval.fn = 6; return CMP; }
 
-.               yyerror("Unknown character");
+"exit"  { return EXIT; }
+"print" { return PRINT; }
+
+[a-zA-Z][a-zA-Z0-9]*  { yylval.s = lookup(yytext); return VARIABLE; }
+
+[0-9]+ | { yylval.d = atof(yytext); return NUMBER; }
+
+"\n"      { return EOL; }
+[ \t]   { /* ignore white space */ }
+.	{ yyerror("Mystery character %c\n", *yytext); }
 %%
-int yywrap(void) {
-    return 1;
-}
