@@ -82,7 +82,7 @@ extern int yydebug;
 typedef union YYSTYPE
 {
 /* Line 2053 of yacc.c  */
-#line 20 "token.y"
+#line 14 "token.y"
 
     int iValue;                 /* integer value */
     char sIndex;                /* symbol table index */

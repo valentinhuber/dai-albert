@@ -16,6 +16,7 @@
                    projectFiles="true">
       <itemPath>lex.yy.c</itemPath>
       <itemPath>symboltable.c</itemPath>
+      <itemPath>test.sh</itemPath>
       <itemPath>testFile.txt</itemPath>
       <itemPath>token.l</itemPath>
       <itemPath>token.y</itemPath>
@@ -42,6 +43,8 @@
       <item path="symboltable.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="symboltable.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="test.sh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="testFile.txt" ex="false" tool="3" flavor2="0">
       </item>
