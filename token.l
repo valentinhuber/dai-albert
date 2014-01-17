@@ -38,6 +38,9 @@ void yyerror(char *);
 
 [ \t\n]+        ;       /* ignore whitespace */
 
+"//".*"\n"       ; /* COMMENT */
+"/*"(.|"\n")*"*/\n"       ; /* MULTI LINE COMMENT */
+
 .               yyerror("Unknown character");
 %%
 int yywrap(void) {

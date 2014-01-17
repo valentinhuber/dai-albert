@@ -31,11 +31,8 @@ void yyerror(char *s);
 %left '*' '/'
 %nonassoc UMINUS
 
-%start program
+%start function
 %%
-
-program: function                { printf("function\n"); }
-        ;
 
 function: MAIN scope         { printf("main\n"); }
         ;
