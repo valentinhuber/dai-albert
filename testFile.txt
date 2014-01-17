@@ -1,4 +1,4 @@
 main {
-    ;
-
+    kuch3en2 = 2 + 4;
+    print kucH3en2;
 }

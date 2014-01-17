@@ -1,5 +1,7 @@
 %{
 #include <stdio.h>
+#include <string.h>
+#include <ctype.h>
 #include <stdlib.h>
 #include <stdarg.h>
 #include "symboltable.h"
@@ -13,7 +15,7 @@ void yyerror(char *s);
 
 %union {
     int iValue;                 /* integer value */
-    char sIndex;                /* symbol table index */
+    char* sValue;                /* symbol table index */
     nodeType *nPtr;             /* node pointer */
 };
 
@@ -29,34 +31,29 @@ void yyerror(char *s);
 %left '*' '/'
 %nonassoc UMINUS
 
+%start program
 %%
 
-program:
-        function                { exit(0); }
+program: function                { printf("function\n"); }
         ;
 
-function:
-          MAIN scope         { printf("main"); }
-        | /* NULL */
+function: MAIN scope         { printf("main\n"); }
         ;
 
-scope:
-          '{' stmts '}'         { printf("scope"); }
-        | /* NULL */
+
+scope:   '{' stmts '}'         { printf("scope\n"); }
         ;
 
-stmts:
-          scope        { printf("scope"); }
-        | stmt          { printf("stmt"); }
-        | /* NULL */
+stmts:   /* NULL */
+        | stmts stmt        { printf("stmt\n"); }
+        | stmts scope
         ;
 
-stmt:
-          ';'                            { printf(";"); }
-        | expr ';'                       { printf(";"); }
-        | PRINT expr ';'                 { printf(";"); }
-        | VARIABLE '=' expr ';'          { printf(";"); }
-       /* | WHILE '(' expr ')' stmt        { printf(";"); }
+stmt:   ';'                            { printf("semicolon\n"); }
+        | expr ';'                       { printf("expr\n"); }
+        | PRINT expr ';'                 { printf("print\n"); }
+        | VARIABLE '=' expr ';'          { printf("assignment\n"); }
+        /* | WHILE '(' expr ')' stmt        { printf(";"); }
         | IF '(' expr ')' stmt %prec IFX { printf(";"); }
         | IF '(' expr ')' stmt ELSE stmt { printf(";"); }
         | '{' stmt_list '}'              { printf(";"); } */
@@ -70,12 +67,12 @@ stmt_list:
 expr:
           INTEGER               { printf("integer"); }
         | VARIABLE              { printf("VARIABLE"); }
-       /* | '-' expr %prec UMINUS { $$ = opr(UMINUS, 1, $2); } */
+  /*      | '-' expr %prec UMINUS { $$ = opr(UMINUS, 1, $2); } */
         | expr '+' expr         { printf("+"); }
         | expr '-' expr         { printf("-"); }
         | expr '*' expr         { printf("*"); }
         | expr '/' expr         { printf("/"); }
-      /*  | expr '<' expr         { $$ = opr('<', 2, $1, $3); }
+     /*   | expr '<' expr         { $$ = opr('<', 2, $1, $3); }
         | expr '>' expr         { $$ = opr('>', 2, $1, $3); }
         | expr GE expr          { $$ = opr(GE, 2, $1, $3); }
         | expr LE expr          { $$ = opr(LE, 2, $1, $3); }
@@ -83,7 +80,6 @@ expr:
         | expr EQ expr          { $$ = opr(EQ, 2, $1, $3); }
         | '(' expr ')'          { $$ = $2; } */
         ;
-
 %%
 
 void yyerror(char *s) {
