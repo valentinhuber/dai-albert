@@ -34,27 +34,16 @@ typedef struct node {
 /**
  * Node for the Symboltable
  */
-struct string {
-    char *name;
-    int value;
-};
 
 /**
  * Nodes for the Abstract Syntax Tree
  */
 // Generic Node
-struct syntaxTreeNode {
+typedef struct syntaxTreeNode {
     int nodetype;
     struct syntaxTreeNode *left;
     struct syntaxTreeNode *right;
-};
-// Node for Flow Constructs (IF ELSE WHILE...)
-struct flowNode {
-    int nodetype;
-    struct flowNode *condition;
-    struct flowNode *thenList;
-    struct flowNode *elseList;
-};
+} treeNode;
 // Node for Numbers(Constants)
 struct numberNode {
     int nodeType;
@@ -63,23 +52,24 @@ struct numberNode {
 
 struct variableNode {
     int nodetype;
-    struct string *s;
+    char* name;
+    int value;
 };
 
-struct assignmentNode {
-    int nodeType;
-    struct string *s;
-    struct syntaxTreeNode *v;
+struct operationNode {
+    int nodetype;
+    int operation;
+    int numberOfOperators;
+    struct syntaxTreeNode **operators;
 };
 /**
  * Functions to build AST
  *  
  */
 struct syntaxTreeNode *newSyntaxTreeNode(int nodetype, struct syntaxTreeNode *left, struct syntaxTreeNode *right);
-struct syntaxTreeNode *newFlowNode(int nodetype,struct flowNode *condition, struct flowNode *thenList, struct flowNode *elseList );
 struct syntaxTreeNode *newNumberNode(int number);
-struct syntaxTreeNode *newVariableNode(struct string str);
-struct syntaxTreeNode *newAssignmentNode(struct string *s, struct synatxTreeNode *v);
+struct syntaxTreeNode *newVariableNode(char* name, int value);
+struct syntaxTreeNode *newOperationNode(int operation, int numberOfOperators, ...);
 int evaluate(struct syntaxTreeNode* tree);
 
 

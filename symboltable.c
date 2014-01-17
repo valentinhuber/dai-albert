@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdarg.h>
 #include "symboltable.h"
 
 table *currentTable;
@@ -105,16 +106,6 @@ struct syntaxTreeNode *newSyntaxTreeNode(int nodetype, struct syntaxTreeNode *le
     return node;
 }
 
-struct syntaxTreeNode *newFlowNode(int nodetype,struct flowNode *condition, struct flowNode *thenList, struct flowNode *elseList ) {
-    struct flowNode *node = malloc(sizeof(struct flowNode));
-    
-    node->nodetype = nodetype;
-    node->condition = condition;
-    node->thenList = thenList;
-    node->elseList = elseList;
-    
-    return (struct syntaxTreeNode *) node;
-}
 struct syntaxTreeNode *newNumberNode(int number) {
     struct numberNode *node = malloc(sizeof(struct numberNode));
     
@@ -124,44 +115,56 @@ struct syntaxTreeNode *newNumberNode(int number) {
     return (struct syntaxTreeNode *) node;
 }
 
-struct syntaxTreeNode *newVariableNode(struct string str) {
+struct syntaxTreeNode *newVariableNode(char* name, int value) {
      struct variableNode *node = malloc(sizeof(struct variableNode));
-     node->nodetype = 'N';
-     node->s = str;
+ 
+     node->nodetype = 's';
+     node->name = name;
+     node->value = value;
      
      return (struct syntaxTreeNode *) node;
 }
 
-struct syntaxTreeNode *newAssignmentNode(struct string *s, struct synatxTreeNode *v) {
-    struct assignmentNode *node = malloc(sizeof(struct assignmentNode));
-    node->nodeType = '=';
-    node->s = s;
-    node->v = v;
+struct syntaxTreeNode *newOperationNode(int operation, int numberOfOperators, ...) {
+    int i;
+    va_list operatorList;
+    
+    struct operationNode *node = malloc(sizeof(struct operationNode));
+    node->operators = malloc(numberOfOperators * sizeof(treeNode));
+    node->nodetype = 'o';
+    node->operation = operation;
+    node->numberOfOperators = numberOfOperators;
+    
+    va_start(operatorList, numberOfOperators);
+    for(i = 0; i < numberOfOperators; i++) {
+        node->operators[i] = va_arg(operatorList, treeNode*);
+    }
+    va_end(operatorList);
     return (struct syntaxTreeNode *) node;
 }
 
 int evaluate(struct syntaxTreeNode* tree) {
-    int returnValue;
+    
+    struct operationNode *n = malloc(sizeof(struct operationNode));
     
     switch(tree->nodetype) {
         
-        case 'i': returnValue = ((struct numberNode *)tree)->number; break;
-        
-        /* expr */
-        case '+': returnValue = evaluate(tree->left) + evaluate(tree->right); break;
-        
-        
-        /* PRINT */
-        case 'p': printf("%i",evaluate(tree->left)); break;
-        
-        /* ASSIGN */
-        case 'N':
-        
-        case '=': returnValue = ((struct assignmentNode *)tree)->s->value =
-                evaluate(((struct assignmentNode *)tree)->v); break;
-        
-        /* VARIABLE */
- 
+        case 'i': return ((struct numberNode *)tree)->number; break;
+        case 's': return ((struct variableNode*)tree)->value; break;
+        case 'o': 
+            n = ((struct operationNode*)tree);
+            switch(n->operation) {
+                /* expr */
+                case '+': return evaluate(n->operators[0]) + evaluate(n->operators[1]); break;
+                /* PRINT */
+                case 'p': printf("%i",evaluate(n->operators[0])); break;
+
+                /*
+                case '=': returnValue = ((struct assignmentNode *)tree)->s->value =
+                        evaluate(((struct assignmentNode *)tree)->v); break;
+                 */
+            }
+            break;
     }
 }
 

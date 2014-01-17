@@ -58,8 +58,8 @@ stmts:   /* NULL */
 stmt:   ';'                              { printf("semicolon\n"); }
         | declaration ';'                { printf("declaration\n"); }
      /*   | expr ';'                       { printf("des isch um schuscht"); } */
-        | PRINT expr ';'                 { $$ = newSyntaxTreeNode('p',$2, NULL); }
-        | VARIABLE '=' expr ';'          { $$ = newSyntaxTreeNode('=',$1, $3); }
+        | PRINT expr ';'                 { $$ = newOperationNode('p', 1, $2); }
+      /*  | VARIABLE '=' expr ';'          { $$ = newSyntaxTreeNode('=',$1, $3); } */
         | WHILE '(' expr ')' stmt        { printf("while"); }
         | IF '(' expr ')' stmt %prec IFX { printf("if"); }
         | IF '(' expr ')' stmt ELSE stmt { printf("if else"); }
@@ -75,9 +75,9 @@ stmt_list:
 */
 expr:
           INTEGER               { $$ = newNumberNode($1); }
-        | VARIABLE              { $$ = newVariableNode($1); }
+        | VARIABLE              { $$ = newVariableNode($1,0); }
   /*      | '-' expr %prec UMINUS { $$ = opr(UMINUS, 1, $2); } */
-        | expr '+' expr         { $$ = newSyntaxTreeNode('+',$1, $3); }
+        | expr '+' expr         { $$ = newOperationNode('+', 2 ,$1, $3); }
         | expr '-' expr         { printf("-"); }
         | expr '*' expr         { printf("*"); }
         | expr '/' expr         { printf("/"); }
