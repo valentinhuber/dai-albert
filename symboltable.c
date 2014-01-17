@@ -158,7 +158,9 @@ int evaluate(struct syntaxTreeNode* tree) {
                 case '+': return evaluate(n->operators[0]) + evaluate(n->operators[1]); break;
                 /* PRINT */
                 case 'p': printf("%i",evaluate(n->operators[0])); break;
-
+                
+                /* ASSIGNMENT */
+                case '=': return ((struct variableNode*)n->operators[0])->value = evaluate(n->operators[1]); break;
                 /*
                 case '=': returnValue = ((struct assignmentNode *)tree)->s->value =
                         evaluate(((struct assignmentNode *)tree)->v); break;

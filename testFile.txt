@@ -7,6 +7,9 @@ main {
 /* sadasd
     asdasd */
 //    if ( kuchen ) { print kuchen; valzo = 22; } else print kuan;
-print 8 + 4;
-//print kuchen;
+
+//kuchen = 8 + 4;
+//print 2;
+print 2;
+print 3;
 }

@@ -41,10 +41,14 @@ void yyerror(char *s);
 %left '*' '/'
 %nonassoc UMINUS
 
-%start function
+%start program
 %%
 
-function: MAIN scope         { evaluate($2); printf("main\n"); }
+program: 
+        function            { exit(0); }
+
+function: MAIN function scope         { evaluate($3); } //printf("main\n"); 
+        |
         ;
 
 
@@ -58,11 +62,11 @@ stmts:   /* NULL */
 stmt:   ';'                              { printf("semicolon\n"); }
         | declaration ';'                { printf("declaration\n"); }
      /*   | expr ';'                       { printf("des isch um schuscht"); } */
-        | PRINT expr ';'                 { $$ = newOperationNode('p', 1, $2); }
-      /*  | VARIABLE '=' expr ';'          { $$ = newSyntaxTreeNode('=',$1, $3); } */
-        | WHILE '(' expr ')' stmt        { printf("while"); }
+        | PRINT expr ';'                 {  $$ = newOperationNode('p', 1, $2);}
+        | VARIABLE '=' expr ';'          { $$ = newOperationNode('=', 2, $1, $3); }
+      /*  | WHILE '(' expr ')' stmt        { printf("while"); }
         | IF '(' expr ')' stmt %prec IFX { printf("if"); }
-        | IF '(' expr ')' stmt ELSE stmt { printf("if else"); }
+        | IF '(' expr ')' stmt ELSE stmt { printf("if else"); } */
         | scope                          { printf(";"); } 
         ;
 
