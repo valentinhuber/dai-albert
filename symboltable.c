@@ -96,6 +96,49 @@ int getWidth(table *t) {
     return width;
 }
 
+struct syntaxTreeNode *newSyntaxTreeNode(int nodetype, struct syntaxTreeNode *left, struct syntaxTreeNode *right) {
+    struct syntaxTreeNode *node = malloc(sizeof(struct syntaxTreeNode));
+    node->nodetype = nodetype;
+    node->left = left;
+    node->right = right;
+    
+    return node;
+}
+
+struct syntaxTreeNode *newFlowNode(int nodetype,struct flowNode *condition, struct flowNode *thenList, struct flowNode *elseList ) {
+    struct flowNode *node = malloc(sizeof(struct flowNode));
+    
+    node->nodetype = nodetype;
+    node->condition = condition;
+    node->thenList = thenList;
+    node->elseList = elseList;
+    
+    return (struct syntaxTreeNode *) node;
+}
+struct syntaxTreeNode *newNumberNode(int number) {
+    struct numberNode *node = malloc(sizeof(struct numberNode));
+    
+    node->nodeType = 'i';
+    node->number = number;
+    
+    return (struct syntaxTreeNode *) node;
+}
+
+int evaluate(struct syntaxTreeNode* tree) {
+    int returnValue;
+    
+    switch(tree->nodetype) {
+        
+        case 'i': returnValue = ((struct numberNode *)tree)->number; break;
+        
+        /* expr */
+        case '+': returnValue = evaluate(tree->left) + evaluate(tree->right); break;
+        
+    }
+}
+
+
+
 /*
  * 
  */

@@ -96,13 +96,15 @@ typedef union YYSTYPE
 /* Line 2053 of yacc.c  */
 #line 16 "token.y"
 
+    struct syntaxTreeNode *node;
     int iValue;                 /* integer value */
     char* sValue;                /* symbol table index */
     int type;
+    int i;
 
 
 /* Line 2053 of yacc.c  */
-#line 106 "y.tab.h"
+#line 108 "y.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

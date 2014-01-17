@@ -31,37 +31,36 @@ typedef struct node {
     struct node *next;
 } node;
 
+/**
+ * Nodes for the Abstract Syntax Tree
+ */
+// Generic Node
+struct syntaxTreeNode {
+    int nodetype;
+    struct syntaxTreeNode *left;
+    struct syntaxTreeNode *right;
+};
+// Node for Flow Constructs (IF ELSE WHILE...)
+struct flowNode {
+    int nodetype;
+    struct flowNode *condition;
+    struct flowNode *thenList;
+    struct flowNode *elseList;
+};
+// Node for Numbers(Constants)
+struct numberNode {
+    int nodeType;
+    int number;
+};
+/**
+ * Functions to build AST
+ *  
+ */
+struct syntaxTreeNode *newSyntaxTreeNode(int nodetype, struct syntaxTreeNode *left, struct syntaxTreeNode *right);
+struct syntaxTreeNode *newFlowNode(int nodetype,struct flowNode *condition, struct flowNode *thenList, struct flowNode *elseList );
+struct syntaxTreeNode *newNumberNode(int number);
 
-typedef enum { typeCon, typeId, typeOpr } nodeEnum;
-
-/* constants */
-typedef struct {
-    int value;                  /* value of constant */
-} conNodeType;
-
-/* identifiers */
-typedef struct {
-    int i;                      /* subscript to sym array */
-} idNodeType;
-
-/* operators */
-typedef struct {
-    int oper;                   /* operator */
-    int nops;                   /* number of operands */
-    struct nodeTypeTag **op;	/* operands */
-} oprNodeType;
-
-typedef struct nodeTypeTag {
-    nodeEnum type;              /* type of node */
-
-    union {
-        conNodeType con;        /* constants */
-        idNodeType id;          /* identifiers */
-        oprNodeType opr;        /* operators */
-    };
-} nodeType;
-
-extern int sym[26];
+int evaluate(struct syntaxTreeNode* tree);
 
 
 

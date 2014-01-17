@@ -165,13 +165,15 @@ typedef union YYSTYPE
 /* Line 387 of yacc.c  */
 #line 16 "token.y"
 
+    struct syntaxTreeNode *node;
     int iValue;                 /* integer value */
     char* sValue;                /* symbol table index */
     int type;
+    int i;
 
 
 /* Line 387 of yacc.c  */
-#line 175 "y.tab.c"
+#line 177 "y.tab.c"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -199,7 +201,7 @@ int yyparse ();
 /* Copy the second part of user declarations.  */
 
 /* Line 390 of yacc.c  */
-#line 203 "y.tab.c"
+#line 205 "y.tab.c"
 
 #ifdef short
 # undef short
@@ -505,9 +507,9 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    44,    44,    48,    51,    52,    55,    56,    57,    58,
-      59,    60,    61,    62,    63,    66,    66,    74,    75,    77,
-      78,    79,    80
+       0,    48,    48,    52,    55,    56,    59,    60,    61,    62,
+      63,    64,    65,    66,    67,    70,    70,    78,    79,    81,
+      82,    83,    84
 };
 #endif
 
@@ -1423,121 +1425,121 @@ yyreduce:
     {
         case 2:
 /* Line 1787 of yacc.c  */
-#line 44 "token.y"
+#line 48 "token.y"
     { printf("main\n"); }
     break;
 
   case 3:
 /* Line 1787 of yacc.c  */
-#line 48 "token.y"
+#line 52 "token.y"
     { printf("scope\n"); }
     break;
 
   case 5:
 /* Line 1787 of yacc.c  */
-#line 52 "token.y"
+#line 56 "token.y"
     { printf("stmt\n"); }
     break;
 
   case 6:
 /* Line 1787 of yacc.c  */
-#line 55 "token.y"
+#line 59 "token.y"
     { printf("semicolon\n"); }
     break;
 
   case 7:
 /* Line 1787 of yacc.c  */
-#line 56 "token.y"
+#line 60 "token.y"
     { printf("declaration\n"); }
     break;
 
   case 8:
 /* Line 1787 of yacc.c  */
-#line 57 "token.y"
-    { printf("expr\n"); }
+#line 61 "token.y"
+    { evaluate((yyvsp[(1) - (2)].node)); }
     break;
 
   case 9:
 /* Line 1787 of yacc.c  */
-#line 58 "token.y"
-    { printf("print\n"); }
+#line 62 "token.y"
+    { printf("%i",evaluate((yyvsp[(2) - (3)].node))); }
     break;
 
   case 10:
 /* Line 1787 of yacc.c  */
-#line 59 "token.y"
+#line 63 "token.y"
     { printf("assignment\n"); }
     break;
 
   case 11:
 /* Line 1787 of yacc.c  */
-#line 60 "token.y"
+#line 64 "token.y"
     { printf("while"); }
     break;
 
   case 12:
 /* Line 1787 of yacc.c  */
-#line 61 "token.y"
+#line 65 "token.y"
     { printf("if"); }
     break;
 
   case 13:
 /* Line 1787 of yacc.c  */
-#line 62 "token.y"
+#line 66 "token.y"
     { printf("if else"); }
     break;
 
   case 14:
 /* Line 1787 of yacc.c  */
-#line 63 "token.y"
+#line 67 "token.y"
     { printf(";"); }
     break;
 
   case 15:
 /* Line 1787 of yacc.c  */
-#line 66 "token.y"
+#line 70 "token.y"
     { (yyval.type) = 'i'; }
     break;
 
   case 17:
 /* Line 1787 of yacc.c  */
-#line 74 "token.y"
-    { printf("integer"); }
+#line 78 "token.y"
+    { (yyval.node) = newNumberNode((yyvsp[(1) - (1)].iValue)); }
     break;
 
   case 18:
 /* Line 1787 of yacc.c  */
-#line 75 "token.y"
+#line 79 "token.y"
     { printf("VARIABLE"); }
     break;
 
   case 19:
 /* Line 1787 of yacc.c  */
-#line 77 "token.y"
-    { printf("+"); }
+#line 81 "token.y"
+    { (yyval.node) = newSyntaxTreeNode('+',(yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node)); }
     break;
 
   case 20:
 /* Line 1787 of yacc.c  */
-#line 78 "token.y"
+#line 82 "token.y"
     { printf("-"); }
     break;
 
   case 21:
 /* Line 1787 of yacc.c  */
-#line 79 "token.y"
+#line 83 "token.y"
     { printf("*"); }
     break;
 
   case 22:
 /* Line 1787 of yacc.c  */
-#line 80 "token.y"
+#line 84 "token.y"
     { printf("/"); }
     break;
 
 
 /* Line 1787 of yacc.c  */
-#line 1541 "y.tab.c"
+#line 1543 "y.tab.c"
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1769,7 +1771,7 @@ yyreturn:
 
 
 /* Line 2050 of yacc.c  */
-#line 89 "token.y"
+#line 93 "token.y"
 
 
 void yyerror(char *s) {

@@ -14,9 +14,11 @@ void yyerror(char *s);
 %}
 
 %union {
+    struct syntaxTreeNode *node;
     int iValue;                 /* integer value */
     char* sValue;                /* symbol table index */
     int type;
+    int i;
 };
 
 %token MAIN
@@ -32,6 +34,8 @@ void yyerror(char *s);
 %token <type> FLOAT
 %token <type> BOOL
 %token <type> STRING
+
+%type <node> expr stmt
 
 %left GE LE EQ NE '>' '<'
 %left '+' '-'
@@ -54,8 +58,8 @@ stmts:   /* NULL */
 
 stmt:   ';'                              { printf("semicolon\n"); }
         | declaration ';'                { printf("declaration\n"); }
-        | expr ';'                       { printf("expr\n"); }
-        | PRINT expr ';'                 { printf("print\n"); }
+        | expr ';'                       { evaluate($1); }
+        | PRINT expr ';'                 { printf("%i",evaluate($2)); }
         | VARIABLE '=' expr ';'          { printf("assignment\n"); }
         | WHILE '(' expr ')' stmt        { printf("while"); }
         | IF '(' expr ')' stmt %prec IFX { printf("if"); }
@@ -71,10 +75,10 @@ stmt_list:
         ;
 */
 expr:
-          INTEGER               { printf("integer"); }
+          INTEGER               { $$ = newNumberNode($1); }
         | VARIABLE              { printf("VARIABLE"); }
   /*      | '-' expr %prec UMINUS { $$ = opr(UMINUS, 1, $2); } */
-        | expr '+' expr         { printf("+"); }
+        | expr '+' expr         { $$ = newSyntaxTreeNode('+',$1, $3); }
         | expr '-' expr         { printf("-"); }
         | expr '*' expr         { printf("*"); }
         | expr '/' expr         { printf("/"); }
