@@ -18,7 +18,6 @@ void yyerror(char *s);
     int iValue;                 /* integer value */
     char* sValue;                /* symbol table index */
     int type;
-    int i;
 };
 
 %token MAIN
@@ -35,7 +34,7 @@ void yyerror(char *s);
 %token <type> BOOL
 %token <type> STRING
 
-%type <node> expr stmt
+%type <node> expr stmt scope stmts function
 
 %left GE LE EQ NE '>' '<'
 %left '+' '-'
@@ -45,22 +44,22 @@ void yyerror(char *s);
 %start function
 %%
 
-function: MAIN scope         { printf("main\n"); }
+function: MAIN scope         { evaluate($2); printf("main\n"); }
         ;
 
 
-scope:   '{' stmts '}'         { printf("scope\n"); }
+scope:   '{' stmts '}'         { $$ = $2; }
         ;
 
 stmts:   /* NULL */
-        | stmts stmt        { printf("stmt\n"); }
+        | stmts stmt        { $$ = $2; }
         ;
 
 stmt:   ';'                              { printf("semicolon\n"); }
         | declaration ';'                { printf("declaration\n"); }
-        | expr ';'                       { evaluate($1); }
-        | PRINT expr ';'                 { printf("%i",evaluate($2)); }
-        | VARIABLE '=' expr ';'          { printf("assignment\n"); }
+     /*   | expr ';'                       { printf("des isch um schuscht"); } */
+        | PRINT expr ';'                 { $$ = newSyntaxTreeNode('p',$2, NULL); }
+        | VARIABLE '=' expr ';'          { $$ = newSyntaxTreeNode('=',$1, $3); }
         | WHILE '(' expr ')' stmt        { printf("while"); }
         | IF '(' expr ')' stmt %prec IFX { printf("if"); }
         | IF '(' expr ')' stmt ELSE stmt { printf("if else"); }
@@ -76,7 +75,7 @@ stmt_list:
 */
 expr:
           INTEGER               { $$ = newNumberNode($1); }
-        | VARIABLE              { printf("VARIABLE"); }
+        | VARIABLE              { $$ = newVariableNode($1); }
   /*      | '-' expr %prec UMINUS { $$ = opr(UMINUS, 1, $2); } */
         | expr '+' expr         { $$ = newSyntaxTreeNode('+',$1, $3); }
         | expr '-' expr         { printf("-"); }

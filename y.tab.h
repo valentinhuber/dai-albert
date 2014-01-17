@@ -100,11 +100,10 @@ typedef union YYSTYPE
     int iValue;                 /* integer value */
     char* sValue;                /* symbol table index */
     int type;
-    int i;
 
 
 /* Line 2053 of yacc.c  */
-#line 108 "y.tab.h"
+#line 107 "y.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

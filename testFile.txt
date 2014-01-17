@@ -1,10 +1,12 @@
 main {
-    kuch3en2 = 2 + 4;
-    3 + 3;
+//    kuch3en2 = 2 + 4;
+//    3 + 3;
 // comment
-    print kucH3en2;
-    if ( 3+2 ) print hons;
+//    print kucH3en2;
+//    if ( 3+2 ) print hons;
 /* sadasd
     asdasd */
-    if ( kuchen ) { print kuchen; valzo = 22; } else print kuan;
+//    if ( kuchen ) { print kuchen; valzo = 22; } else print kuan;
+kuchen = 3 + 4;
+print kuchen;
 }

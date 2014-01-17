@@ -32,6 +32,14 @@ typedef struct node {
 } node;
 
 /**
+ * Node for the Symboltable
+ */
+struct string {
+    char *name;
+    int value;
+};
+
+/**
  * Nodes for the Abstract Syntax Tree
  */
 // Generic Node
@@ -52,6 +60,17 @@ struct numberNode {
     int nodeType;
     int number;
 };
+
+struct variableNode {
+    int nodetype;
+    struct string *s;
+};
+
+struct assignmentNode {
+    int nodeType;
+    struct string *s;
+    struct syntaxTreeNode *v;
+};
 /**
  * Functions to build AST
  *  
@@ -59,7 +78,8 @@ struct numberNode {
 struct syntaxTreeNode *newSyntaxTreeNode(int nodetype, struct syntaxTreeNode *left, struct syntaxTreeNode *right);
 struct syntaxTreeNode *newFlowNode(int nodetype,struct flowNode *condition, struct flowNode *thenList, struct flowNode *elseList );
 struct syntaxTreeNode *newNumberNode(int number);
-
+struct syntaxTreeNode *newVariableNode(struct string str);
+struct syntaxTreeNode *newAssignmentNode(struct string *s, struct synatxTreeNode *v);
 int evaluate(struct syntaxTreeNode* tree);
 
 

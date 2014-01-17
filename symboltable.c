@@ -124,6 +124,22 @@ struct syntaxTreeNode *newNumberNode(int number) {
     return (struct syntaxTreeNode *) node;
 }
 
+struct syntaxTreeNode *newVariableNode(struct string str) {
+     struct variableNode *node = malloc(sizeof(struct variableNode));
+     node->nodetype = 'N';
+     node->s = str;
+     
+     return (struct syntaxTreeNode *) node;
+}
+
+struct syntaxTreeNode *newAssignmentNode(struct string *s, struct synatxTreeNode *v) {
+    struct assignmentNode *node = malloc(sizeof(struct assignmentNode));
+    node->nodeType = '=';
+    node->s = s;
+    node->v = v;
+    return (struct syntaxTreeNode *) node;
+}
+
 int evaluate(struct syntaxTreeNode* tree) {
     int returnValue;
     
@@ -134,6 +150,18 @@ int evaluate(struct syntaxTreeNode* tree) {
         /* expr */
         case '+': returnValue = evaluate(tree->left) + evaluate(tree->right); break;
         
+        
+        /* PRINT */
+        case 'p': printf("%i",evaluate(tree->left)); break;
+        
+        /* ASSIGN */
+        case 'N':
+        
+        case '=': returnValue = ((struct assignmentNode *)tree)->s->value =
+                evaluate(((struct assignmentNode *)tree)->v); break;
+        
+        /* VARIABLE */
+ 
     }
 }
 
