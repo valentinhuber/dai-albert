@@ -1,9 +1,5 @@
 Terminals unused in grammar
 
-   WHILE
-   IF
-   IFX
-   ELSE
    '>'
    '<'
    NE
@@ -25,43 +21,48 @@ Grammar
 
     4 stmts: /* empty */
     5      | stmts stmt
-    6      | stmts scope
 
-    7 stmt: ';'
-    8     | expr ';'
-    9     | PRINT expr ';'
-   10     | VARIABLE '=' expr ';'
+    6 stmt: ';'
+    7     | expr ';'
+    8     | PRINT expr ';'
+    9     | VARIABLE '=' expr ';'
+   10     | WHILE '(' expr ')' stmt
+   11     | IF '(' expr ')' stmt
+   12     | IF '(' expr ')' stmt ELSE stmt
+   13     | scope
 
-   11 expr: INTEGER
-   12     | VARIABLE
-   13     | expr '+' expr
-   14     | expr '-' expr
-   15     | expr '*' expr
-   16     | expr '/' expr
+   14 expr: INTEGER
+   15     | VARIABLE
+   16     | expr '+' expr
+   17     | expr '-' expr
+   18     | expr '*' expr
+   19     | expr '/' expr
 
 
 Terminals, with rules where they appear
 
 $end (0) 0
-'*' (42) 15
-'+' (43) 13
-'-' (45) 14
-'/' (47) 16
-';' (59) 7 8 9 10
+'(' (40) 10 11 12
+')' (41) 10 11 12
+'*' (42) 18
+'+' (43) 16
+'-' (45) 17
+'/' (47) 19
+';' (59) 6 7 8 9
 '<' (60)
-'=' (61) 10
+'=' (61) 9
 '>' (62)
 '{' (123) 3
 '}' (125) 3
 error (256)
 MAIN (258) 2
-INTEGER (259) 11
-VARIABLE (260) 10 12
-WHILE (261)
-IF (262)
-PRINT (263) 9
+INTEGER (259) 14
+VARIABLE (260) 9 15
+WHILE (261) 10
+IF (262) 11 12
+PRINT (263) 8
 IFX (264)
-ELSE (265)
+ELSE (265) 12
 NE (266)
 EQ (267)
 LE (268)
@@ -71,20 +72,20 @@ UMINUS (270)
 
 Nonterminals, with rules where they appear
 
-$accept (26)
+$accept (28)
     on left: 0
-program (27)
+program (29)
     on left: 1, on right: 0
-function (28)
+function (30)
     on left: 2, on right: 1
-scope (29)
-    on left: 3, on right: 2 6
-stmts (30)
-    on left: 4 5 6, on right: 3 5 6
-stmt (31)
-    on left: 7 8 9 10, on right: 5
-expr (32)
-    on left: 11 12 13 14 15 16, on right: 8 9 10 13 14 15 16
+scope (31)
+    on left: 3, on right: 2 13
+stmts (32)
+    on left: 4 5, on right: 3 5
+stmt (33)
+    on left: 6 7 8 9 10 11 12 13, on right: 5 10 11 12
+expr (34)
+    on left: 14 15 16 17 18 19, on right: 7 8 9 10 11 12 16 17 18 19
 
 
 State 0
@@ -147,243 +148,387 @@ State 7
 
     3 scope: '{' stmts . '}'
     5 stmts: stmts . stmt
-    6      | stmts . scope
 
     INTEGER   shift, and go to state 8
     VARIABLE  shift, and go to state 9
-    PRINT     shift, and go to state 10
+    WHILE     shift, and go to state 10
+    IF        shift, and go to state 11
+    PRINT     shift, and go to state 12
     '{'       shift, and go to state 4
-    '}'       shift, and go to state 11
-    ';'       shift, and go to state 12
+    '}'       shift, and go to state 13
+    ';'       shift, and go to state 14
 
-    scope  go to state 13
-    stmt   go to state 14
-    expr   go to state 15
+    scope  go to state 15
+    stmt   go to state 16
+    expr   go to state 17
 
 
 State 8
 
-   11 expr: INTEGER .
+   14 expr: INTEGER .
 
-    $default  reduce using rule 11 (expr)
+    $default  reduce using rule 14 (expr)
 
 
 State 9
 
-   10 stmt: VARIABLE . '=' expr ';'
-   12 expr: VARIABLE .
+    9 stmt: VARIABLE . '=' expr ';'
+   15 expr: VARIABLE .
 
-    '='  shift, and go to state 16
+    '='  shift, and go to state 18
 
-    $default  reduce using rule 12 (expr)
+    $default  reduce using rule 15 (expr)
 
 
 State 10
 
-    9 stmt: PRINT . expr ';'
+   10 stmt: WHILE . '(' expr ')' stmt
 
-    INTEGER   shift, and go to state 8
-    VARIABLE  shift, and go to state 17
-
-    expr  go to state 18
+    '('  shift, and go to state 19
 
 
 State 11
+
+   11 stmt: IF . '(' expr ')' stmt
+   12     | IF . '(' expr ')' stmt ELSE stmt
+
+    '('  shift, and go to state 20
+
+
+State 12
+
+    8 stmt: PRINT . expr ';'
+
+    INTEGER   shift, and go to state 8
+    VARIABLE  shift, and go to state 21
+
+    expr  go to state 22
+
+
+State 13
 
     3 scope: '{' stmts '}' .
 
     $default  reduce using rule 3 (scope)
 
 
-State 12
-
-    7 stmt: ';' .
-
-    $default  reduce using rule 7 (stmt)
-
-
-State 13
-
-    6 stmts: stmts scope .
-
-    $default  reduce using rule 6 (stmts)
-
-
 State 14
+
+    6 stmt: ';' .
+
+    $default  reduce using rule 6 (stmt)
+
+
+State 15
+
+   13 stmt: scope .
+
+    $default  reduce using rule 13 (stmt)
+
+
+State 16
 
     5 stmts: stmts stmt .
 
     $default  reduce using rule 5 (stmts)
 
 
-State 15
-
-    8 stmt: expr . ';'
-   13 expr: expr . '+' expr
-   14     | expr . '-' expr
-   15     | expr . '*' expr
-   16     | expr . '/' expr
-
-    '+'  shift, and go to state 19
-    '-'  shift, and go to state 20
-    '*'  shift, and go to state 21
-    '/'  shift, and go to state 22
-    ';'  shift, and go to state 23
-
-
-State 16
-
-   10 stmt: VARIABLE '=' . expr ';'
-
-    INTEGER   shift, and go to state 8
-    VARIABLE  shift, and go to state 17
-
-    expr  go to state 24
-
-
 State 17
 
-   12 expr: VARIABLE .
+    7 stmt: expr . ';'
+   16 expr: expr . '+' expr
+   17     | expr . '-' expr
+   18     | expr . '*' expr
+   19     | expr . '/' expr
 
-    $default  reduce using rule 12 (expr)
+    '+'  shift, and go to state 23
+    '-'  shift, and go to state 24
+    '*'  shift, and go to state 25
+    '/'  shift, and go to state 26
+    ';'  shift, and go to state 27
 
 
 State 18
 
-    9 stmt: PRINT expr . ';'
-   13 expr: expr . '+' expr
-   14     | expr . '-' expr
-   15     | expr . '*' expr
-   16     | expr . '/' expr
-
-    '+'  shift, and go to state 19
-    '-'  shift, and go to state 20
-    '*'  shift, and go to state 21
-    '/'  shift, and go to state 22
-    ';'  shift, and go to state 25
-
-
-State 19
-
-   13 expr: expr '+' . expr
+    9 stmt: VARIABLE '=' . expr ';'
 
     INTEGER   shift, and go to state 8
-    VARIABLE  shift, and go to state 17
-
-    expr  go to state 26
-
-
-State 20
-
-   14 expr: expr '-' . expr
-
-    INTEGER   shift, and go to state 8
-    VARIABLE  shift, and go to state 17
-
-    expr  go to state 27
-
-
-State 21
-
-   15 expr: expr '*' . expr
-
-    INTEGER   shift, and go to state 8
-    VARIABLE  shift, and go to state 17
+    VARIABLE  shift, and go to state 21
 
     expr  go to state 28
 
 
-State 22
+State 19
 
-   16 expr: expr '/' . expr
+   10 stmt: WHILE '(' . expr ')' stmt
 
     INTEGER   shift, and go to state 8
-    VARIABLE  shift, and go to state 17
+    VARIABLE  shift, and go to state 21
 
     expr  go to state 29
 
 
-State 23
+State 20
 
-    8 stmt: expr ';' .
+   11 stmt: IF '(' . expr ')' stmt
+   12     | IF '(' . expr ')' stmt ELSE stmt
 
-    $default  reduce using rule 8 (stmt)
+    INTEGER   shift, and go to state 8
+    VARIABLE  shift, and go to state 21
 
-
-State 24
-
-   10 stmt: VARIABLE '=' expr . ';'
-   13 expr: expr . '+' expr
-   14     | expr . '-' expr
-   15     | expr . '*' expr
-   16     | expr . '/' expr
-
-    '+'  shift, and go to state 19
-    '-'  shift, and go to state 20
-    '*'  shift, and go to state 21
-    '/'  shift, and go to state 22
-    ';'  shift, and go to state 30
+    expr  go to state 30
 
 
-State 25
+State 21
 
-    9 stmt: PRINT expr ';' .
-
-    $default  reduce using rule 9 (stmt)
-
-
-State 26
-
-   13 expr: expr . '+' expr
-   13     | expr '+' expr .
-   14     | expr . '-' expr
-   15     | expr . '*' expr
-   16     | expr . '/' expr
-
-    '*'  shift, and go to state 21
-    '/'  shift, and go to state 22
-
-    $default  reduce using rule 13 (expr)
-
-
-State 27
-
-   13 expr: expr . '+' expr
-   14     | expr . '-' expr
-   14     | expr '-' expr .
-   15     | expr . '*' expr
-   16     | expr . '/' expr
-
-    '*'  shift, and go to state 21
-    '/'  shift, and go to state 22
-
-    $default  reduce using rule 14 (expr)
-
-
-State 28
-
-   13 expr: expr . '+' expr
-   14     | expr . '-' expr
-   15     | expr . '*' expr
-   15     | expr '*' expr .
-   16     | expr . '/' expr
+   15 expr: VARIABLE .
 
     $default  reduce using rule 15 (expr)
 
 
+State 22
+
+    8 stmt: PRINT expr . ';'
+   16 expr: expr . '+' expr
+   17     | expr . '-' expr
+   18     | expr . '*' expr
+   19     | expr . '/' expr
+
+    '+'  shift, and go to state 23
+    '-'  shift, and go to state 24
+    '*'  shift, and go to state 25
+    '/'  shift, and go to state 26
+    ';'  shift, and go to state 31
+
+
+State 23
+
+   16 expr: expr '+' . expr
+
+    INTEGER   shift, and go to state 8
+    VARIABLE  shift, and go to state 21
+
+    expr  go to state 32
+
+
+State 24
+
+   17 expr: expr '-' . expr
+
+    INTEGER   shift, and go to state 8
+    VARIABLE  shift, and go to state 21
+
+    expr  go to state 33
+
+
+State 25
+
+   18 expr: expr '*' . expr
+
+    INTEGER   shift, and go to state 8
+    VARIABLE  shift, and go to state 21
+
+    expr  go to state 34
+
+
+State 26
+
+   19 expr: expr '/' . expr
+
+    INTEGER   shift, and go to state 8
+    VARIABLE  shift, and go to state 21
+
+    expr  go to state 35
+
+
+State 27
+
+    7 stmt: expr ';' .
+
+    $default  reduce using rule 7 (stmt)
+
+
+State 28
+
+    9 stmt: VARIABLE '=' expr . ';'
+   16 expr: expr . '+' expr
+   17     | expr . '-' expr
+   18     | expr . '*' expr
+   19     | expr . '/' expr
+
+    '+'  shift, and go to state 23
+    '-'  shift, and go to state 24
+    '*'  shift, and go to state 25
+    '/'  shift, and go to state 26
+    ';'  shift, and go to state 36
+
+
 State 29
 
-   13 expr: expr . '+' expr
-   14     | expr . '-' expr
-   15     | expr . '*' expr
-   16     | expr . '/' expr
-   16     | expr '/' expr .
+   10 stmt: WHILE '(' expr . ')' stmt
+   16 expr: expr . '+' expr
+   17     | expr . '-' expr
+   18     | expr . '*' expr
+   19     | expr . '/' expr
 
-    $default  reduce using rule 16 (expr)
+    '+'  shift, and go to state 23
+    '-'  shift, and go to state 24
+    '*'  shift, and go to state 25
+    '/'  shift, and go to state 26
+    ')'  shift, and go to state 37
 
 
 State 30
 
-   10 stmt: VARIABLE '=' expr ';' .
+   11 stmt: IF '(' expr . ')' stmt
+   12     | IF '(' expr . ')' stmt ELSE stmt
+   16 expr: expr . '+' expr
+   17     | expr . '-' expr
+   18     | expr . '*' expr
+   19     | expr . '/' expr
+
+    '+'  shift, and go to state 23
+    '-'  shift, and go to state 24
+    '*'  shift, and go to state 25
+    '/'  shift, and go to state 26
+    ')'  shift, and go to state 38
+
+
+State 31
+
+    8 stmt: PRINT expr ';' .
+
+    $default  reduce using rule 8 (stmt)
+
+
+State 32
+
+   16 expr: expr . '+' expr
+   16     | expr '+' expr .
+   17     | expr . '-' expr
+   18     | expr . '*' expr
+   19     | expr . '/' expr
+
+    '*'  shift, and go to state 25
+    '/'  shift, and go to state 26
+
+    $default  reduce using rule 16 (expr)
+
+
+State 33
+
+   16 expr: expr . '+' expr
+   17     | expr . '-' expr
+   17     | expr '-' expr .
+   18     | expr . '*' expr
+   19     | expr . '/' expr
+
+    '*'  shift, and go to state 25
+    '/'  shift, and go to state 26
+
+    $default  reduce using rule 17 (expr)
+
+
+State 34
+
+   16 expr: expr . '+' expr
+   17     | expr . '-' expr
+   18     | expr . '*' expr
+   18     | expr '*' expr .
+   19     | expr . '/' expr
+
+    $default  reduce using rule 18 (expr)
+
+
+State 35
+
+   16 expr: expr . '+' expr
+   17     | expr . '-' expr
+   18     | expr . '*' expr
+   19     | expr . '/' expr
+   19     | expr '/' expr .
+
+    $default  reduce using rule 19 (expr)
+
+
+State 36
+
+    9 stmt: VARIABLE '=' expr ';' .
+
+    $default  reduce using rule 9 (stmt)
+
+
+State 37
+
+   10 stmt: WHILE '(' expr ')' . stmt
+
+    INTEGER   shift, and go to state 8
+    VARIABLE  shift, and go to state 9
+    WHILE     shift, and go to state 10
+    IF        shift, and go to state 11
+    PRINT     shift, and go to state 12
+    '{'       shift, and go to state 4
+    ';'       shift, and go to state 14
+
+    scope  go to state 15
+    stmt   go to state 39
+    expr   go to state 17
+
+
+State 38
+
+   11 stmt: IF '(' expr ')' . stmt
+   12     | IF '(' expr ')' . stmt ELSE stmt
+
+    INTEGER   shift, and go to state 8
+    VARIABLE  shift, and go to state 9
+    WHILE     shift, and go to state 10
+    IF        shift, and go to state 11
+    PRINT     shift, and go to state 12
+    '{'       shift, and go to state 4
+    ';'       shift, and go to state 14
+
+    scope  go to state 15
+    stmt   go to state 40
+    expr   go to state 17
+
+
+State 39
+
+   10 stmt: WHILE '(' expr ')' stmt .
 
     $default  reduce using rule 10 (stmt)
+
+
+State 40
+
+   11 stmt: IF '(' expr ')' stmt .
+   12     | IF '(' expr ')' stmt . ELSE stmt
+
+    ELSE  shift, and go to state 41
+
+    $default  reduce using rule 11 (stmt)
+
+
+State 41
+
+   12 stmt: IF '(' expr ')' stmt ELSE . stmt
+
+    INTEGER   shift, and go to state 8
+    VARIABLE  shift, and go to state 9
+    WHILE     shift, and go to state 10
+    IF        shift, and go to state 11
+    PRINT     shift, and go to state 12
+    '{'       shift, and go to state 4
+    ';'       shift, and go to state 14
+
+    scope  go to state 15
+    stmt   go to state 42
+    expr   go to state 17
+
+
+State 42
+
+   12 stmt: IF '(' expr ')' stmt ELSE stmt .
+
+    $default  reduce using rule 12 (stmt)

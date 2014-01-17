@@ -1,4 +1,7 @@
 main {
     kuch3en2 = 2 + 4;
+    3 + 3;
     print kucH3en2;
+    if ( 3+2 ) print hons;
+    if ( kuchen ) { print kuchen; valzo = 22; } else print kuan;
 }

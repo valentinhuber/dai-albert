@@ -46,17 +46,16 @@ scope:   '{' stmts '}'         { printf("scope\n"); }
 
 stmts:   /* NULL */
         | stmts stmt        { printf("stmt\n"); }
-        | stmts scope
         ;
 
 stmt:   ';'                            { printf("semicolon\n"); }
         | expr ';'                       { printf("expr\n"); }
         | PRINT expr ';'                 { printf("print\n"); }
         | VARIABLE '=' expr ';'          { printf("assignment\n"); }
-        /* | WHILE '(' expr ')' stmt        { printf(";"); }
-        | IF '(' expr ')' stmt %prec IFX { printf(";"); }
-        | IF '(' expr ')' stmt ELSE stmt { printf(";"); }
-        | '{' stmt_list '}'              { printf(";"); } */
+        | WHILE '(' expr ')' stmt        { printf("while"); }
+        | IF '(' expr ')' stmt %prec IFX { printf("if"); }
+        | IF '(' expr ')' stmt ELSE stmt { printf("if else"); }
+        | scope                          { printf(";"); } 
         ;
 /*
 stmt_list:
