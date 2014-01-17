@@ -52,13 +52,19 @@ extern int yydebug;
      WHILE = 261,
      IF = 262,
      PRINT = 263,
-     IFX = 264,
-     ELSE = 265,
-     NE = 266,
-     EQ = 267,
-     LE = 268,
-     GE = 269,
-     UMINUS = 270
+     TRUE = 264,
+     FALSE = 265,
+     IFX = 266,
+     ELSE = 267,
+     INT = 268,
+     FLOAT = 269,
+     BOOL = 270,
+     STRING = 271,
+     NE = 272,
+     EQ = 273,
+     LE = 274,
+     GE = 275,
+     UMINUS = 276
    };
 #endif
 /* Tokens.  */
@@ -68,13 +74,19 @@ extern int yydebug;
 #define WHILE 261
 #define IF 262
 #define PRINT 263
-#define IFX 264
-#define ELSE 265
-#define NE 266
-#define EQ 267
-#define LE 268
-#define GE 269
-#define UMINUS 270
+#define TRUE 264
+#define FALSE 265
+#define IFX 266
+#define ELSE 267
+#define INT 268
+#define FLOAT 269
+#define BOOL 270
+#define STRING 271
+#define NE 272
+#define EQ 273
+#define LE 274
+#define GE 275
+#define UMINUS 276
 
 
 
@@ -86,11 +98,11 @@ typedef union YYSTYPE
 
     int iValue;                 /* integer value */
     char* sValue;                /* symbol table index */
-    nodeType *nPtr;             /* node pointer */
+    int type;
 
 
 /* Line 2053 of yacc.c  */
-#line 94 "y.tab.h"
+#line 106 "y.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

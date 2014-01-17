@@ -31,6 +31,13 @@ void yyerror(char *);
 "print"         return PRINT;
 "main"          return MAIN;
 
+"int"           return INT;
+"bool"          return BOOL;
+"float"         return FLOAT;
+"string"        return STRING; 
+"true"          return TRUE;
+"false"         return FALSE;
+
 [a-z][A-z0-9]*       { 
                 yylval.sValue = strdup(yytext);
                 return VARIABLE;

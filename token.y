@@ -16,15 +16,22 @@ void yyerror(char *s);
 %union {
     int iValue;                 /* integer value */
     char* sValue;                /* symbol table index */
-    nodeType *nPtr;             /* node pointer */
+    int type;
 };
 
 %token MAIN
 %token <iValue> INTEGER
-%token <sIndex> VARIABLE
+%token <sValue> VARIABLE
 %token WHILE IF PRINT
+%token TRUE
+%token FALSE
 %nonassoc IFX
 %nonassoc ELSE
+
+%token <type> INT
+%token <type> FLOAT
+%token <type> BOOL
+%token <type> STRING
 
 %left GE LE EQ NE '>' '<'
 %left '+' '-'
@@ -45,7 +52,8 @@ stmts:   /* NULL */
         | stmts stmt        { printf("stmt\n"); }
         ;
 
-stmt:   ';'                            { printf("semicolon\n"); }
+stmt:   ';'                              { printf("semicolon\n"); }
+        | declaration ';'                { printf("declaration\n"); }
         | expr ';'                       { printf("expr\n"); }
         | PRINT expr ';'                 { printf("print\n"); }
         | VARIABLE '=' expr ';'          { printf("assignment\n"); }
@@ -54,6 +62,8 @@ stmt:   ';'                            { printf("semicolon\n"); }
         | IF '(' expr ')' stmt ELSE stmt { printf("if else"); }
         | scope                          { printf(";"); } 
         ;
+
+declaration: INT { $<type>$ = 'i'; } expr ';'
 /*
 stmt_list:
           stmt                  { $$ = $1; }
