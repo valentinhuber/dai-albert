@@ -1,11 +1,7 @@
 Terminals unused in grammar
 
-   WHILE
-   IF
    TRUE
    FALSE
-   IFX
-   ELSE
    FLOAT
    BOOL
    STRING
@@ -32,61 +28,64 @@ Grammar
     9     | declaration ';'
    10     | PRINT expr ';'
    11     | VARIABLE '=' expr ';'
-   12     | scope
+   12     | WHILE '(' expr ')' stmt
+   13     | IF '(' expr ')' stmt
+   14     | IF '(' expr ')' stmt ELSE stmt
+   15     | scope
 
-   13 @1: /* empty */
+   16 @1: /* empty */
 
-   14 declaration: INT @1 expr ';'
+   17 declaration: INT @1 expr ';'
 
-   15 expr: INTEGER
-   16     | VARIABLE
-   17     | expr '+' expr
-   18     | expr '-' expr
-   19     | expr '*' expr
-   20     | expr '/' expr
-   21     | expr '<' expr
-   22     | expr '>' expr
-   23     | expr GE expr
-   24     | expr LE expr
-   25     | expr NE expr
-   26     | expr EQ expr
-   27     | '(' expr ')'
+   18 expr: INTEGER
+   19     | VARIABLE
+   20     | expr '+' expr
+   21     | expr '-' expr
+   22     | expr '*' expr
+   23     | expr '/' expr
+   24     | expr '<' expr
+   25     | expr '>' expr
+   26     | expr GE expr
+   27     | expr LE expr
+   28     | expr NE expr
+   29     | expr EQ expr
+   30     | '(' expr ')'
 
 
 Terminals, with rules where they appear
 
 $end (0) 0
-'(' (40) 27
-')' (41) 27
-'*' (42) 19
-'+' (43) 17
-'-' (45) 18
-'/' (47) 20
-';' (59) 8 9 10 11 14
-'<' (60) 21
+'(' (40) 12 13 14 30
+')' (41) 12 13 14 30
+'*' (42) 22
+'+' (43) 20
+'-' (45) 21
+'/' (47) 23
+';' (59) 8 9 10 11 17
+'<' (60) 24
 '=' (61) 11
-'>' (62) 22
+'>' (62) 25
 '{' (123) 5
 '}' (125) 5
 error (256)
 MAIN (258) 3
-INTEGER (259) 15
-VARIABLE (260) 11 16
-WHILE (261)
-IF (262)
+INTEGER (259) 18
+VARIABLE (260) 11 19
+WHILE (261) 12
+IF (262) 13 14
 PRINT (263) 10
 TRUE (264)
 FALSE (265)
 IFX (266)
-ELSE (267)
-INT (268) 14
+ELSE (267) 14
+INT (268) 17
 FLOAT (269)
 BOOL (270)
 STRING (271)
-NE (272) 25
-EQ (273) 26
-LE (274) 24
-GE (275) 23
+NE (272) 28
+EQ (273) 29
+LE (274) 27
+GE (275) 26
 UMINUS (276)
 
 
@@ -101,18 +100,18 @@ init (36)
 function (37)
     on left: 3 4, on right: 1
 scope (38)
-    on left: 5, on right: 3 12
+    on left: 5, on right: 3 15
 stmts (39)
     on left: 6 7, on right: 5 7
 stmt (40)
-    on left: 8 9 10 11 12, on right: 7
+    on left: 8 9 10 11 12 13 14 15, on right: 7 12 13 14
 declaration (41)
-    on left: 14, on right: 9
+    on left: 17, on right: 9
 @1 (42)
-    on left: 13, on right: 14
+    on left: 16, on right: 17
 expr (43)
-    on left: 15 16 17 18 19 20 21 22 23 24 25 26 27, on right: 10 11
-    14 17 18 19 20 21 22 23 24 25 26 27
+    on left: 18 19 20 21 22 23 24 25 26 27 28 29 30, on right: 10 11
+    12 13 14 17 20 21 22 23 24 25 26 27 28 29 30
 
 
 State 0
@@ -188,580 +187,751 @@ State 8
     7 stmts: stmts . stmt
 
     VARIABLE  shift, and go to state 9
-    PRINT     shift, and go to state 10
-    INT       shift, and go to state 11
+    WHILE     shift, and go to state 10
+    IF        shift, and go to state 11
+    PRINT     shift, and go to state 12
+    INT       shift, and go to state 13
     '{'       shift, and go to state 6
-    '}'       shift, and go to state 12
-    ';'       shift, and go to state 13
+    '}'       shift, and go to state 14
+    ';'       shift, and go to state 15
 
-    scope        go to state 14
-    stmt         go to state 15
-    declaration  go to state 16
+    scope        go to state 16
+    stmt         go to state 17
+    declaration  go to state 18
 
 
 State 9
 
    11 stmt: VARIABLE . '=' expr ';'
 
-    '='  shift, and go to state 17
+    '='  shift, and go to state 19
 
 
 State 10
 
-   10 stmt: PRINT . expr ';'
+   12 stmt: WHILE . '(' expr ')' stmt
 
-    INTEGER   shift, and go to state 18
-    VARIABLE  shift, and go to state 19
-    '('       shift, and go to state 20
-
-    expr  go to state 21
+    '('  shift, and go to state 20
 
 
 State 11
 
-   14 declaration: INT . @1 expr ';'
+   13 stmt: IF . '(' expr ')' stmt
+   14     | IF . '(' expr ')' stmt ELSE stmt
 
-    $default  reduce using rule 13 (@1)
-
-    @1  go to state 22
+    '('  shift, and go to state 21
 
 
 State 12
+
+   10 stmt: PRINT . expr ';'
+
+    INTEGER   shift, and go to state 22
+    VARIABLE  shift, and go to state 23
+    '('       shift, and go to state 24
+
+    expr  go to state 25
+
+
+State 13
+
+   17 declaration: INT . @1 expr ';'
+
+    $default  reduce using rule 16 (@1)
+
+    @1  go to state 26
+
+
+State 14
 
     5 scope: '{' stmts '}' .
 
     $default  reduce using rule 5 (scope)
 
 
-State 13
+State 15
 
     8 stmt: ';' .
 
     $default  reduce using rule 8 (stmt)
 
 
-State 14
+State 16
 
-   12 stmt: scope .
+   15 stmt: scope .
 
-    $default  reduce using rule 12 (stmt)
+    $default  reduce using rule 15 (stmt)
 
 
-State 15
+State 17
 
     7 stmts: stmts stmt .
 
     $default  reduce using rule 7 (stmts)
 
 
-State 16
+State 18
 
     9 stmt: declaration . ';'
 
-    ';'  shift, and go to state 23
-
-
-State 17
-
-   11 stmt: VARIABLE '=' . expr ';'
-
-    INTEGER   shift, and go to state 18
-    VARIABLE  shift, and go to state 19
-    '('       shift, and go to state 20
-
-    expr  go to state 24
-
-
-State 18
-
-   15 expr: INTEGER .
-
-    $default  reduce using rule 15 (expr)
+    ';'  shift, and go to state 27
 
 
 State 19
 
-   16 expr: VARIABLE .
+   11 stmt: VARIABLE '=' . expr ';'
 
-    $default  reduce using rule 16 (expr)
+    INTEGER   shift, and go to state 22
+    VARIABLE  shift, and go to state 23
+    '('       shift, and go to state 24
+
+    expr  go to state 28
 
 
 State 20
 
-   27 expr: '(' . expr ')'
+   12 stmt: WHILE '(' . expr ')' stmt
 
-    INTEGER   shift, and go to state 18
-    VARIABLE  shift, and go to state 19
-    '('       shift, and go to state 20
+    INTEGER   shift, and go to state 22
+    VARIABLE  shift, and go to state 23
+    '('       shift, and go to state 24
 
-    expr  go to state 25
+    expr  go to state 29
 
 
 State 21
 
-   10 stmt: PRINT expr . ';'
-   17 expr: expr . '+' expr
-   18     | expr . '-' expr
-   19     | expr . '*' expr
-   20     | expr . '/' expr
-   21     | expr . '<' expr
-   22     | expr . '>' expr
-   23     | expr . GE expr
-   24     | expr . LE expr
-   25     | expr . NE expr
-   26     | expr . EQ expr
+   13 stmt: IF '(' . expr ')' stmt
+   14     | IF '(' . expr ')' stmt ELSE stmt
 
-    '>'  shift, and go to state 26
-    '<'  shift, and go to state 27
-    NE   shift, and go to state 28
-    EQ   shift, and go to state 29
-    LE   shift, and go to state 30
-    GE   shift, and go to state 31
-    '+'  shift, and go to state 32
-    '-'  shift, and go to state 33
-    '*'  shift, and go to state 34
-    '/'  shift, and go to state 35
-    ';'  shift, and go to state 36
+    INTEGER   shift, and go to state 22
+    VARIABLE  shift, and go to state 23
+    '('       shift, and go to state 24
+
+    expr  go to state 30
 
 
 State 22
 
-   14 declaration: INT @1 . expr ';'
+   18 expr: INTEGER .
 
-    INTEGER   shift, and go to state 18
-    VARIABLE  shift, and go to state 19
-    '('       shift, and go to state 20
-
-    expr  go to state 37
+    $default  reduce using rule 18 (expr)
 
 
 State 23
+
+   19 expr: VARIABLE .
+
+    $default  reduce using rule 19 (expr)
+
+
+State 24
+
+   30 expr: '(' . expr ')'
+
+    INTEGER   shift, and go to state 22
+    VARIABLE  shift, and go to state 23
+    '('       shift, and go to state 24
+
+    expr  go to state 31
+
+
+State 25
+
+   10 stmt: PRINT expr . ';'
+   20 expr: expr . '+' expr
+   21     | expr . '-' expr
+   22     | expr . '*' expr
+   23     | expr . '/' expr
+   24     | expr . '<' expr
+   25     | expr . '>' expr
+   26     | expr . GE expr
+   27     | expr . LE expr
+   28     | expr . NE expr
+   29     | expr . EQ expr
+
+    '>'  shift, and go to state 32
+    '<'  shift, and go to state 33
+    NE   shift, and go to state 34
+    EQ   shift, and go to state 35
+    LE   shift, and go to state 36
+    GE   shift, and go to state 37
+    '+'  shift, and go to state 38
+    '-'  shift, and go to state 39
+    '*'  shift, and go to state 40
+    '/'  shift, and go to state 41
+    ';'  shift, and go to state 42
+
+
+State 26
+
+   17 declaration: INT @1 . expr ';'
+
+    INTEGER   shift, and go to state 22
+    VARIABLE  shift, and go to state 23
+    '('       shift, and go to state 24
+
+    expr  go to state 43
+
+
+State 27
 
     9 stmt: declaration ';' .
 
     $default  reduce using rule 9 (stmt)
 
 
-State 24
-
-   11 stmt: VARIABLE '=' expr . ';'
-   17 expr: expr . '+' expr
-   18     | expr . '-' expr
-   19     | expr . '*' expr
-   20     | expr . '/' expr
-   21     | expr . '<' expr
-   22     | expr . '>' expr
-   23     | expr . GE expr
-   24     | expr . LE expr
-   25     | expr . NE expr
-   26     | expr . EQ expr
-
-    '>'  shift, and go to state 26
-    '<'  shift, and go to state 27
-    NE   shift, and go to state 28
-    EQ   shift, and go to state 29
-    LE   shift, and go to state 30
-    GE   shift, and go to state 31
-    '+'  shift, and go to state 32
-    '-'  shift, and go to state 33
-    '*'  shift, and go to state 34
-    '/'  shift, and go to state 35
-    ';'  shift, and go to state 38
-
-
-State 25
-
-   17 expr: expr . '+' expr
-   18     | expr . '-' expr
-   19     | expr . '*' expr
-   20     | expr . '/' expr
-   21     | expr . '<' expr
-   22     | expr . '>' expr
-   23     | expr . GE expr
-   24     | expr . LE expr
-   25     | expr . NE expr
-   26     | expr . EQ expr
-   27     | '(' expr . ')'
-
-    '>'  shift, and go to state 26
-    '<'  shift, and go to state 27
-    NE   shift, and go to state 28
-    EQ   shift, and go to state 29
-    LE   shift, and go to state 30
-    GE   shift, and go to state 31
-    '+'  shift, and go to state 32
-    '-'  shift, and go to state 33
-    '*'  shift, and go to state 34
-    '/'  shift, and go to state 35
-    ')'  shift, and go to state 39
-
-
-State 26
-
-   22 expr: expr '>' . expr
-
-    INTEGER   shift, and go to state 18
-    VARIABLE  shift, and go to state 19
-    '('       shift, and go to state 20
-
-    expr  go to state 40
-
-
-State 27
-
-   21 expr: expr '<' . expr
-
-    INTEGER   shift, and go to state 18
-    VARIABLE  shift, and go to state 19
-    '('       shift, and go to state 20
-
-    expr  go to state 41
-
-
 State 28
 
-   25 expr: expr NE . expr
+   11 stmt: VARIABLE '=' expr . ';'
+   20 expr: expr . '+' expr
+   21     | expr . '-' expr
+   22     | expr . '*' expr
+   23     | expr . '/' expr
+   24     | expr . '<' expr
+   25     | expr . '>' expr
+   26     | expr . GE expr
+   27     | expr . LE expr
+   28     | expr . NE expr
+   29     | expr . EQ expr
 
-    INTEGER   shift, and go to state 18
-    VARIABLE  shift, and go to state 19
-    '('       shift, and go to state 20
-
-    expr  go to state 42
+    '>'  shift, and go to state 32
+    '<'  shift, and go to state 33
+    NE   shift, and go to state 34
+    EQ   shift, and go to state 35
+    LE   shift, and go to state 36
+    GE   shift, and go to state 37
+    '+'  shift, and go to state 38
+    '-'  shift, and go to state 39
+    '*'  shift, and go to state 40
+    '/'  shift, and go to state 41
+    ';'  shift, and go to state 44
 
 
 State 29
 
-   26 expr: expr EQ . expr
+   12 stmt: WHILE '(' expr . ')' stmt
+   20 expr: expr . '+' expr
+   21     | expr . '-' expr
+   22     | expr . '*' expr
+   23     | expr . '/' expr
+   24     | expr . '<' expr
+   25     | expr . '>' expr
+   26     | expr . GE expr
+   27     | expr . LE expr
+   28     | expr . NE expr
+   29     | expr . EQ expr
 
-    INTEGER   shift, and go to state 18
-    VARIABLE  shift, and go to state 19
-    '('       shift, and go to state 20
-
-    expr  go to state 43
+    '>'  shift, and go to state 32
+    '<'  shift, and go to state 33
+    NE   shift, and go to state 34
+    EQ   shift, and go to state 35
+    LE   shift, and go to state 36
+    GE   shift, and go to state 37
+    '+'  shift, and go to state 38
+    '-'  shift, and go to state 39
+    '*'  shift, and go to state 40
+    '/'  shift, and go to state 41
+    ')'  shift, and go to state 45
 
 
 State 30
 
-   24 expr: expr LE . expr
+   13 stmt: IF '(' expr . ')' stmt
+   14     | IF '(' expr . ')' stmt ELSE stmt
+   20 expr: expr . '+' expr
+   21     | expr . '-' expr
+   22     | expr . '*' expr
+   23     | expr . '/' expr
+   24     | expr . '<' expr
+   25     | expr . '>' expr
+   26     | expr . GE expr
+   27     | expr . LE expr
+   28     | expr . NE expr
+   29     | expr . EQ expr
 
-    INTEGER   shift, and go to state 18
-    VARIABLE  shift, and go to state 19
-    '('       shift, and go to state 20
-
-    expr  go to state 44
+    '>'  shift, and go to state 32
+    '<'  shift, and go to state 33
+    NE   shift, and go to state 34
+    EQ   shift, and go to state 35
+    LE   shift, and go to state 36
+    GE   shift, and go to state 37
+    '+'  shift, and go to state 38
+    '-'  shift, and go to state 39
+    '*'  shift, and go to state 40
+    '/'  shift, and go to state 41
+    ')'  shift, and go to state 46
 
 
 State 31
 
-   23 expr: expr GE . expr
+   20 expr: expr . '+' expr
+   21     | expr . '-' expr
+   22     | expr . '*' expr
+   23     | expr . '/' expr
+   24     | expr . '<' expr
+   25     | expr . '>' expr
+   26     | expr . GE expr
+   27     | expr . LE expr
+   28     | expr . NE expr
+   29     | expr . EQ expr
+   30     | '(' expr . ')'
 
-    INTEGER   shift, and go to state 18
-    VARIABLE  shift, and go to state 19
-    '('       shift, and go to state 20
-
-    expr  go to state 45
+    '>'  shift, and go to state 32
+    '<'  shift, and go to state 33
+    NE   shift, and go to state 34
+    EQ   shift, and go to state 35
+    LE   shift, and go to state 36
+    GE   shift, and go to state 37
+    '+'  shift, and go to state 38
+    '-'  shift, and go to state 39
+    '*'  shift, and go to state 40
+    '/'  shift, and go to state 41
+    ')'  shift, and go to state 47
 
 
 State 32
 
-   17 expr: expr '+' . expr
+   25 expr: expr '>' . expr
 
-    INTEGER   shift, and go to state 18
-    VARIABLE  shift, and go to state 19
-    '('       shift, and go to state 20
-
-    expr  go to state 46
-
-
-State 33
-
-   18 expr: expr '-' . expr
-
-    INTEGER   shift, and go to state 18
-    VARIABLE  shift, and go to state 19
-    '('       shift, and go to state 20
-
-    expr  go to state 47
-
-
-State 34
-
-   19 expr: expr '*' . expr
-
-    INTEGER   shift, and go to state 18
-    VARIABLE  shift, and go to state 19
-    '('       shift, and go to state 20
+    INTEGER   shift, and go to state 22
+    VARIABLE  shift, and go to state 23
+    '('       shift, and go to state 24
 
     expr  go to state 48
 
 
-State 35
+State 33
 
-   20 expr: expr '/' . expr
+   24 expr: expr '<' . expr
 
-    INTEGER   shift, and go to state 18
-    VARIABLE  shift, and go to state 19
-    '('       shift, and go to state 20
+    INTEGER   shift, and go to state 22
+    VARIABLE  shift, and go to state 23
+    '('       shift, and go to state 24
 
     expr  go to state 49
 
 
+State 34
+
+   28 expr: expr NE . expr
+
+    INTEGER   shift, and go to state 22
+    VARIABLE  shift, and go to state 23
+    '('       shift, and go to state 24
+
+    expr  go to state 50
+
+
+State 35
+
+   29 expr: expr EQ . expr
+
+    INTEGER   shift, and go to state 22
+    VARIABLE  shift, and go to state 23
+    '('       shift, and go to state 24
+
+    expr  go to state 51
+
+
 State 36
+
+   27 expr: expr LE . expr
+
+    INTEGER   shift, and go to state 22
+    VARIABLE  shift, and go to state 23
+    '('       shift, and go to state 24
+
+    expr  go to state 52
+
+
+State 37
+
+   26 expr: expr GE . expr
+
+    INTEGER   shift, and go to state 22
+    VARIABLE  shift, and go to state 23
+    '('       shift, and go to state 24
+
+    expr  go to state 53
+
+
+State 38
+
+   20 expr: expr '+' . expr
+
+    INTEGER   shift, and go to state 22
+    VARIABLE  shift, and go to state 23
+    '('       shift, and go to state 24
+
+    expr  go to state 54
+
+
+State 39
+
+   21 expr: expr '-' . expr
+
+    INTEGER   shift, and go to state 22
+    VARIABLE  shift, and go to state 23
+    '('       shift, and go to state 24
+
+    expr  go to state 55
+
+
+State 40
+
+   22 expr: expr '*' . expr
+
+    INTEGER   shift, and go to state 22
+    VARIABLE  shift, and go to state 23
+    '('       shift, and go to state 24
+
+    expr  go to state 56
+
+
+State 41
+
+   23 expr: expr '/' . expr
+
+    INTEGER   shift, and go to state 22
+    VARIABLE  shift, and go to state 23
+    '('       shift, and go to state 24
+
+    expr  go to state 57
+
+
+State 42
 
    10 stmt: PRINT expr ';' .
 
     $default  reduce using rule 10 (stmt)
 
 
-State 37
+State 43
 
-   14 declaration: INT @1 expr . ';'
-   17 expr: expr . '+' expr
-   18     | expr . '-' expr
-   19     | expr . '*' expr
-   20     | expr . '/' expr
-   21     | expr . '<' expr
-   22     | expr . '>' expr
-   23     | expr . GE expr
-   24     | expr . LE expr
-   25     | expr . NE expr
-   26     | expr . EQ expr
+   17 declaration: INT @1 expr . ';'
+   20 expr: expr . '+' expr
+   21     | expr . '-' expr
+   22     | expr . '*' expr
+   23     | expr . '/' expr
+   24     | expr . '<' expr
+   25     | expr . '>' expr
+   26     | expr . GE expr
+   27     | expr . LE expr
+   28     | expr . NE expr
+   29     | expr . EQ expr
 
-    '>'  shift, and go to state 26
-    '<'  shift, and go to state 27
-    NE   shift, and go to state 28
-    EQ   shift, and go to state 29
-    LE   shift, and go to state 30
-    GE   shift, and go to state 31
-    '+'  shift, and go to state 32
-    '-'  shift, and go to state 33
-    '*'  shift, and go to state 34
-    '/'  shift, and go to state 35
-    ';'  shift, and go to state 50
+    '>'  shift, and go to state 32
+    '<'  shift, and go to state 33
+    NE   shift, and go to state 34
+    EQ   shift, and go to state 35
+    LE   shift, and go to state 36
+    GE   shift, and go to state 37
+    '+'  shift, and go to state 38
+    '-'  shift, and go to state 39
+    '*'  shift, and go to state 40
+    '/'  shift, and go to state 41
+    ';'  shift, and go to state 58
 
 
-State 38
+State 44
 
    11 stmt: VARIABLE '=' expr ';' .
 
     $default  reduce using rule 11 (stmt)
 
 
-State 39
-
-   27 expr: '(' expr ')' .
-
-    $default  reduce using rule 27 (expr)
-
-
-State 40
-
-   17 expr: expr . '+' expr
-   18     | expr . '-' expr
-   19     | expr . '*' expr
-   20     | expr . '/' expr
-   21     | expr . '<' expr
-   22     | expr . '>' expr
-   22     | expr '>' expr .
-   23     | expr . GE expr
-   24     | expr . LE expr
-   25     | expr . NE expr
-   26     | expr . EQ expr
-
-    '+'  shift, and go to state 32
-    '-'  shift, and go to state 33
-    '*'  shift, and go to state 34
-    '/'  shift, and go to state 35
-
-    $default  reduce using rule 22 (expr)
-
-
-State 41
-
-   17 expr: expr . '+' expr
-   18     | expr . '-' expr
-   19     | expr . '*' expr
-   20     | expr . '/' expr
-   21     | expr . '<' expr
-   21     | expr '<' expr .
-   22     | expr . '>' expr
-   23     | expr . GE expr
-   24     | expr . LE expr
-   25     | expr . NE expr
-   26     | expr . EQ expr
-
-    '+'  shift, and go to state 32
-    '-'  shift, and go to state 33
-    '*'  shift, and go to state 34
-    '/'  shift, and go to state 35
-
-    $default  reduce using rule 21 (expr)
-
-
-State 42
-
-   17 expr: expr . '+' expr
-   18     | expr . '-' expr
-   19     | expr . '*' expr
-   20     | expr . '/' expr
-   21     | expr . '<' expr
-   22     | expr . '>' expr
-   23     | expr . GE expr
-   24     | expr . LE expr
-   25     | expr . NE expr
-   25     | expr NE expr .
-   26     | expr . EQ expr
-
-    '+'  shift, and go to state 32
-    '-'  shift, and go to state 33
-    '*'  shift, and go to state 34
-    '/'  shift, and go to state 35
-
-    $default  reduce using rule 25 (expr)
-
-
-State 43
-
-   17 expr: expr . '+' expr
-   18     | expr . '-' expr
-   19     | expr . '*' expr
-   20     | expr . '/' expr
-   21     | expr . '<' expr
-   22     | expr . '>' expr
-   23     | expr . GE expr
-   24     | expr . LE expr
-   25     | expr . NE expr
-   26     | expr . EQ expr
-   26     | expr EQ expr .
-
-    '+'  shift, and go to state 32
-    '-'  shift, and go to state 33
-    '*'  shift, and go to state 34
-    '/'  shift, and go to state 35
-
-    $default  reduce using rule 26 (expr)
-
-
-State 44
-
-   17 expr: expr . '+' expr
-   18     | expr . '-' expr
-   19     | expr . '*' expr
-   20     | expr . '/' expr
-   21     | expr . '<' expr
-   22     | expr . '>' expr
-   23     | expr . GE expr
-   24     | expr . LE expr
-   24     | expr LE expr .
-   25     | expr . NE expr
-   26     | expr . EQ expr
-
-    '+'  shift, and go to state 32
-    '-'  shift, and go to state 33
-    '*'  shift, and go to state 34
-    '/'  shift, and go to state 35
-
-    $default  reduce using rule 24 (expr)
-
-
 State 45
 
-   17 expr: expr . '+' expr
-   18     | expr . '-' expr
-   19     | expr . '*' expr
-   20     | expr . '/' expr
-   21     | expr . '<' expr
-   22     | expr . '>' expr
-   23     | expr . GE expr
-   23     | expr GE expr .
-   24     | expr . LE expr
-   25     | expr . NE expr
-   26     | expr . EQ expr
+   12 stmt: WHILE '(' expr ')' . stmt
 
-    '+'  shift, and go to state 32
-    '-'  shift, and go to state 33
-    '*'  shift, and go to state 34
-    '/'  shift, and go to state 35
+    VARIABLE  shift, and go to state 9
+    WHILE     shift, and go to state 10
+    IF        shift, and go to state 11
+    PRINT     shift, and go to state 12
+    INT       shift, and go to state 13
+    '{'       shift, and go to state 6
+    ';'       shift, and go to state 15
 
-    $default  reduce using rule 23 (expr)
+    scope        go to state 16
+    stmt         go to state 59
+    declaration  go to state 18
 
 
 State 46
 
-   17 expr: expr . '+' expr
-   17     | expr '+' expr .
-   18     | expr . '-' expr
-   19     | expr . '*' expr
-   20     | expr . '/' expr
-   21     | expr . '<' expr
-   22     | expr . '>' expr
-   23     | expr . GE expr
-   24     | expr . LE expr
-   25     | expr . NE expr
-   26     | expr . EQ expr
+   13 stmt: IF '(' expr ')' . stmt
+   14     | IF '(' expr ')' . stmt ELSE stmt
 
-    '*'  shift, and go to state 34
-    '/'  shift, and go to state 35
+    VARIABLE  shift, and go to state 9
+    WHILE     shift, and go to state 10
+    IF        shift, and go to state 11
+    PRINT     shift, and go to state 12
+    INT       shift, and go to state 13
+    '{'       shift, and go to state 6
+    ';'       shift, and go to state 15
 
-    $default  reduce using rule 17 (expr)
+    scope        go to state 16
+    stmt         go to state 60
+    declaration  go to state 18
 
 
 State 47
 
-   17 expr: expr . '+' expr
-   18     | expr . '-' expr
-   18     | expr '-' expr .
-   19     | expr . '*' expr
-   20     | expr . '/' expr
-   21     | expr . '<' expr
-   22     | expr . '>' expr
-   23     | expr . GE expr
-   24     | expr . LE expr
-   25     | expr . NE expr
-   26     | expr . EQ expr
+   30 expr: '(' expr ')' .
 
-    '*'  shift, and go to state 34
-    '/'  shift, and go to state 35
-
-    $default  reduce using rule 18 (expr)
+    $default  reduce using rule 30 (expr)
 
 
 State 48
 
-   17 expr: expr . '+' expr
-   18     | expr . '-' expr
-   19     | expr . '*' expr
-   19     | expr '*' expr .
-   20     | expr . '/' expr
-   21     | expr . '<' expr
-   22     | expr . '>' expr
-   23     | expr . GE expr
-   24     | expr . LE expr
-   25     | expr . NE expr
-   26     | expr . EQ expr
+   20 expr: expr . '+' expr
+   21     | expr . '-' expr
+   22     | expr . '*' expr
+   23     | expr . '/' expr
+   24     | expr . '<' expr
+   25     | expr . '>' expr
+   25     | expr '>' expr .
+   26     | expr . GE expr
+   27     | expr . LE expr
+   28     | expr . NE expr
+   29     | expr . EQ expr
 
-    $default  reduce using rule 19 (expr)
+    '+'  shift, and go to state 38
+    '-'  shift, and go to state 39
+    '*'  shift, and go to state 40
+    '/'  shift, and go to state 41
+
+    $default  reduce using rule 25 (expr)
 
 
 State 49
 
-   17 expr: expr . '+' expr
-   18     | expr . '-' expr
-   19     | expr . '*' expr
-   20     | expr . '/' expr
-   20     | expr '/' expr .
-   21     | expr . '<' expr
-   22     | expr . '>' expr
-   23     | expr . GE expr
-   24     | expr . LE expr
-   25     | expr . NE expr
-   26     | expr . EQ expr
+   20 expr: expr . '+' expr
+   21     | expr . '-' expr
+   22     | expr . '*' expr
+   23     | expr . '/' expr
+   24     | expr . '<' expr
+   24     | expr '<' expr .
+   25     | expr . '>' expr
+   26     | expr . GE expr
+   27     | expr . LE expr
+   28     | expr . NE expr
+   29     | expr . EQ expr
 
-    $default  reduce using rule 20 (expr)
+    '+'  shift, and go to state 38
+    '-'  shift, and go to state 39
+    '*'  shift, and go to state 40
+    '/'  shift, and go to state 41
+
+    $default  reduce using rule 24 (expr)
 
 
 State 50
 
-   14 declaration: INT @1 expr ';' .
+   20 expr: expr . '+' expr
+   21     | expr . '-' expr
+   22     | expr . '*' expr
+   23     | expr . '/' expr
+   24     | expr . '<' expr
+   25     | expr . '>' expr
+   26     | expr . GE expr
+   27     | expr . LE expr
+   28     | expr . NE expr
+   28     | expr NE expr .
+   29     | expr . EQ expr
 
-    $default  reduce using rule 14 (declaration)
+    '+'  shift, and go to state 38
+    '-'  shift, and go to state 39
+    '*'  shift, and go to state 40
+    '/'  shift, and go to state 41
+
+    $default  reduce using rule 28 (expr)
+
+
+State 51
+
+   20 expr: expr . '+' expr
+   21     | expr . '-' expr
+   22     | expr . '*' expr
+   23     | expr . '/' expr
+   24     | expr . '<' expr
+   25     | expr . '>' expr
+   26     | expr . GE expr
+   27     | expr . LE expr
+   28     | expr . NE expr
+   29     | expr . EQ expr
+   29     | expr EQ expr .
+
+    '+'  shift, and go to state 38
+    '-'  shift, and go to state 39
+    '*'  shift, and go to state 40
+    '/'  shift, and go to state 41
+
+    $default  reduce using rule 29 (expr)
+
+
+State 52
+
+   20 expr: expr . '+' expr
+   21     | expr . '-' expr
+   22     | expr . '*' expr
+   23     | expr . '/' expr
+   24     | expr . '<' expr
+   25     | expr . '>' expr
+   26     | expr . GE expr
+   27     | expr . LE expr
+   27     | expr LE expr .
+   28     | expr . NE expr
+   29     | expr . EQ expr
+
+    '+'  shift, and go to state 38
+    '-'  shift, and go to state 39
+    '*'  shift, and go to state 40
+    '/'  shift, and go to state 41
+
+    $default  reduce using rule 27 (expr)
+
+
+State 53
+
+   20 expr: expr . '+' expr
+   21     | expr . '-' expr
+   22     | expr . '*' expr
+   23     | expr . '/' expr
+   24     | expr . '<' expr
+   25     | expr . '>' expr
+   26     | expr . GE expr
+   26     | expr GE expr .
+   27     | expr . LE expr
+   28     | expr . NE expr
+   29     | expr . EQ expr
+
+    '+'  shift, and go to state 38
+    '-'  shift, and go to state 39
+    '*'  shift, and go to state 40
+    '/'  shift, and go to state 41
+
+    $default  reduce using rule 26 (expr)
+
+
+State 54
+
+   20 expr: expr . '+' expr
+   20     | expr '+' expr .
+   21     | expr . '-' expr
+   22     | expr . '*' expr
+   23     | expr . '/' expr
+   24     | expr . '<' expr
+   25     | expr . '>' expr
+   26     | expr . GE expr
+   27     | expr . LE expr
+   28     | expr . NE expr
+   29     | expr . EQ expr
+
+    '*'  shift, and go to state 40
+    '/'  shift, and go to state 41
+
+    $default  reduce using rule 20 (expr)
+
+
+State 55
+
+   20 expr: expr . '+' expr
+   21     | expr . '-' expr
+   21     | expr '-' expr .
+   22     | expr . '*' expr
+   23     | expr . '/' expr
+   24     | expr . '<' expr
+   25     | expr . '>' expr
+   26     | expr . GE expr
+   27     | expr . LE expr
+   28     | expr . NE expr
+   29     | expr . EQ expr
+
+    '*'  shift, and go to state 40
+    '/'  shift, and go to state 41
+
+    $default  reduce using rule 21 (expr)
+
+
+State 56
+
+   20 expr: expr . '+' expr
+   21     | expr . '-' expr
+   22     | expr . '*' expr
+   22     | expr '*' expr .
+   23     | expr . '/' expr
+   24     | expr . '<' expr
+   25     | expr . '>' expr
+   26     | expr . GE expr
+   27     | expr . LE expr
+   28     | expr . NE expr
+   29     | expr . EQ expr
+
+    $default  reduce using rule 22 (expr)
+
+
+State 57
+
+   20 expr: expr . '+' expr
+   21     | expr . '-' expr
+   22     | expr . '*' expr
+   23     | expr . '/' expr
+   23     | expr '/' expr .
+   24     | expr . '<' expr
+   25     | expr . '>' expr
+   26     | expr . GE expr
+   27     | expr . LE expr
+   28     | expr . NE expr
+   29     | expr . EQ expr
+
+    $default  reduce using rule 23 (expr)
+
+
+State 58
+
+   17 declaration: INT @1 expr ';' .
+
+    $default  reduce using rule 17 (declaration)
+
+
+State 59
+
+   12 stmt: WHILE '(' expr ')' stmt .
+
+    $default  reduce using rule 12 (stmt)
+
+
+State 60
+
+   13 stmt: IF '(' expr ')' stmt .
+   14     | IF '(' expr ')' stmt . ELSE stmt
+
+    ELSE  shift, and go to state 61
+
+    $default  reduce using rule 13 (stmt)
+
+
+State 61
+
+   14 stmt: IF '(' expr ')' stmt ELSE . stmt
+
+    VARIABLE  shift, and go to state 9
+    WHILE     shift, and go to state 10
+    IF        shift, and go to state 11
+    PRINT     shift, and go to state 12
+    INT       shift, and go to state 13
+    '{'       shift, and go to state 6
+    ';'       shift, and go to state 15
+
+    scope        go to state 16
+    stmt         go to state 62
+    declaration  go to state 18
+
+
+State 62
+
+   14 stmt: IF '(' expr ')' stmt ELSE stmt .
+
+    $default  reduce using rule 14 (stmt)

@@ -25,4 +25,12 @@ print 8 >= 5; //0
 print 8 <= 5; //0
 print 5 != 5;  //0
 print 5 == 5; //1
+
+var = 3;
+if(var < 4) {
+    print var;
+} else {
+    print 4;
+}
+
 }

@@ -68,9 +68,9 @@ stmt:   ';'                              { printf("semicolon\n"); }
      /*   | expr ';'                       { printf("des isch um schuscht"); } */
         | PRINT expr ';'                 { $$ = newOperationNode('p', 1, $2);}
         | VARIABLE '=' expr ';'          { $$ = newOperationNode('=', 2, newVariableNode($1,0), $3); }
-      /*  | WHILE '(' expr ')' stmt        { printf("while"); }
-        | IF '(' expr ')' stmt %prec IFX { printf("if"); }
-        | IF '(' expr ')' stmt ELSE stmt { printf("if else"); } */
+        | WHILE '(' expr ')' stmt        { printf("while"); }
+        | IF '(' expr ')' stmt %prec IFX { $$ = newOperationNode(IF, 2, $3, $5); }
+        | IF '(' expr ')' stmt ELSE stmt { $$ = newOperationNode(IF, 3, $3, $5, $7); }
         | scope                          { printf(";"); } 
         ;
 

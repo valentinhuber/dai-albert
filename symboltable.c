@@ -171,14 +171,24 @@ int evaluate(struct syntaxTreeNode* tree) {
                 case '*': return evaluate(n->operators[0]) * evaluate(n->operators[1]); break;
                 case '/': return evaluate(n->operators[0]) / evaluate(n->operators[1]); break;
                 
-                case '<': return evaluate(n->operators[0]) > evaluate(n->operators[1]); break;
-                case '>': return evaluate(n->operators[0]) < evaluate(n->operators[1]); break;
+                case '<': return evaluate(n->operators[0]) < evaluate(n->operators[1]); break;
+                case '>': return evaluate(n->operators[0]) > evaluate(n->operators[1]); break;
                 
                 case GE: return evaluate(n->operators[0]) >= evaluate(n->operators[1]); break;
                 case LE: return evaluate(n->operators[0]) <= evaluate(n->operators[1]); break;
                 case NE: return evaluate(n->operators[0]) != evaluate(n->operators[1]); break;
                 case EQ: return evaluate(n->operators[0]) == evaluate(n->operators[1]); break;                  
                 
+                /* IF & IF ELSE */
+                case IF: evaluate(n->operators[0]);
+                        if (n->numberOfOperators > 2) {
+                            /* IF ELSE */
+                            evaluate(n->operators[1]);
+                            evaluate(n->operators[2]);
+                        } else {
+                            /* IF */
+                            evaluate(n->operators[1]);
+                        } break;
                 /* PRINT */
                 case 'p': printf("%i\n",evaluate(n->operators[0])); break;
                 
