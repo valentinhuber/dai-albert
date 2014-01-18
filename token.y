@@ -34,7 +34,7 @@ void yyerror(char *s);
 %token <type> BOOL
 %token <type> STRING
 
-%type <node> expr stmt scope stmts function
+%type <node> expr stmt scope stmts function stmt_list
 
 %left GE LE EQ NE '>' '<'
 %left '+' '-'
@@ -71,16 +71,16 @@ stmt:   ';'                              { printf("semicolon\n"); }
         | WHILE '(' expr ')' stmt        { printf("while"); }
         | IF '(' expr ')' stmt %prec IFX { $$ = newOperationNode(IF, 2, $3, $5); }
         | IF '(' expr ')' stmt ELSE stmt { $$ = newOperationNode(ELSE, 3, $3, $5, $7); }
-        | scope                          { printf(";"); } 
+        | '{' stmt_list '}'              { $$ = $2; } 
         ;
 
 declaration: INT { $<type>$ = 'i'; } expr ';'
-/*
+
 stmt_list:
-          stmt                  { $$ = $1; }
-        | stmt_list stmt        { $$ = opr(';', 2, $1, $2); }
+        | stmt                  { $$ = $1; }
+        | stmt_list stmt        { $$ = newOperationNode('l', 2, $1, $2); }
         ;
-*/
+
 expr:
           INTEGER               { $$ = newNumberNode($1); }
         | VARIABLE              { $$ = newVariableNode($1,0); }

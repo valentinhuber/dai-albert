@@ -157,6 +157,8 @@ int evaluate(struct syntaxTreeNode* tree) {
     
     struct operationNode *n = malloc(sizeof(struct operationNode));
     
+    if( !tree || !tree->nodetype) return 0;
+    
     switch(tree->nodetype) {
         
         case 'i': return ((struct numberNode *)tree)->number; break;
@@ -193,7 +195,9 @@ int evaluate(struct syntaxTreeNode* tree) {
                                 evaluate(n->operators[2]);
                         break;
                        
-                        
+                /* list oft statements */
+                case 'l': evaluate(n->operators[0]); return evaluate(n->operators[1]); break;
+                
                 /* PRINT */
                 case 'p': printf("%i\n",evaluate(n->operators[0])); break;
                 
