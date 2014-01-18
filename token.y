@@ -34,7 +34,7 @@ void yyerror(char *s);
 %token <type> BOOL
 %token <type> STRING
 
-%type <node> expr stmt scope stmts function stmt_list
+%type <node> expr stmt scope stmts function init
 
 %left GE LE EQ NE '>' '<'
 %left '+' '-'
@@ -52,39 +52,32 @@ init: /* NULL */ { makeTable(NULL); };
 
 function: 
         MAIN scope         {   } //printf("main\n");    freeNode($2);
-        |
         ;
 
 
-scope:   '{' stmts '}'         {  }
+scope:   '{' stmts '}'         { evaluate($2); }
         ;
 
 stmts:   
-        | stmts stmt        { evaluate($2); } //freeNode($2);
+         stmt        { $$ = $1; } //freeNode($2);
+        | stmts stmt  { $$ = newOperationNode('l', 2, $1, $2); }
         ;
 
-stmt:   ';'                              { printf("semicolon\n"); }
-        | declaration ';'                { printf("declaration\n"); }
-     /*   | expr ';'                       { printf("des isch um schuscht"); } */
-        | PRINT expr ';'                 { $$ = newOperationNode('p', 1, $2);}
+stmt:    PRINT expr ';'                  { $$ = newOperationNode(PRINT, 1, $2);}
         | VARIABLE '=' expr ';'          { $$ = newOperationNode('=', 2, newVariableNode($1,0), $3); }
-        | WHILE '(' expr ')' stmt        { printf("while"); }
+        | WHILE '(' expr ')' stmt        { $$ = newOperationNode(WHILE, 2, $3, $5); }
         | IF '(' expr ')' stmt %prec IFX { $$ = newOperationNode(IF, 2, $3, $5); }
         | IF '(' expr ')' stmt ELSE stmt { $$ = newOperationNode(ELSE, 3, $3, $5, $7); }
-        | '{' stmt_list '}'              { $$ = $2; } 
+        | '{' stmts '}'                  { $$ = $2; } 
+    /*  | declaration ';'                { printf("declaration\n"); } */
         ;
 
-declaration: INT { $<type>$ = 'i'; } expr ';'
+/* declaration: INT { $<type>$ = 'i'; } expr ';' */
 
-stmt_list:
-        | stmt                  { $$ = $1; }
-        | stmt_list stmt        { $$ = newOperationNode('l', 2, $1, $2); }
-        ;
 
 expr:
           INTEGER               { $$ = newNumberNode($1); }
         | VARIABLE              { $$ = newVariableNode($1,0); }
-  /*      | '-' expr %prec UMINUS { $$ = opr(UMINUS, 1, $2); } */
         | expr '+' expr         { $$ = newOperationNode('+', 2 ,$1, $3); }
         | expr '-' expr         { $$ = newOperationNode('-', 2 ,$1, $3); }
         | expr '*' expr         { $$ = newOperationNode('*', 2 ,$1, $3); }

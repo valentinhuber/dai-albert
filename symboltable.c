@@ -185,6 +185,7 @@ int evaluate(struct syntaxTreeNode* tree) {
                 case IF: 
                         if(evaluate(n->operators[0]))
                                 evaluate(n->operators[1]);
+                        return 0;
                         break;
                         
                 /* IF ELSE */        
@@ -193,18 +194,20 @@ int evaluate(struct syntaxTreeNode* tree) {
                                 evaluate(n->operators[1]);
                             else
                                 evaluate(n->operators[2]);
+                        return 0;
                         break;
-                       
+                /* WHILE */
+                case WHILE:
+                    while(evaluate(n->operators[0])) evaluate(n->operators[1]); return 0; break;
+                    
                 /* list oft statements */
                 case 'l': evaluate(n->operators[0]); return evaluate(n->operators[1]); break;
                 
                 /* PRINT */
-                case 'p': printf("%i\n",evaluate(n->operators[0])); break;
+                case PRINT: printf("%i\n",evaluate(n->operators[0])); return 0; break;
                 
                 /* ASSIGNMENT */
                 case '=': ((struct variableNode*)n->operators[0])->value = evaluate(n->operators[1]); enter(currentTable, ((struct variableNode*)n->operators[0]), 0); return 0; break; //return ((struct variableNode*)n->operators[0])->value = 
-                
-                
                 
             }
             break;
