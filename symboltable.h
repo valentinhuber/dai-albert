@@ -8,6 +8,8 @@
 #ifndef SYMBOLTABLE_H
 #define	SYMBOLTABLE_H
 
+
+
 /*
  * Symbol table which contains the previous symbol table
  *  
@@ -84,9 +86,11 @@ table *makeTable(table *parent);
 void enter(table *t, struct variableNode *n, int type);
 void addWidth(table *t, int width);
 void enterProc(table *t, char *name, table *newTable);
-struct variableNode* findNode(char *name, table *t);
+struct node* findNode(char *name, table *t);
 
 
+table *currentTable;
+table *firstTable;
 
 #endif	/* SYMBOLTABLE_H */
 

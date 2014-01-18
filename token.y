@@ -64,7 +64,8 @@ stmts:
         ;
 
 stmt:    PRINT expr ';'                  { $$ = newOperationNode(PRINT, 1, $2);}
-        | VARIABLE '=' expr ';'          { $$ = newOperationNode('=', 2, newVariableNode($1,0), $3); }
+        | VARIABLE '=' expr ';'          { $$ = newOperationNode('=', 2, newVariableNode($1,0), $3);}
+                                         
         | WHILE '(' expr ')' stmt        { $$ = newOperationNode(WHILE, 2, $3, $5); }
         | IF '(' expr ')' stmt %prec IFX { $$ = newOperationNode(IF, 2, $3, $5); }
         | IF '(' expr ')' stmt ELSE stmt { $$ = newOperationNode(ELSE, 3, $3, $5, $7); }

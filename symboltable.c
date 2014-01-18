@@ -12,9 +12,6 @@
 #include "symboltable.h"
 #include "y.tab.h"
 
-table *currentTable;
-table *firstTable;
-
 /*
  * 
  */
@@ -56,40 +53,37 @@ void enterProc(table *t, char *name, table *newTable) {
     t->child->name = name;
 }
 
-struct variableNode* findNode(char *name, table *tbl){
+struct node* findNode(char *name, table *tbl){
     table *t = tbl;
     node *p = NULL;
     char *r = name;
-    
-    struct variableNode *returnNode = malloc(sizeof(struct variableNode));
-    returnNode->nodetype = 's';
-    returnNode->name = strdup(name);
-    
-    if( t == NULL) { 
-        return returnNode;
-    }
+   
+    if( t == NULL) return p;
+   
     p = t->first;
-    
+   
     while(1) {
-        if (p == NULL){
+        if ( p == NULL ){
             if (t->parent != NULL){
                 t = t->parent;
                 return findNode(name, t);
             } else {
-                //returnNode->value = p->value;
-                return returnNode;
+                return p;
             }
-        } 
-        
-        if (strcmp(p->name,r) == 0){
-            returnNode->value = p->value;
-            return returnNode;
         }
+       
+        if( p->name == NULL )
+            return p;
         
+        if (strcmp(p->name , r) == 0){
+            return p;
+        }
+       
         p = p->next;
-        
-        
+       
+       
     }
+
 }
 
 
@@ -207,8 +201,14 @@ int evaluate(struct syntaxTreeNode* tree) {
                 case PRINT: printf("%i\n",evaluate(n->operators[0])); return 0; break;
                 
                 /* ASSIGNMENT */
-                case '=': ((struct variableNode*)n->operators[0])->value = evaluate(n->operators[1]); enter(currentTable, ((struct variableNode*)n->operators[0]), 0); return 0; break; //return ((struct variableNode*)n->operators[0])->value = 
-                
+                case '=': 
+                    if(findNode(((struct variableNode*)n->operators[0])->name,currentTable) != NULL) {
+                      findNode(((struct variableNode*)n->operators[0])->name,currentTable)->value = evaluate(n->operators[1]);
+                    }
+                    else {
+                        ((struct variableNode*)n->operators[0])->value = evaluate(n->operators[1]); enter(currentTable, ((struct variableNode*)n->operators[0]), 0); 
+                   }
+                    return 0; break;
             }
             break;
     }

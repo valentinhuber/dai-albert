@@ -11,6 +11,7 @@ main {
 //kuchen = 8 + 4;
 //print 2;
 
+
 print 1;
 print 1+1;
 kuchen = 3;
@@ -38,4 +39,9 @@ if(4 < 3) {
     print 30;
 }
 
+i = 10;
+while ( i < 14 ) {
+    print 40;
+    i = i +1;
+}
 }
