@@ -41,7 +41,7 @@ if(4 < 3) {
 
 i = 10;
 while ( i < 14 ) {
-    print 40;
+    print i;
     i = i +1;
 }
 }

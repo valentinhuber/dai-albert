@@ -176,7 +176,7 @@ int evaluate(struct syntaxTreeNode* tree) {
                 case EQ: return evaluate(n->operators[0]) == evaluate(n->operators[1]); break;                  
                 
                 /* IF */
-                case IF: 
+                case IF: enterProc(currentTable, "if", makeTable(currentTable));
                         if(evaluate(n->operators[0]))
                                 evaluate(n->operators[1]);
                         return 0;
@@ -184,6 +184,7 @@ int evaluate(struct syntaxTreeNode* tree) {
                         
                 /* IF ELSE */        
                 case ELSE: 
+                        enterProc(currentTable, "ifelse", makeTable(currentTable));
                         if(evaluate(n->operators[0]))
                                 evaluate(n->operators[1]);
                             else
@@ -192,6 +193,7 @@ int evaluate(struct syntaxTreeNode* tree) {
                         break;
                 /* WHILE */
                 case WHILE:
+                    enterProc(currentTable, "while", makeTable(currentTable));
                     while(evaluate(n->operators[0])) evaluate(n->operators[1]); return 0; break;
                     
                 /* list oft statements */
