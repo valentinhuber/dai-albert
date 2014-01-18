@@ -27,6 +27,7 @@ typedef struct table {
 typedef struct node {
     char *name;
     int type;
+    int value;
     int line;
     struct node *next;
 } node;
@@ -71,7 +72,8 @@ struct syntaxTreeNode *newNumberNode(int number);
 struct syntaxTreeNode *newVariableNode(char* name, int value);
 struct syntaxTreeNode *newOperationNode(int operation, int numberOfOperators, ...);
 int evaluate(struct syntaxTreeNode* tree);
-
+void freeNode(struct syntaxTreeNode* node);
+  
 
 
 
@@ -79,9 +81,15 @@ int evaluate(struct syntaxTreeNode* tree);
  * Holbegs a symbol table
  */
 table *makeTable(table *parent);
-void enter(table *t, char *name, int type);
+void enter(table *t, struct variableNode *n, int type);
 void addWidth(table *t, int width);
 void enterProc(table *t, char *name, table *newTable);
-node* findNode(char *name, table *t);
+struct variableNode* findNode(char *name, table *t);
+
+
+
+table *currentTable;
+table *firstTable;
+
 #endif	/* SYMBOLTABLE_H */
 

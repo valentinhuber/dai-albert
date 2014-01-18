@@ -11,5 +11,7 @@ main {
 //kuchen = 8 + 4;
 //print 2;
 print 2;
+kuchen = 4;
 print 3;
+print kuchen;
 }

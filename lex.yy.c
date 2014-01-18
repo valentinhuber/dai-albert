@@ -884,7 +884,7 @@ case 19:
 YY_RULE_SETUP
 #line 41 "token.l"
 { 
-                yylval.sValue = strdup(yytext);
+                yylval.variableNode = strdup(yytext);
                 return VARIABLE;
             }
 	YY_BREAK

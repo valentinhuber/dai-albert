@@ -16,13 +16,13 @@ void yyerror(char *s);
 %union {
     struct syntaxTreeNode *node;
     int iValue;                 /* integer value */
-    char* sValue;                /* symbol table index */
+    char* variableNode;                /* name of variable in symbol table */
     int type;
 };
 
 %token MAIN
 %token <iValue> INTEGER
-%token <sValue> VARIABLE
+%token <variableNode> VARIABLE
 %token WHILE IF PRINT
 %token TRUE
 %token FALSE
@@ -47,23 +47,24 @@ void yyerror(char *s);
 program: 
         function            { exit(0); }
 
-function: MAIN function scope         { evaluate($3); } //printf("main\n"); 
+function: 
+        MAIN scope         {   } //printf("main\n");    freeNode($2);
         |
         ;
 
 
-scope:   '{' stmts '}'         { $$ = $2; }
+scope:   '{' stmts '}'         {  }
         ;
 
-stmts:   /* NULL */
-        | stmts stmt        { $$ = $2; }
+stmts:   
+        | stmts stmt        { makeTable(NULL); evaluate($2); } //freeNode($2);
         ;
 
 stmt:   ';'                              { printf("semicolon\n"); }
         | declaration ';'                { printf("declaration\n"); }
      /*   | expr ';'                       { printf("des isch um schuscht"); } */
-        | PRINT expr ';'                 {  $$ = newOperationNode('p', 1, $2);}
-        | VARIABLE '=' expr ';'          { $$ = newOperationNode('=', 2, $1, $3); }
+        | PRINT expr ';'                 { $$ = newOperationNode('p', 1, $2);}
+        | VARIABLE '=' expr ';'          { $$ = newOperationNode('=', 2, newVariableNode($1,0), $3); }
       /*  | WHILE '(' expr ')' stmt        { printf("while"); }
         | IF '(' expr ')' stmt %prec IFX { printf("if"); }
         | IF '(' expr ')' stmt ELSE stmt { printf("if else"); } */

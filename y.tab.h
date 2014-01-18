@@ -98,7 +98,7 @@ typedef union YYSTYPE
 
     struct syntaxTreeNode *node;
     int iValue;                 /* integer value */
-    char* sValue;                /* symbol table index */
+    char* variableNode;                /* name of variable in symbol table */
     int type;
 
 

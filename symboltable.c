@@ -11,8 +11,7 @@
 #include <stdarg.h>
 #include "symboltable.h"
 
-table *currentTable;
-table *firstTable;
+
 
 /*
  * 
@@ -28,7 +27,8 @@ table *makeTable(table *parent) {
     
     return currentTable;
 }
-void enter(table *t, char *name, int type) {
+void enter(table *t, struct variableNode *n, int type) {
+    
     node *p;
     
     p = t->first;
@@ -37,7 +37,8 @@ void enter(table *t, char *name, int type) {
         p = p->next;
     }
     
-    p->name = strdup(name);
+    p->name = strdup(n->name);
+    p->value = n->value;
     p->type = type;
     p->next = malloc(sizeof(struct node));
     
@@ -53,13 +54,18 @@ void enterProc(table *t, char *name, table *newTable) {
     t->child->name = name;
 }
 
-node* findNode(char *name, table *tbl){
+struct variableNode* findNode(char *name, table *tbl){
     table *t = tbl;
     node *p = NULL;
     char *r = name;
     
-    if( t == NULL) return p;
+    struct variableNode *returnNode = malloc(sizeof(struct variableNode));
+    returnNode->nodetype = 's';
+    returnNode->name = strdup(name);
     
+    if( t == NULL) { 
+        return returnNode;
+    }
     p = t->first;
     
     while(1) {
@@ -68,12 +74,14 @@ node* findNode(char *name, table *tbl){
                 t = t->parent;
                 return findNode(name, t);
             } else {
-                return p;
+                //returnNode->value = p->value;
+                return returnNode;
             }
         } 
         
         if (p->name == r){
-            return p;
+            returnNode->value = p->value;
+            return returnNode;
         }
         
         p = p->next;
@@ -119,7 +127,7 @@ struct syntaxTreeNode *newVariableNode(char* name, int value) {
      struct variableNode *node = malloc(sizeof(struct variableNode));
  
      node->nodetype = 's';
-     node->name = name;
+     node->name = strdup(name);
      node->value = value;
      
      return (struct syntaxTreeNode *) node;
@@ -150,7 +158,7 @@ int evaluate(struct syntaxTreeNode* tree) {
     switch(tree->nodetype) {
         
         case 'i': return ((struct numberNode *)tree)->number; break;
-        case 's': return ((struct variableNode*)tree)->value; break;
+        case 's': return findNode(((struct variableNode*)tree)->name, currentTable)->value; break;
         case 'o': 
             n = ((struct operationNode*)tree);
             switch(n->operation) {
@@ -160,7 +168,7 @@ int evaluate(struct syntaxTreeNode* tree) {
                 case 'p': printf("%i",evaluate(n->operators[0])); break;
                 
                 /* ASSIGNMENT */
-                case '=': return ((struct variableNode*)n->operators[0])->value = evaluate(n->operators[1]); break;
+                case '=': ((struct variableNode*)n->operators[0])->value = evaluate(n->operators[1]); enter(currentTable, ((struct variableNode*)n->operators[0]), 0); return 0; break; //return ((struct variableNode*)n->operators[0])->value = 
                 /*
                 case '=': returnValue = ((struct assignmentNode *)tree)->s->value =
                         evaluate(((struct assignmentNode *)tree)->v); break;
@@ -170,8 +178,19 @@ int evaluate(struct syntaxTreeNode* tree) {
     }
 }
 
-
-
+ void freeNode(struct syntaxTreeNode* node){
+    int i;
+    struct operationNode *n = malloc(sizeof(struct operationNode));
+    if(node->nodetype = 'o') {
+        n = ((struct operationNode*)node);
+        for(i = 0; i < n->numberOfOperators; i++){
+            freeNode(n->operators[i]);
+        }
+        free(n->operators);
+    }
+    free(n);
+    free(node);
+ }
 /*
  * 
  */

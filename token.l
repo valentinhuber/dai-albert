@@ -39,7 +39,7 @@ void yyerror(char *);
 "false"         return FALSE;
 
 [a-z][A-z0-9]*       { 
-                yylval.sValue = strdup(yytext);
+                yylval.variableNode = strdup(yytext);
                 return VARIABLE;
             }
 
