@@ -1519,7 +1519,7 @@ yyreduce:
   case 15:
 /* Line 1787 of yacc.c  */
 #line 73 "token.y"
-    { (yyval.node) = newOperationNode(IF, 3, (yyvsp[(3) - (7)].node), (yyvsp[(5) - (7)].node), (yyvsp[(7) - (7)].node)); }
+    { (yyval.node) = newOperationNode(ELSE, 3, (yyvsp[(3) - (7)].node), (yyvsp[(5) - (7)].node), (yyvsp[(7) - (7)].node)); }
     break;
 
   case 16:
