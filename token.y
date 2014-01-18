@@ -86,16 +86,16 @@ expr:
         | VARIABLE              { $$ = newVariableNode($1,0); }
   /*      | '-' expr %prec UMINUS { $$ = opr(UMINUS, 1, $2); } */
         | expr '+' expr         { $$ = newOperationNode('+', 2 ,$1, $3); }
-        | expr '-' expr         { printf("-"); }
-        | expr '*' expr         { printf("*"); }
-        | expr '/' expr         { printf("/"); }
-     /*   | expr '<' expr         { $$ = opr('<', 2, $1, $3); }
-        | expr '>' expr         { $$ = opr('>', 2, $1, $3); }
-        | expr GE expr          { $$ = opr(GE, 2, $1, $3); }
-        | expr LE expr          { $$ = opr(LE, 2, $1, $3); }
-        | expr NE expr          { $$ = opr(NE, 2, $1, $3); }
-        | expr EQ expr          { $$ = opr(EQ, 2, $1, $3); }
-        | '(' expr ')'          { $$ = $2; } */
+        | expr '-' expr         { $$ = newOperationNode('-', 2 ,$1, $3); }
+        | expr '*' expr         { $$ = newOperationNode('*', 2 ,$1, $3); }
+        | expr '/' expr         { $$ = newOperationNode('/', 2 ,$1, $3); }
+        | expr '<' expr         { $$ = newOperationNode('<', 2 ,$1, $3); }
+        | expr '>' expr         { $$ = newOperationNode('>', 2 ,$1, $3); }
+        | expr GE expr          { $$ = newOperationNode(GE, 2 ,$1, $3); }
+        | expr LE expr          { $$ = newOperationNode(LE, 2 ,$1, $3); }
+        | expr NE expr          { $$ = newOperationNode(NE, 2 ,$1, $3); }
+        | expr EQ expr          { $$ = newOperationNode(EQ, 2 ,$1, $3); }
+        | '(' expr ')'          { $$ = $2; }
         ;
 %%
 

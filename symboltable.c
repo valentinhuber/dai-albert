@@ -10,6 +10,7 @@
 #include <string.h>
 #include <stdarg.h>
 #include "symboltable.h"
+#include "y.tab.h"
 
 table *currentTable;
 table *firstTable;
@@ -163,17 +164,29 @@ int evaluate(struct syntaxTreeNode* tree) {
         case 'o': 
             n = ((struct operationNode*)tree);
             switch(n->operation) {
-                /* expr */
+                
+                /* artimetic operations */
                 case '+': return evaluate(n->operators[0]) + evaluate(n->operators[1]); break;
+                case '-': return evaluate(n->operators[0]) - evaluate(n->operators[1]); break;
+                case '*': return evaluate(n->operators[0]) * evaluate(n->operators[1]); break;
+                case '/': return evaluate(n->operators[0]) / evaluate(n->operators[1]); break;
+                
+                case '<': return evaluate(n->operators[0]) > evaluate(n->operators[1]); break;
+                case '>': return evaluate(n->operators[0]) < evaluate(n->operators[1]); break;
+                
+                case GE: return evaluate(n->operators[0]) >= evaluate(n->operators[1]); break;
+                case LE: return evaluate(n->operators[0]) <= evaluate(n->operators[1]); break;
+                case NE: return evaluate(n->operators[0]) != evaluate(n->operators[1]); break;
+                case EQ: return evaluate(n->operators[0]) == evaluate(n->operators[1]); break;                  
+                
                 /* PRINT */
-                case 'p': printf("%i",evaluate(n->operators[0])); break;
+                case 'p': printf("%i\n",evaluate(n->operators[0])); break;
                 
                 /* ASSIGNMENT */
                 case '=': ((struct variableNode*)n->operators[0])->value = evaluate(n->operators[1]); enter(currentTable, ((struct variableNode*)n->operators[0]), 0); return 0; break; //return ((struct variableNode*)n->operators[0])->value = 
-                /*
-                case '=': returnValue = ((struct assignmentNode *)tree)->s->value =
-                        evaluate(((struct assignmentNode *)tree)->v); break;
-                 */
+                
+                
+                
             }
             break;
     }
