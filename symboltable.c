@@ -11,7 +11,8 @@
 #include <stdarg.h>
 #include "symboltable.h"
 
-
+table *currentTable;
+table *firstTable;
 
 /*
  * 
@@ -79,7 +80,7 @@ struct variableNode* findNode(char *name, table *tbl){
             }
         } 
         
-        if (p->name == r){
+        if (strcmp(p->name,r) == 0){
             returnNode->value = p->value;
             return returnNode;
         }

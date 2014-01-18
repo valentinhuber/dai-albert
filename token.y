@@ -45,7 +45,10 @@ void yyerror(char *s);
 %%
 
 program: 
-        function            { exit(0); }
+        init function            { exit(0); }
+
+init: /* NULL */ { makeTable(NULL); }; 
+    ;
 
 function: 
         MAIN scope         {   } //printf("main\n");    freeNode($2);
@@ -57,7 +60,7 @@ scope:   '{' stmts '}'         {  }
         ;
 
 stmts:   
-        | stmts stmt        { makeTable(NULL); evaluate($2); } //freeNode($2);
+        | stmts stmt        { evaluate($2); } //freeNode($2);
         ;
 
 stmt:   ';'                              { printf("semicolon\n"); }

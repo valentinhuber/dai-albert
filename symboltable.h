@@ -88,8 +88,5 @@ struct variableNode* findNode(char *name, table *t);
 
 
 
-table *currentTable;
-table *firstTable;
-
 #endif	/* SYMBOLTABLE_H */
 
