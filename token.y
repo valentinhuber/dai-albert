@@ -6,17 +6,15 @@
 #include <stdarg.h>
 #include "symboltable.h"
 
-
 /* prototypes */
 int yylex(void);
-
 void yyerror(char *s);
 %}
 
 %union {
     struct syntaxTreeNode *node;
     int iValue;                 /* integer value */
-    char* variableNode;                /* name of variable in symbol table */
+    char* variableNode;         /* name of variable in symbol table */
     int type;
 };
 
@@ -47,20 +45,20 @@ void yyerror(char *s);
 program: 
         init function            { exit(0); }
 
-init: /* NULL */ { makeTable(NULL); }; 
+init: /* NULL */                 { makeTable(NULL); }; 
     ;
 
 function: 
-        MAIN scope         {   } //printf("main\n");    freeNode($2);
+        MAIN scope               {   } //printf("main\n");    freeNode($2);
         ;
 
 
-scope:   '{' stmts '}'         { evaluate($2); }
+scope:   '{' stmts '}'           { evaluate($2); }
         ;
 
 stmts:   
-         stmt        { $$ = $1; } //freeNode($2);
-        | stmts stmt  { $$ = newOperationNode('l', 2, $1, $2); }
+         stmt                   { $$ = $1; } //freeNode($2);
+        | stmts stmt            { $$ = newOperationNode('l', 2, $1, $2); }
         ;
 
 stmt:    PRINT expr ';'                  { $$ = newOperationNode(PRINT, 1, $2);}

@@ -12,8 +12,10 @@
 #include "symboltable.h"
 #include "y.tab.h"
 
-/*
- * 
+/**
+ * Creates a new Symbol table
+ * @param parent
+ * @return The current Symbol table
  */
 table *makeTable(table *parent) {
     table *t = malloc(sizeof(struct table));
@@ -26,6 +28,13 @@ table *makeTable(table *parent) {
     
     return currentTable;
 }
+
+/**
+ * Adds a Variable to the Symbol Table
+ * @param t
+ * @param n 
+ * @param type
+ */
 void enter(table *t, struct variableNode *n, int type) {
     
     node *p;
@@ -44,26 +53,46 @@ void enter(table *t, struct variableNode *n, int type) {
     currentTable = t;
 }
 
+/**
+ * Sets the width of the Symbol table
+ * @param t
+ * @param width
+ */
 void addWidth(table *t, int width) {
 
 }
 
+/**
+ * Adds a sub Symbol table to a Symbol table
+ * @param t
+ * @param name
+ * @param newTable
+ */
 void enterProc(table *t, char *name, table *newTable) {
     t->child = newTable;
     t->child->name = name;
 }
 
+/**
+ * Searches for a node in the Symbol table and
+ * returns it if found
+ * @param name
+ * @param tbl
+ * @return 
+ */
 struct node* findNode(char *name, table *tbl){
     table *t = tbl;
     node *p = NULL;
     char *r = name;
    
-    if( t == NULL) return p;
-   
+    if(t == NULL) {
+        return p;
+    }
+    
     p = t->first;
    
     while(1) {
-        if ( p == NULL ){
+        if (p == NULL){
             if (t->parent != NULL){
                 t = t->parent;
                 return findNode(name, t);
@@ -72,18 +101,15 @@ struct node* findNode(char *name, table *tbl){
             }
         }
        
-        if( p->name == NULL )
-            return p;
-        
-        if (strcmp(p->name , r) == 0){
+        if(p->name == NULL) {
             return p;
         }
-       
+        
+        if (strcmp(p->name , r) == 0) {
+            return p;
+        }  
         p = p->next;
-       
-       
     }
-
 }
 
 
@@ -101,6 +127,13 @@ int getWidth(table *t) {
     return width;
 }
 
+/**
+ * Creates a new generic node in the AST
+ * @param nodetype
+ * @param left
+ * @param right
+ * @return 
+ */
 struct syntaxTreeNode *newSyntaxTreeNode(int nodetype, struct syntaxTreeNode *left, struct syntaxTreeNode *right) {
     struct syntaxTreeNode *node = malloc(sizeof(struct syntaxTreeNode));
     node->nodetype = nodetype;
@@ -110,6 +143,11 @@ struct syntaxTreeNode *newSyntaxTreeNode(int nodetype, struct syntaxTreeNode *le
     return node;
 }
 
+/**
+ * Creates a number node in the AST
+ * @param number
+ * @return 
+ */
 struct syntaxTreeNode *newNumberNode(int number) {
     struct numberNode *node = malloc(sizeof(struct numberNode));
     
@@ -119,6 +157,12 @@ struct syntaxTreeNode *newNumberNode(int number) {
     return (struct syntaxTreeNode *) node;
 }
 
+/**
+ * Creates a variable node in the AST
+ * @param name
+ * @param value
+ * @return 
+ */
 struct syntaxTreeNode *newVariableNode(char* name, int value) {
      struct variableNode *node = malloc(sizeof(struct variableNode));
  
@@ -129,6 +173,13 @@ struct syntaxTreeNode *newVariableNode(char* name, int value) {
      return (struct syntaxTreeNode *) node;
 }
 
+/**
+ * Creates a operation node in the AST
+ * @param operation
+ * @param numberOfOperators
+ * @param ...
+ * @return 
+ */
 struct syntaxTreeNode *newOperationNode(int operation, int numberOfOperators, ...) {
     int i;
     va_list operatorList;
@@ -147,6 +198,12 @@ struct syntaxTreeNode *newOperationNode(int operation, int numberOfOperators, ..
     return (struct syntaxTreeNode *) node;
 }
 
+/**
+ * Evaluates the AST recursively and returns the value of the
+ * evaluated statement
+ * @param tree
+ * @return 
+ */
 int evaluate(struct syntaxTreeNode* tree) {
     
     struct operationNode *n = malloc(sizeof(struct operationNode));
@@ -216,7 +273,11 @@ int evaluate(struct syntaxTreeNode* tree) {
     }
 }
 
- void freeNode(struct syntaxTreeNode* node){
+/**
+ * Frees the AST recursively
+ * @param node
+ */
+void freeNode(struct syntaxTreeNode* node){
     int i;
     struct operationNode *n = malloc(sizeof(struct operationNode));
     if(node->nodetype = 'o') {
@@ -229,9 +290,7 @@ int evaluate(struct syntaxTreeNode* tree) {
     free(n);
     free(node);
  }
-/*
- * 
- */
+ 
 /*
 int main() {
     table *t;

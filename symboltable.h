@@ -11,8 +11,7 @@
 
 
 /*
- * Symbol table which contains the previous symbol table
- *  
+ * Symbol table
  */
 typedef struct table {
     struct table *parent;
@@ -24,7 +23,7 @@ typedef struct table {
 
 
 /*
- * A bissl a node
+ * Node for the Symbol table
  */
 typedef struct node {
     char *name;
@@ -35,39 +34,43 @@ typedef struct node {
 } node;
 
 /**
- * Node for the Symboltable
+ * Generic Node for the Abstract Syntax Tree
  */
-
-/**
- * Nodes for the Abstract Syntax Tree
- */
-// Generic Node
 typedef struct syntaxTreeNode {
     int nodetype;
     struct syntaxTreeNode *left;
     struct syntaxTreeNode *right;
 } treeNode;
-// Node for Numbers(Constants)
+
+/**
+ * Node for storing Numbers in the AST
+ */
 struct numberNode {
     int nodeType;
     int number;
 };
 
+/**
+ * Node for storing Variables(Strings) in the AST
+ */
 struct variableNode {
     int nodetype;
     char* name;
     int value;
 };
 
+/**
+ * Node for storing  Operations in the AST
+ */
 struct operationNode {
     int nodetype;
     int operation;
     int numberOfOperators;
     struct syntaxTreeNode **operators;
 };
+
 /**
- * Functions to build AST
- *  
+ * Functions to build the AST
  */
 struct syntaxTreeNode *newSyntaxTreeNode(int nodetype, struct syntaxTreeNode *left, struct syntaxTreeNode *right);
 struct syntaxTreeNode *newNumberNode(int number);
@@ -76,18 +79,14 @@ struct syntaxTreeNode *newOperationNode(int operation, int numberOfOperators, ..
 int evaluate(struct syntaxTreeNode* tree);
 void freeNode(struct syntaxTreeNode* node);
   
-
-
-
 /*
- * Holbegs a symbol table
+ * Functions for the Symbol table
  */
 table *makeTable(table *parent);
 void enter(table *t, struct variableNode *n, int type);
 void addWidth(table *t, int width);
 void enterProc(table *t, char *name, table *newTable);
 struct node* findNode(char *name, table *t);
-
 
 table *currentTable;
 table *firstTable;
