@@ -73,12 +73,21 @@ void enterProc(table *t, char *name, table *newTable) {
     t->child->name = name;
 }
 
+/**
+ * Leaves a scope
+ */
 void leaveProc(){
     if (currentTable != NULL){
         currentTable = currentTable->parent;
     }
 }
 
+/**
+ * Searches for a node in the Symbol table and returns it if found
+ * @param name
+ * @param tbl
+ * @return 
+ */
 struct node* findNode(char *name, table *tbl){
     table *t = tbl;
     node *p = NULL;

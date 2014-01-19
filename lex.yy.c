@@ -785,138 +785,127 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 YY_RULE_SETUP
 #line 10 "token.l"
-{
-                yylval.iValue = atoi(yytext);
-                return INTEGER;
-            }
+{ yylval.iValue = atoi(yytext); return INTEGER; }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 15 "token.l"
-{
-                yylval.iValue = atoi(yytext);
-                return INTEGER;
-            }
+#line 12 "token.l"
+{ yylval.iValue = atoi(yytext); return INTEGER; }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 20 "token.l"
-{
-                return *yytext;
-             }
+#line 14 "token.l"
+{ return *yytext; }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 24 "token.l"
+#line 16 "token.l"
 return GE;
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 25 "token.l"
+#line 17 "token.l"
 return LE;
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 26 "token.l"
+#line 18 "token.l"
 return EQ;
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 27 "token.l"
+#line 19 "token.l"
 return NE;
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 28 "token.l"
+#line 20 "token.l"
 return WHILE;
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 29 "token.l"
+#line 21 "token.l"
 return IF;
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 30 "token.l"
+#line 22 "token.l"
 return ELSE;
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 31 "token.l"
+#line 23 "token.l"
 return PRINT;
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 32 "token.l"
+#line 24 "token.l"
 return MAIN;
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 34 "token.l"
+#line 26 "token.l"
 return INT;
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 35 "token.l"
+#line 27 "token.l"
 return BOOL;
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 36 "token.l"
+#line 28 "token.l"
 return FLOAT;
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 37 "token.l"
+#line 29 "token.l"
 return STRING; 
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 38 "token.l"
+#line 30 "token.l"
 return TRUE;
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 39 "token.l"
+#line 31 "token.l"
 return FALSE;
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 41 "token.l"
-{ 
-                yylval.variableNode = strdup(yytext);
-                return VARIABLE;
-            }
+#line 33 "token.l"
+{ yylval.variableNode = strdup(yytext); return VARIABLE; }
 	YY_BREAK
 case 20:
 /* rule 20 can match eol */
 YY_RULE_SETUP
-#line 46 "token.l"
-;       /* ignore whitespace */
+#line 35 "token.l"
+;   /* ignore whitespace */
 	YY_BREAK
 case 21:
 /* rule 21 can match eol */
 YY_RULE_SETUP
-#line 48 "token.l"
-; /* COMMENT */
+#line 37 "token.l"
+;   /* ignore single line comments */
 	YY_BREAK
 case 22:
 /* rule 22 can match eol */
 YY_RULE_SETUP
-#line 49 "token.l"
-; /* MULTI LINE COMMENT */
+#line 38 "token.l"
+;   /* ignore multi line comments */
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 51 "token.l"
+#line 40 "token.l"
 yyerror("Unknown character");
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 52 "token.l"
+#line 41 "token.l"
 ECHO;
 	YY_BREAK
-#line 920 "lex.yy.c"
+#line 909 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1914,7 +1903,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 52 "token.l"
+#line 41 "token.l"
 
 
 int yywrap(void) {
