@@ -73,13 +73,12 @@ void enterProc(table *t, char *name, table *newTable) {
     t->child->name = name;
 }
 
-/**
- * Searches for a node in the Symbol table and
- * returns it if found
- * @param name
- * @param tbl
- * @return 
- */
+void leaveProc(){
+    if (currentTable != NULL){
+        currentTable = currentTable->parent;
+    }
+}
+
 struct node* findNode(char *name, table *tbl){
     table *t = tbl;
     node *p = NULL;
@@ -236,6 +235,8 @@ int evaluate(struct syntaxTreeNode* tree) {
                 case IF: enterProc(currentTable, "if", makeTable(currentTable));
                         if(evaluate(n->operators[0]))
                                 evaluate(n->operators[1]);
+                
+                        leaveProc();
                         return 0;
                         break;
                         
@@ -246,6 +247,8 @@ int evaluate(struct syntaxTreeNode* tree) {
                                 evaluate(n->operators[1]);
                             else
                                 evaluate(n->operators[2]);
+                        
+                        leaveProc();
                         return 0;
                         break;
                 /* WHILE */

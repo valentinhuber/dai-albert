@@ -86,6 +86,7 @@ table *makeTable(table *parent);
 void enter(table *t, struct variableNode *n, int type);
 void addWidth(table *t, int width);
 void enterProc(table *t, char *name, table *newTable);
+void leaveProc();
 struct node* findNode(char *name, table *t);
 
 table *currentTable;
