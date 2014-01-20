@@ -48,45 +48,47 @@ extern int yydebug;
    enum yytokentype {
      MAIN = 258,
      INTEGER = 259,
-     VARIABLE = 260,
-     WHILE = 261,
-     IF = 262,
-     PRINT = 263,
-     TRUE = 264,
-     FALSE = 265,
-     IFX = 266,
-     ELSE = 267,
-     INT = 268,
-     FLOAT = 269,
-     BOOL = 270,
-     STRING = 271,
-     NE = 272,
-     EQ = 273,
-     LE = 274,
-     GE = 275,
-     UMINUS = 276
+     STRING_LITERAL = 260,
+     VARIABLE = 261,
+     WHILE = 262,
+     IF = 263,
+     PRINT = 264,
+     TRUE = 265,
+     FALSE = 266,
+     IFX = 267,
+     ELSE = 268,
+     INT = 269,
+     FLOAT = 270,
+     BOOL = 271,
+     STRING = 272,
+     NE = 273,
+     EQ = 274,
+     LE = 275,
+     GE = 276,
+     UMINUS = 277
    };
 #endif
 /* Tokens.  */
 #define MAIN 258
 #define INTEGER 259
-#define VARIABLE 260
-#define WHILE 261
-#define IF 262
-#define PRINT 263
-#define TRUE 264
-#define FALSE 265
-#define IFX 266
-#define ELSE 267
-#define INT 268
-#define FLOAT 269
-#define BOOL 270
-#define STRING 271
-#define NE 272
-#define EQ 273
-#define LE 274
-#define GE 275
-#define UMINUS 276
+#define STRING_LITERAL 260
+#define VARIABLE 261
+#define WHILE 262
+#define IF 263
+#define PRINT 264
+#define TRUE 265
+#define FALSE 266
+#define IFX 267
+#define ELSE 268
+#define INT 269
+#define FLOAT 270
+#define BOOL 271
+#define STRING 272
+#define NE 273
+#define EQ 274
+#define LE 275
+#define GE 276
+#define UMINUS 277
 
 
 
@@ -94,16 +96,17 @@ extern int yydebug;
 typedef union YYSTYPE
 {
 /* Line 2053 of yacc.c  */
-#line 15 "token.y"
+#line 13 "token.y"
 
     struct syntaxTreeNode *node;
     int iValue;                 /* integer value */
+    char* sValue;
     char* variableNode;         /* name of variable in symbol table */
     int type;
 
 
 /* Line 2053 of yacc.c  */
-#line 107 "y.tab.h"
+#line 110 "y.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

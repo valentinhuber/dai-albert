@@ -18,14 +18,14 @@
  * @return The current Symbol table
  */
 table *makeTable(table *parent) {
-    table *t = malloc(sizeof(struct table));
+    table *t = malloc(sizeof (struct table));
     t->parent = parent;
     t->child = NULL;
     t->name = NULL;
-    t->first = malloc(sizeof(struct node));
-    
+    t->first = malloc(sizeof (struct node));
+
     currentTable = t;
-    
+
     return currentTable;
 }
 
@@ -36,21 +36,21 @@ table *makeTable(table *parent) {
  * @param type
  */
 void enter(table *t, struct variableNode *n) {
-    
+
     node *p;
-    
+
     p = t->first;
-    
-    while(p != NULL && p->next != NULL) {
+
+    while (p != NULL && p->next != NULL) {
         p = p->next;
     }
-    
+
     p->name = strdup(n->name);
     p->value = n->value;
     p->type = n->nodetype;
     p->line = n->line;
-    p->next = malloc(sizeof(struct node));
-    
+    p->next = malloc(sizeof (struct node));
+
     currentTable = t;
 }
 
@@ -77,8 +77,8 @@ void enterProc(table *t, char *name, table *newTable) {
 /**
  * Leaves a scope
  */
-void leaveProc(){
-    if (currentTable != NULL){
+void leaveProc() {
+    if (currentTable != NULL) {
         currentTable = currentTable->parent;
     }
 }
@@ -89,38 +89,37 @@ void leaveProc(){
  * @param tbl
  * @return 
  */
-struct node* findNode(char *name, table *tbl){
+struct node* findNode(char *name, table *tbl) {
     table *t = tbl;
     node *p = NULL;
     char *r = name;
-   
-    if(t == NULL) {
+
+    if (t == NULL) {
         return p;
     }
-    
+
     p = t->first;
-   
-    while(1) {
-        if (p == NULL){
-            if (t->parent != NULL){
+
+    while (1) {
+        if (p == NULL) {
+            if (t->parent != NULL) {
                 t = t->parent;
                 return findNode(name, t);
             } else {
                 return p;
             }
         }
-       
-        if(p->name == NULL) {
+
+        if (p->name == NULL) {
             return p;
         }
-        
-        if (strcmp(p->name , r) == 0) {
+
+        if (strcmp(p->name, r) == 0) {
             return p;
-        }  
+        }
         p = p->next;
     }
 }
-
 
 /**
  * Get the width of all symbol tables (stacksize)
@@ -132,23 +131,22 @@ int getWidth(table *t) {
     while (t->child != NULL) {
         width += t->width;
         t = t->child;
-    } 
+    }
     return width;
 }
 
+
 /**
- * Creates a new generic node in the AST
- * @param nodetype
- * @param left
- * @param right
+ * Creates a number node in the AST
+ * @param number
  * @return 
  */
-struct syntaxTreeNode *newSyntaxTreeNode(int nodetype, struct syntaxTreeNode *left, struct syntaxTreeNode *right) {
-    struct syntaxTreeNode *node = malloc(sizeof(struct syntaxTreeNode));
-    node->nodetype = nodetype;
-    node->left = left;
-    node->right = right;
-    
+struct syntaxTreeNode *newNumberNode(int number) {
+    treeNode *node = malloc(sizeof (treeNode));
+
+    node->nodeType = 'i';
+    node->integer.number = number;
+
     return node;
 }
 
@@ -157,14 +155,16 @@ struct syntaxTreeNode *newSyntaxTreeNode(int nodetype, struct syntaxTreeNode *le
  * @param number
  * @return 
  */
-struct syntaxTreeNode *newNumberNode(int number) {
-    struct numberNode *node = malloc(sizeof(struct numberNode));
+treeNode *newStringNode(char *s) {
+    treeNode *node = malloc(sizeof (treeNode));
+    node->string.str = malloc(sizeof (stringNode));
     
-    node->nodeType = 'i';
-    node->number = number;
-    
-    return (struct syntaxTreeNode *) node;
+    node->nodeType = 's';
+    node->string.str = s;
+
+    return node;
 }
+
 
 /**
  * Creates a variable node in the AST
@@ -173,14 +173,14 @@ struct syntaxTreeNode *newNumberNode(int number) {
  * @return 
  */
 struct syntaxTreeNode *newVariableNode(char* name, int value, int nodeType, int line) {
-     struct variableNode *node = malloc(sizeof(struct variableNode));
- 
-     node->name = strdup(name);
-     node->value = value;
-     node->nodetype = nodeType;
-     node->line = line;
-     
-     return (struct syntaxTreeNode *) node;
+    struct variableNode *node = malloc(sizeof (struct variableNode));
+
+    node->name = strdup(name);
+    node->value = value;
+    node->nodetype = nodeType;
+    node->line = line;
+
+    return (struct syntaxTreeNode *) node;
 }
 
 /**
@@ -193,15 +193,15 @@ struct syntaxTreeNode *newVariableNode(char* name, int value, int nodeType, int 
 struct syntaxTreeNode *newOperationNode(int operation, int numberOfOperators, ...) {
     int i;
     va_list operatorList;
-    
-    struct operationNode *node = malloc(sizeof(struct operationNode));
-    node->operators = malloc(numberOfOperators * sizeof(treeNode));
+
+    struct operationNode *node = malloc(sizeof (struct operationNode));
+    node->operators = malloc(numberOfOperators * sizeof (treeNode));
     node->nodetype = 'o';
     node->operation = operation;
     node->numberOfOperators = numberOfOperators;
-    
+
     va_start(operatorList, numberOfOperators);
-    for(i = 0; i < numberOfOperators; i++) {
+    for (i = 0; i < numberOfOperators; i++) {
         node->operators[i] = va_arg(operatorList, treeNode*);
     }
     va_end(operatorList);
@@ -215,74 +215,93 @@ struct syntaxTreeNode *newOperationNode(int operation, int numberOfOperators, ..
  * @return 
  */
 int evaluate(struct syntaxTreeNode* tree) {
-    
-    struct operationNode *n = malloc(sizeof(struct operationNode));
-    
-    if( !tree || !tree->nodetype) return 0;
-    
-    switch(tree->nodetype) {
-        
-        case 'i': return ((struct numberNode *)tree)->number; break;
-        case 's': return findNode(((struct variableNode*)tree)->name, currentTable)->value; break;
-        case 'o': 
-            n = ((struct operationNode*)tree);
-            switch(n->operation) {
-                
-                /* artimetic operations */
-                case '+': return evaluate(n->operators[0]) + evaluate(n->operators[1]); break;
-                case '-': return evaluate(n->operators[0]) - evaluate(n->operators[1]); break;
-                case '*': return evaluate(n->operators[0]) * evaluate(n->operators[1]); break;
-                case '/': return evaluate(n->operators[0]) / evaluate(n->operators[1]); break;
-                
-                case '<': return evaluate(n->operators[0]) < evaluate(n->operators[1]); break;
-                case '>': return evaluate(n->operators[0]) > evaluate(n->operators[1]); break;
-                
-                case GE: return evaluate(n->operators[0]) >= evaluate(n->operators[1]); break;
-                case LE: return evaluate(n->operators[0]) <= evaluate(n->operators[1]); break;
-                case NE: return evaluate(n->operators[0]) != evaluate(n->operators[1]); break;
-                case EQ: return evaluate(n->operators[0]) == evaluate(n->operators[1]); break;                  
-                
-                /* IF */
+
+    struct operationNode *n = malloc(sizeof (struct operationNode));
+
+    if (!tree || !tree->nodeType) return 0;
+
+    switch (tree->nodeType) {
+
+        case 'i': return ((integerNode *) tree)->number;
+            break;
+        case 's': return findNode(((struct variableNode*) tree)->name, currentTable)->value;
+            break;
+        case 'o':
+            n = ((struct operationNode*) tree);
+            switch (n->operation) {
+
+                    /* artimetic operations */
+                case '+': return evaluate(n->operators[0]) + evaluate(n->operators[1]);
+                    break;
+                case '-': return evaluate(n->operators[0]) - evaluate(n->operators[1]);
+                    break;
+                case '*': return evaluate(n->operators[0]) * evaluate(n->operators[1]);
+                    break;
+                case '/': return evaluate(n->operators[0]) / evaluate(n->operators[1]);
+                    break;
+
+                case '<': return evaluate(n->operators[0]) < evaluate(n->operators[1]);
+                    break;
+                case '>': return evaluate(n->operators[0]) > evaluate(n->operators[1]);
+                    break;
+
+                case GE: return evaluate(n->operators[0]) >= evaluate(n->operators[1]);
+                    break;
+                case LE: return evaluate(n->operators[0]) <= evaluate(n->operators[1]);
+                    break;
+                case NE: return evaluate(n->operators[0]) != evaluate(n->operators[1]);
+                    break;
+                case EQ: return evaluate(n->operators[0]) == evaluate(n->operators[1]);
+                    break;
+
+                    /* IF */
                 case IF: enterProc(currentTable, "if", makeTable(currentTable));
-                        if(evaluate(n->operators[0]))
-                                evaluate(n->operators[1]);
-                
-                        leaveProc();
-                        return 0;
-                        break;
-                        
-                /* IF ELSE */        
-                case ELSE: 
-                        enterProc(currentTable, "ifelse", makeTable(currentTable));
-                        if(evaluate(n->operators[0]))
-                                evaluate(n->operators[1]);
-                            else
-                                evaluate(n->operators[2]);
-                        
-                        leaveProc();
-                        return 0;
-                        break;
-                /* WHILE */
+                    if (evaluate(n->operators[0]))
+                        evaluate(n->operators[1]);
+
+                    leaveProc();
+                    return 0;
+                    break;
+
+                    /* IF ELSE */
+                case ELSE:
+                    enterProc(currentTable, "ifelse", makeTable(currentTable));
+                    if (evaluate(n->operators[0]))
+                        evaluate(n->operators[1]);
+                    else
+                        evaluate(n->operators[2]);
+
+                    leaveProc();
+                    return 0;
+                    break;
+                    /* WHILE */
                 case WHILE:
                     enterProc(currentTable, "while", makeTable(currentTable));
-                    while(evaluate(n->operators[0])) evaluate(n->operators[1]); return 0; break;
-                    
-                /* list oft statements */
-                case 'l': evaluate(n->operators[0]); return evaluate(n->operators[1]); break;
-                
-                /* PRINT */
-                case PRINT: printf("%i\n",evaluate(n->operators[0])); return 0; break;
-                
-                /* ASSIGNMENT */
-                case '=': 
-                    if((node*)findNode(((struct variableNode*)n->operators[0])->name,currentTable)->name != NULL) {
-                      findNode(((struct variableNode*)n->operators[0])->name,currentTable)->value = evaluate(n->operators[1]);
+                    while (evaluate(n->operators[0])) evaluate(n->operators[1]);
+                    return 0;
+                    break;
+
+                    /* list oft statements */
+                case 'l': evaluate(n->operators[0]);
+                    return evaluate(n->operators[1]);
+                    break;
+
+                    /* PRINT */
+                case PRINT: printf("%i\n", evaluate(n->operators[0]));
+                    return 0;
+                    break;
+
+                    /* ASSIGNMENT */
+                case '=':
+                    if ((node*) findNode(((struct variableNode*) n->operators[0])->name, currentTable)->name != NULL) {
+                        findNode(((struct variableNode*) n->operators[0])->name, currentTable)->value
+                                = evaluate(n->operators[1]);
+                    } else {
+                        ((struct variableNode*) n->operators[0])->value = evaluate(n->operators[1]);
+                        enter(currentTable, ((struct variableNode*) n->operators[0]));
                     }
-                    else {
-                        ((struct variableNode*)n->operators[0])->value = evaluate(n->operators[1]); 
-                        enter(currentTable, ((struct variableNode*)n->operators[0])); 
-                   }
-                    return 0; break;
+                    return 0;
+                    break;
             }
             break;
     }
@@ -292,20 +311,33 @@ int evaluate(struct syntaxTreeNode* tree) {
  * Frees the AST recursively
  * @param node
  */
-void freeNode(struct syntaxTreeNode* node){
+void freeNode(struct syntaxTreeNode* node) {
     int i;
-    struct operationNode *n = malloc(sizeof(struct operationNode));
-    if(node->nodetype = 'o') {
-        n = ((struct operationNode*)node);
-        for(i = 0; i < n->numberOfOperators; i++){
+    struct operationNode *n = malloc(sizeof (struct operationNode));
+    if (node->nodeType = 'o') {
+        n = ((struct operationNode*) node);
+        for (i = 0; i < n->numberOfOperators; i++) {
             freeNode(n->operators[i]);
         }
         free(n->operators);
     }
     free(n);
     free(node);
- }
- 
+}
+
+/**
+ * Error function using variable argument list
+ * @param s
+ * @param ...
+ */
+void yyerror(char *str, ...) {
+    va_list listPointer;
+    va_start(listPointer, str);
+
+    fprintf(stderr, "Error in line %d: ", yylineno);
+    vfprintf(stderr, str, listPointer);
+    fprintf(stderr, "\n");
+}
 /*
 int main() {
     table *t;
@@ -328,4 +360,4 @@ int main() {
     
     return (EXIT_SUCCESS);
 }
-*/
+ */

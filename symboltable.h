@@ -8,7 +8,8 @@
 #ifndef SYMBOLTABLE_H
 #define	SYMBOLTABLE_H
 
-
+extern int yylineno;
+void yyerror(char *s, ...);
 
 /*
  * Symbol table
@@ -33,22 +34,32 @@ typedef struct node {
     struct node *next;
 } node;
 
-/**
- * Generic Node for the Abstract Syntax Tree
- */
-typedef struct syntaxTreeNode {
-    int nodetype;
-    struct syntaxTreeNode *left;
-    struct syntaxTreeNode *right;
-} treeNode;
+
 
 /**
  * Node for storing Numbers in the AST
  */
-struct numberNode {
-    int nodeType;
+typedef struct {
     int number;
-};
+} integerNode;
+
+typedef struct {
+    char *str;
+} stringNode;
+
+/**
+ * Generic Node for the Abstract Syntax Tree
+ */
+typedef struct syntaxTreeNode {
+    int nodeType;
+    
+    union {
+        integerNode integer;
+        stringNode string;
+    };
+    
+} treeNode;
+
 
 /**
  * Node for storing Variables(Strings) in the AST
@@ -73,7 +84,6 @@ struct operationNode {
 /**
  * Functions to build the AST
  */
-struct syntaxTreeNode *newSyntaxTreeNode(int nodetype, struct syntaxTreeNode *left, struct syntaxTreeNode *right);
 struct syntaxTreeNode *newNumberNode(int number);
 struct syntaxTreeNode *newVariableNode(char* name, int value, int nodeType, int line);
 struct syntaxTreeNode *newOperationNode(int operation, int numberOfOperators, ...);
@@ -94,4 +104,3 @@ table *currentTable;
 table *firstTable;
 
 #endif	/* SYMBOLTABLE_H */
-

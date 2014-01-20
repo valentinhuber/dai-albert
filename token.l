@@ -1,9 +1,10 @@
+%option noyywrap nodefault yylineno
+
 %{
 #include <stdlib.h>
 #include <string.h>
+#include "symboltable.h"
 #include "y.tab.h"
-
-void yyerror(char *);
 %}
 
 %%
@@ -11,6 +12,8 @@ void yyerror(char *);
 0                   { yylval.iValue = atoi(yytext); return INTEGER; }
 
 [1-9][0-9]*         { yylval.iValue = atoi(yytext); return INTEGER; }
+
+\"(\\.|[^\\"])*\"   { yylval.sValue = strdup(yytext); return STRING_LITERAL; }
 
 [-()<>=+*/;{}.]     { return *yytext; }
 
@@ -33,15 +36,12 @@ void yyerror(char *);
 
 [a-z][A-z0-9]*      { yylval.variableNode = strdup(yytext); return VARIABLE; }
 
-[ \t]           ; /* ignore whitespace */
+[ \t]               ;   /* ignore whitespace */
 
-[\n]            ;   /*{ lineCount++; }*/
+[\n]                ;   /* ignore newline */
 
 "//".*"\n"          ;   /* ignore single line comments */
 "/*"(.|"\n")*"*/\n" ;   /* ignore multi line comments */
 
-.                   yyerror("Unknown character");
+.                   { yyerror("Unknown character %c\n", *yytext); }
 %%
-int yywrap(void) {
-    return 1;
-}

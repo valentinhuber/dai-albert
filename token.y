@@ -5,22 +5,22 @@
 #include <stdlib.h>
 #include <stdarg.h>
 #include "symboltable.h"
-#include "lineCounter.h"
 
 /* prototypes */
 int yylex(void);
-void yyerror(char *s);
 %}
 
 %union {
     struct syntaxTreeNode *node;
     int iValue;                 /* integer value */
+    char* sValue;
     char* variableNode;         /* name of variable in symbol table */
     int type;
 };
 
 %token MAIN
 %token <iValue> INTEGER
+%token <sValue> STRING_LITERAL
 %token <variableNode> VARIABLE
 %token WHILE IF PRINT
 %token TRUE
@@ -62,7 +62,7 @@ stmts:  stmt                   { $$ = $1; } //freeNode($2);
         ;
 
 stmt:    PRINT expr ';'                  { $$ = newOperationNode(PRINT, 1, $2);}
-        /*| VARIABLE '=' expr ';'          { $$ = newOperationNode('=', 2, newVariableNode($1,0), $3);}*/
+        | VARIABLE '=' expr ';'          { $$ = newOperationNode('=', 2, newVariableNode($1,0, 0, yylineno), $3);}
                                          
         | WHILE '(' expr ')' stmt        { $$ = newOperationNode(WHILE, 2, $3, $5); }
         | IF '(' expr ')' stmt %prec IFX { $$ = newOperationNode(IF, 2, $3, $5); }
@@ -72,15 +72,16 @@ stmt:    PRINT expr ';'                  { $$ = newOperationNode(PRINT, 1, $2);}
         ;
 
 declaration: INT { $<type>$ = 'i'; } assignment              { $$ = $3; }
+        | STRING { $<type>$ = 's'; } assignment              { $$ = $3; }
         ;
 
-assignment: VARIABLE                        { $$ = newOperationNode('=', 1, newVariableNode($1,0,$<type>0, lineCount)); }
-            | VARIABLE '=' expr             { $$ = newOperationNode('=', 2, newVariableNode($1,0,$<type>0, lineCount), $3);}
+assignment: VARIABLE                        { $$ = newOperationNode('=', 1, newVariableNode($1,0,$<type>0, yylineno)); }
+            | VARIABLE '=' expr             { $$ = newOperationNode('=', 2, newVariableNode($1,0,$<type>0, yylineno), $3);}
             ;
 
-expr:
-          INTEGER               { $$ = newNumberNode($1); }
-        | VARIABLE              { $$ = newVariableNode($1,0,$<type>0, lineCount); }
+expr:    INTEGER                { $$ = newNumberNode($1); }
+        | STRING_LITERAL        { $$ = newStringNode($1); }
+       /* | VARIABLE              { $$ = newVariableNode($1,0,$<type>0, yylineno); }*/
         | expr '+' expr         { $$ = newOperationNode('+', 2 ,$1, $3); }
         | expr '-' expr         { $$ = newOperationNode('-', 2 ,$1, $3); }
         | expr '*' expr         { $$ = newOperationNode('*', 2 ,$1, $3); }
@@ -95,13 +96,7 @@ expr:
         ;
 %%
 
-void yyerror(char *s) {
-    fprintf(stdout, "%s\n", s);
-}
-
-
 extern int yy_flex_debug;
 int main(void) {
-    printf("\n");
     return(yyparse());
 }
