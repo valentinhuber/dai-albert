@@ -191,7 +191,7 @@ treeNode *newVariableNode(char* name, int nodeType, int line) {
             break;
     }
     
-    n->type = nodeType;
+    n->type = 'v';
     n->line = line;
     
     return ((treeNode *)n); //->nodeType = nodeType
@@ -241,10 +241,11 @@ treeNode *evaluate(treeNode* tree) {
         case 'i': t->integer.number = tree->integer.number; t->nodeType = 'i';
             return t;
             break;
+        
         case 's': t->string.str = tree->string.str; t->nodeType = 's';
             return t;
             break;
-      //  case 'v':  return evaluate(((node *)tree)->value); break;
+        case 'v': return evaluate(((node *)tree)->value); break;
         case 'o':
             n = ((struct operationNode*) tree);
             switch (n->operation) {
@@ -320,7 +321,7 @@ treeNode *evaluate(treeNode* tree) {
                     if(n->operators[0]->nodeType != 'i' && n->operators[0]->nodeType != 's') {
                         node *result = findNode(((node*) n->operators[0])->name, currentTable);
                         if(result->name != NULL) {
-                            switch(result->type) {
+                            switch(result->value->nodeType) {
                                 case 'i': printf("%i\n",result->value->integer.number); break;
                                 case 's': printf("%s\n",result->value->string.str); break;
                             }
@@ -337,25 +338,27 @@ treeNode *evaluate(treeNode* tree) {
                     /* ASSIGNMENT */
                 case '=': {
                     node *result = findNode(((node*) n->operators[0])->name, currentTable);
-                    if (result->name != NULL && result->type == ((treeNode*)evaluate(n->operators[1]))->nodeType) {
-                       if(result->type == ((treeNode*)evaluate(n->operators[1]))->nodeType)
-                                result->value = evaluate(n->operators[1]);      // VALUE ASSIGNMENT
-                        else if (result->name != NULL && ((node*) n->operators[1])->name != NULL) {
-                                node *assignment = findNode(((node*) n->operators[1])->name, currentTable);
-                                if(assignment->name != NULL && result->type == assignment->type)
-                                        result->value = assignment->value;          //VARIABLE ASSIGNEMNT
-                                else 
-                                        yyerror("dai albert error");
-                        }else 
-                            yyerror("dai albert error");
-                    } else {
-                        if (result->name == NULL){
+                    if(((node*)n->operators[1])->type == 'v') {
+                        node *assignment = findNode(((node*) n->operators[1])->name, currentTable);
+                        if (result->name != NULL && assignment->name != NULL && result->value->nodeType == assignment->value->nodeType) {
+                                 node *assignment = findNode(((node*) n->operators[1])->name, currentTable);
+                                 result->value = assignment->value;          //VARIABLE ASSIGNEMNT
+                       }else 
+                            yyerror("no maching variable types");
+                        
+                    }else {
+                        treeNode *assignment = evaluate(n->operators[1]);
+                        if (result->name != NULL && result->value->nodeType == assignment->nodeType)
+                                 result->value = assignment;      // VALUE ASSIGNMENT
+                        else if (result->name == NULL){
                                 treeNode *test = evaluate(n->operators[1]);
                                 ((node*)n->operators[0])->value = test;
                                 enter(currentTable, (node *) n->operators[0]);
-                        } else 
-                            yyerror("variable of type  already declared as");
+                        }
+                        else 
+                                yyerror("dai albert error");
                     }
+                    
                     return t;
                     break;
                 }

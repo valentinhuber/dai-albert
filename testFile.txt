@@ -1,1 +1,6 @@
-main{int albert=3; print 4; print albert;}
+main {
+int k = 3;
+int x = 4;
+k = x;
+print k;
+}

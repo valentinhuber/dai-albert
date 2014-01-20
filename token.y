@@ -62,7 +62,7 @@ stmts:  stmt                   { $$ = $1; } //freeNode($2);
         ;
 
 stmt:    PRINT expr ';'                  { $$ = newOperationNode(PRINT, 1, $2);}
-        | VARIABLE '=' expr ';'          { $$ = newOperationNode('a', 2, newVariableNode($1, 0, yylineno), $3);}                                 
+        | VARIABLE '=' expr ';'          { $$ = newOperationNode('=', 2, newVariableNode($1, 0, yylineno), $3);}                                 
         | WHILE '(' expr ')' stmt        { $$ = newOperationNode(WHILE, 2, $3, $5); }
         | IF '(' expr ')' stmt %prec IFX { $$ = newOperationNode(IF, 2, $3, $5); }
         | IF '(' expr ')' stmt ELSE stmt { $$ = newOperationNode(ELSE, 3, $3, $5, $7); }
@@ -80,7 +80,6 @@ assignment: VARIABLE                        { $$ = newOperationNode('=', 1, newV
 
 
 expr:    INTEGER                { $$ = newNumberNode($1); }
-        | STRING_LITERAL        { $$ = newStringNode($1); }
         | VARIABLE              { $$ = newVariableNode($1, 0, yylineno); }
         | expr '+' expr         { $$ = newOperationNode('+', 2 ,$1, $3); }
         | expr '-' expr         { $$ = newOperationNode('-', 2 ,$1, $3); }
@@ -92,6 +91,7 @@ expr:    INTEGER                { $$ = newNumberNode($1); }
         | expr LE expr          { $$ = newOperationNode(LE, 2 ,$1, $3); }
         | expr NE expr          { $$ = newOperationNode(NE, 2 ,$1, $3); }
         | expr EQ expr          { $$ = newOperationNode(EQ, 2 ,$1, $3); }
+        | STRING_LITERAL        { $$ = newStringNode($1); }
         | '(' expr ')'          { $$ = $2; }
         ;
 %%
