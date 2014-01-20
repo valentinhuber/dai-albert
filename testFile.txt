@@ -14,7 +14,7 @@ a = x + a;
 print a;
 int b = a +x;
 print b;
-a = "asd";
+a = "asd"; //error
 
 /* 
    multi
@@ -31,4 +31,16 @@ while ( x < 10 ) {
     print "loop";
     x = x +1;
 }
+
+int j = 1;
+int k = 1;
+while (j<10){
+    while (k<2){
+        k = k + 1;
+        print k;
+    }
+    j = j + 1;
+    print j;
+}
+
 }

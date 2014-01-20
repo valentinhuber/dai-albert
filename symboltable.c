@@ -330,6 +330,7 @@ treeNode *evaluate(treeNode* tree) {
                     enterProc(currentTable, "while", makeTable(currentTable));
                     while (evaluate(n->operators[0])->integer.number != 0) 
                         evaluate(n->operators[1]);
+                    leaveProc();
                     return t;
                     break;
 
