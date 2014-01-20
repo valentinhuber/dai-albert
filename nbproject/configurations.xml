@@ -4,7 +4,6 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
-      <itemPath>lineCounter.h</itemPath>
       <itemPath>symboltable.h</itemPath>
       <itemPath>y.tab.h</itemPath>
     </logicalFolder>
@@ -40,8 +39,6 @@
       <compileType>
       </compileType>
       <item path="lex.yy.c" ex="false" tool="0" flavor2="0">
-      </item>
-      <item path="lineCounter.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="symboltable.c" ex="false" tool="0" flavor2="0">
       </item>
