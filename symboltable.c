@@ -317,7 +317,7 @@ treeNode *evaluate(treeNode* tree) {
 
                     /* PRINT */
                 case PRINT: {
-                    if(n->operators[0]->nodeType != 'i') {
+                    if(n->operators[0]->nodeType != 'i' && n->operators[0]->nodeType != 's') {
                         node *result = findNode(((node*) n->operators[0])->name, currentTable);
                         if(result->name != NULL) {
                             switch(result->type) {
@@ -326,7 +326,10 @@ treeNode *evaluate(treeNode* tree) {
                             }
                         }
                     } else {
-                        printf("%i\n",evaluate(n->operators[0])->integer.number);
+                        switch(evaluate(n->operators[0])->nodeType) {
+                         case 'i': printf("%i\n",evaluate(n->operators[0])->integer.number); break;
+                         case 's': printf("%s\n",evaluate(n->operators[0])->string.str); break;
+                        }
                     }
                     return t;
                     break;
