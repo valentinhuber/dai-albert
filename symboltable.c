@@ -89,7 +89,7 @@ void leaveProc() {
  * @param tbl
  * @return 
  */
-struct node* findNode(char *name, table *tbl) {
+node* findNode(char *name, table *tbl) {
     table *t = tbl;
     node *p = NULL;
     char *r = name;
@@ -140,7 +140,7 @@ int getWidth(table *t) {
  * @param number
  * @return 
  */
-struct syntaxTreeNode *newNumberNode(int number) {
+treeNode *newNumberNode(int number) {
     treeNode *node = malloc(sizeof (treeNode));
 
     node->nodeType = 'i';
@@ -170,15 +170,26 @@ treeNode *newStringNode(char *s) {
  * @param value
  * @return 
  */
-struct syntaxTreeNode *newVariableNode(char* name, int value, int nodeType, int line) {
+treeNode *newVariableNode(char* name, int nodeType, int line) {
     node *n = malloc(sizeof (struct node));
 
     n->name = strdup(name);
-    n->value = value;
+    
+    switch (nodeType) {
+
+        case 'i': 
+            n->value.nodeType = nodeType;
+            n->value.integer.number = 0;
+            break;
+        case 's': n->value.string.str = malloc(sizeof (stringNode));
+            n->value.string.str = "";
+            break;
+    }
+    
     n->type = nodeType;
     n->line = line;
 
-    return (struct syntaxTreeNode *) n;
+    return (treeNode *) n;
 }
 
 /**
@@ -188,7 +199,7 @@ struct syntaxTreeNode *newVariableNode(char* name, int value, int nodeType, int 
  * @param ...
  * @return 
  */
-struct syntaxTreeNode *newOperationNode(int operation, int numberOfOperators, ...) {
+treeNode *newOperationNode(int operation, int numberOfOperators, ...) {
     int i;
     va_list operatorList;
 
@@ -203,7 +214,7 @@ struct syntaxTreeNode *newOperationNode(int operation, int numberOfOperators, ..
         node->operators[i] = va_arg(operatorList, treeNode*);
     }
     va_end(operatorList);
-    return (struct syntaxTreeNode *) node;
+    return (treeNode *) node;
 }
 
 /**
@@ -212,7 +223,7 @@ struct syntaxTreeNode *newOperationNode(int operation, int numberOfOperators, ..
  * @param tree
  * @return 
  */
-treeNode *evaluate(struct syntaxTreeNode* tree) {
+treeNode *evaluate(treeNode* tree) {
 
     struct operationNode *n = malloc(sizeof (struct operationNode));
     treeNode *t = malloc(sizeof (treeNode));
@@ -306,12 +317,12 @@ treeNode *evaluate(struct syntaxTreeNode* tree) {
 
                     /* ASSIGNMENT */
                 case '=':
-                    if ((node*) findNode(((struct node*) n->operators[0])->name, currentTable)->name != NULL) {
-                        findNode(((struct node*) n->operators[0])->name, currentTable)->value
-                                = evaluate(n->operators[1]);
+                    if ((node*) findNode(((node*) n->operators[0])->name, currentTable)->name != NULL) {
+                        findNode(((node*) n->operators[0])->name, currentTable)->value
+                                = (evaluate(n->operators[1]));
                     } else {
-                        ((struct node*) n->operators[0])->value = evaluate(n->operators[1]);
-                        enter(currentTable, ((struct node*) n->operators[0]));
+                        ((node*) n->operators[0])->value = ((treeNode *)evaluate(n->operators[1]));
+                        enter(currentTable, ((node*) n->operators[0]));
                     }
                     return t;
                     break;

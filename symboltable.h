@@ -23,16 +23,7 @@ typedef struct table {
 } table;
 
 
-/*
- * Node for the Symbol table
- */
-typedef struct node {
-    char *name;
-    int type;
-    int value;
-    int line;
-    struct node *next;
-} node;
+
 
 
 
@@ -70,20 +61,31 @@ struct operationNode {
     struct syntaxTreeNode **operators;
 };
 
+/*
+ * Node for the Symbol table
+ */
+typedef struct node {
+    char *name;
+    int type;
+    treeNode value;
+    int line;
+    struct node *next;
+} node;
+
 /**
  * Functions to build the AST
  */
-struct syntaxTreeNode *newNumberNode(int number);
-struct syntaxTreeNode *newVariableNode(char* name, int value, int nodeType, int line);
-struct syntaxTreeNode *newOperationNode(int operation, int numberOfOperators, ...);
-treeNode *evaluate(struct syntaxTreeNode* tree);
+treeNode *newNumberNode(int number);
+treeNode *newVariableNode(char* name, int nodeType, int line);
+treeNode *newOperationNode(int operation, int numberOfOperators, ...);
+treeNode *evaluate(treeNode* tree);
 void freeNode(struct syntaxTreeNode* node);
   
 /*
  * Functions for the Symbol table
  */
 table *makeTable(table *parent);
-void enter(table *t, struct node *n);
+void enter(table *t, node *n);
 void addWidth(table *t, int width);
 void enterProc(table *t, char *name, table *newTable);
 void leaveProc();

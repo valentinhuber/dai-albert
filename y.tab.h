@@ -98,7 +98,7 @@ typedef union YYSTYPE
 /* Line 2053 of yacc.c  */
 #line 13 "token.y"
 
-    struct syntaxTreeNode *node;
+    treeNode *node;
     int iValue;                 /* integer value */
     char* sValue;
     char* variableNode;         /* name of variable in symbol table */
