@@ -341,6 +341,7 @@ treeNode *evaluate(treeNode* tree) {
     }
 }
 
+
 /**
  * Frees the AST recursively
  * @param node

@@ -36,6 +36,7 @@
 
 [a-z][A-z0-9]*      { yylval.variableNode = strdup(yytext); return VARIABLE; }
 
+
 [ \t]               ;   /* ignore whitespace */
 
 [\n]                ;   /* ignore newline */

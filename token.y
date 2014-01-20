@@ -79,6 +79,7 @@ assignment: VARIABLE                        { $$ = newOperationNode('=', 1, newV
             | VARIABLE '=' expr             { $$ = newOperationNode('=', 2, newVariableNode($1, $<type>0, yylineno), $3);}
             ;
 
+
 expr:    INTEGER                { $$ = newNumberNode($1); }
         | STRING_LITERAL        { $$ = newStringNode($1); }
         | VARIABLE              { $$ = newVariableNode($1, 0, yylineno); }

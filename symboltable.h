@@ -82,6 +82,7 @@ treeNode *newOperationNode(int operation, int numberOfOperators, ...);
 treeNode *evaluate(treeNode* tree);
 void freeNode(struct syntaxTreeNode* node);
   
+
 /*
  * Functions for the Symbol table
  */

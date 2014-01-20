@@ -7,11 +7,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/albert/NetBeansProjects/dai-albert/token.l</file>
-            <file>file:/home/albert/NetBeansProjects/dai-albert/symboltable.h</file>
-            <file>file:/home/albert/NetBeansProjects/dai-albert/testFile.txt</file>
-            <file>file:/home/albert/NetBeansProjects/dai-albert/symboltable.c</file>
-            <file>file:/home/albert/NetBeansProjects/dai-albert/token.y</file>
+            <file>file:/home/valentin/Documents/flac/DaiAlbert/dai-albert/token.y</file>
+            <file>file:/home/valentin/Documents/flac/DaiAlbert/dai-albert/token.l</file>
+            <file>file:/home/valentin/Documents/flac/DaiAlbert/dai-albert/testFile.txt</file>
+            <file>file:/home/valentin/Documents/flac/DaiAlbert/dai-albert/symboltable.c</file>
+            <file>file:/home/valentin/Documents/flac/DaiAlbert/dai-albert/test.sh</file>
+            <file>file:/home/valentin/Documents/flac/DaiAlbert/dai-albert/symboltable.h</file>
         </group>
     </open-files>
 </project-private>
