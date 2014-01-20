@@ -323,6 +323,8 @@ treeNode *evaluate(treeNode* tree) {
                             case 'i': printf("%i\n",result->value->integer.number); break;
                             case 's': printf("%s\n",result->value->string.str); break;
                         }
+                    } else {
+                        printf("%i\n",evaluate(n->operators[0])->integer.number);
                     }
                     return t;
                     break;
