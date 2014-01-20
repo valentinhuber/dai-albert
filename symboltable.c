@@ -247,36 +247,36 @@ treeNode *evaluate(treeNode* tree) {
             switch (n->operation) {
 
                     /* arithmetic operations */
-                case '+': t->integer.number = ((treeNode *)evaluate(n->operators[0]))->integer.number + ((treeNode *)evaluate(n->operators[1]))->integer.number;
+                case '+': t->integer.number = evaluate(n->operators[0])->integer.number + evaluate(n->operators[1])->integer.number;
                     return t;
                     break;
-                case '-': t->integer.number = ((treeNode *)evaluate(n->operators[0]))->integer.number - ((treeNode *)evaluate(n->operators[1]))->integer.number;
+                case '-': t->integer.number = evaluate(n->operators[0])->integer.number - evaluate(n->operators[1])->integer.number;
                     return t;
                     break;
-                case '*': t->integer.number = ((treeNode *)evaluate(n->operators[0]))->integer.number * ((treeNode *)evaluate(n->operators[1]))->integer.number;
+                case '*': t->integer.number = evaluate(n->operators[0])->integer.number * evaluate(n->operators[1])->integer.number;
                     return t;
                     break;
-                case '/': t->integer.number = ((treeNode *)evaluate(n->operators[0]))->integer.number / ((treeNode *)evaluate(n->operators[1]))->integer.number;
-                    return t;
-                    break;
-
-                case '<': t->integer.number = ((treeNode *)evaluate(n->operators[0]))->integer.number < ((treeNode *)evaluate(n->operators[1]))->integer.number;
-                    return t;
-                    break;
-                case '>': t->integer.number = ((treeNode *)evaluate(n->operators[0]))->integer.number > ((treeNode *)evaluate(n->operators[1]))->integer.number;
+                case '/': t->integer.number = evaluate(n->operators[0])->integer.number / evaluate(n->operators[1])->integer.number;
                     return t;
                     break;
 
-                case GE: t->integer.number = ((treeNode *)evaluate(n->operators[0]))->integer.number >= ((treeNode *)evaluate(n->operators[1]))->integer.number;
+                case '<': t->integer.number = evaluate(n->operators[0])->integer.number < evaluate(n->operators[1])->integer.number;
                     return t;
                     break;
-                case LE: t->integer.number = ((treeNode *)evaluate(n->operators[0]))->integer.number <= ((treeNode *)evaluate(n->operators[1]))->integer.number;
+                case '>': t->integer.number = evaluate(n->operators[0])->integer.number > evaluate(n->operators[1])->integer.number;
                     return t;
                     break;
-                case NE: t->integer.number = ((treeNode *)evaluate(n->operators[0]))->integer.number != ((treeNode *)evaluate(n->operators[1]))->integer.number;
+
+                case GE: t->integer.number = evaluate(n->operators[0])->integer.number >= evaluate(n->operators[1])->integer.number;
                     return t;
                     break;
-                case EQ: t->integer.number = ((treeNode *)evaluate(n->operators[0]))->integer.number == ((treeNode *)evaluate(n->operators[1]))->integer.number;
+                case LE: t->integer.number = evaluate(n->operators[0])->integer.number <= evaluate(n->operators[1])->integer.number;
+                    return t;
+                    break;
+                case NE: t->integer.number = evaluate(n->operators[0])->integer.number != evaluate(n->operators[1])->integer.number;
+                    return t;
+                    break;
+                case EQ: t->integer.number = evaluate(n->operators[0])->integer.number == evaluate(n->operators[1])->integer.number;
                     return t;
                     break;
 
