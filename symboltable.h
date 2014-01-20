@@ -43,12 +43,13 @@ typedef struct {
  */
 typedef struct syntaxTreeNode {
     int nodeType;
+    char* name;
+    int line; 
     
     union {
         integerNode integer;
         stringNode string;
     };
-    
 } treeNode;
 
 /**
@@ -67,7 +68,7 @@ struct operationNode {
 typedef struct node {
     char *name;
     int type;
-    treeNode value;
+    treeNode *value;
     int line;
     struct node *next;
 } node;
@@ -85,7 +86,7 @@ void freeNode(struct syntaxTreeNode* node);
  * Functions for the Symbol table
  */
 table *makeTable(table *parent);
-void enter(table *t, node *n);
+void enter(table *t, treeNode *n);
 void addWidth(table *t, int width);
 void enterProc(table *t, char *name, table *newTable);
 void leaveProc();

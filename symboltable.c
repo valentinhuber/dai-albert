@@ -35,19 +35,21 @@ table *makeTable(table *parent) {
  * @param n 
  * @param type
  */
-void enter(table *t, node *n) {
+void enter(table *t, treeNode *n) {
 
     node *p;
 
     p = t->first;
-
+    
     while (p != NULL && p->next != NULL) {
         p = p->next;
     }
-
-    p->name = strdup(n->name);
-    p->value = n->value;
-    p->type = n->type;
+    
+    p->value = malloc(sizeof (treeNode));
+    p->name = n->name;
+    p->value->integer.number = n->integer.number;
+    p->value->string.str = n->string.str;
+    p->type = n->nodeType;
     p->line = n->line;
     p->next = malloc(sizeof (struct node));
 
@@ -174,15 +176,16 @@ treeNode *newVariableNode(char* name, int nodeType, int line) {
     node *n = malloc(sizeof (struct node));
 
     n->name = strdup(name);
+    n->value = malloc(sizeof (treeNode));
     
     switch (nodeType) {
 
         case 'i': 
-            n->value.nodeType = nodeType;
-            n->value.integer.number = 0;
+            n->value->nodeType = nodeType;
+            n->value->integer.number = 0;
             break;
-        case 's': n->value.string.str = malloc(sizeof (stringNode));
-            n->value.string.str = "";
+        case 's': n->value->string.str = malloc(sizeof (stringNode));
+            n->value->string.str = "";
             break;
     }
     
@@ -311,18 +314,23 @@ treeNode *evaluate(treeNode* tree) {
                     break;
 
                     /* PRINT */
-                case PRINT: printf("%i\n", ((treeNode *)evaluate(n->operators[0]))->integer.number);
+                case PRINT: {
+                    treeNode *result = evaluate(n->operators[0]); 
+                    switch(result->nodeType) {
+                        case 'i': printf("%i\n",result->integer.number); break;
+                        case 's': printf("%s\n",result->string.str); break;
+                    }
                     return t;
                     break;
-
+                }
                     /* ASSIGNMENT */
                 case '=':
                     if ((node*) findNode(((node*) n->operators[0])->name, currentTable)->name != NULL) {
                         findNode(((node*) n->operators[0])->name, currentTable)->value
-                                = (evaluate(n->operators[1]));
+                                = (evaluate(n->operators[1]))->integer.number;
                     } else {
                         ((node*) n->operators[0])->value = ((treeNode *)evaluate(n->operators[1]));
-                        enter(currentTable, ((node*) n->operators[0]));
+                        enter(currentTable, ((treeNode *) n->operators[0]));
                     }
                     return t;
                     break;
