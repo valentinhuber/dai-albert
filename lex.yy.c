@@ -921,35 +921,35 @@ YY_RULE_SETUP
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 39 "token.l"
+#line 40 "token.l"
 ;   /* ignore whitespace */
 	YY_BREAK
 case 22:
 /* rule 22 can match eol */
 YY_RULE_SETUP
-#line 41 "token.l"
+#line 42 "token.l"
 ;   /* ignore newline */
 	YY_BREAK
 case 23:
 /* rule 23 can match eol */
 YY_RULE_SETUP
-#line 43 "token.l"
+#line 44 "token.l"
 ;   /* ignore single line comments */
 	YY_BREAK
 case 24:
 /* rule 24 can match eol */
 YY_RULE_SETUP
-#line 44 "token.l"
+#line 45 "token.l"
 ;   /* ignore multi line comments */
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 46 "token.l"
+#line 47 "token.l"
 { yyerror("Unknown character %c\n", *yytext); }
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 47 "token.l"
+#line 48 "token.l"
 YY_FATAL_ERROR( "flex scanner jammed" );
 	YY_BREAK
 #line 956 "lex.yy.c"
@@ -1962,6 +1962,6 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 47 "token.l"
+#line 48 "token.l"
 
 

@@ -325,9 +325,14 @@ treeNode *evaluate(treeNode* tree) {
                     break;
                 }
                     /* ASSIGNMENT */
-                case '=':
-                    if (findNode(((node*) n->operators[0])->name, currentTable)->name != NULL) {
-                        findNode(((node*) n->operators[0])->name, currentTable)->value = evaluate(n->operators[1]);
+                case '=': {
+                    node *result = findNode(((node*) n->operators[0])->name, currentTable);
+                    if (result->name != NULL) {
+                        treeNode *assignment = evaluate(n->operators[1]);
+                        if(result->type == assignment->nodeType)
+                                result->value = evaluate(n->operators[1]);
+                        else
+                            yyerror("dai albert error");
                     } else {
                         treeNode *test = evaluate(n->operators[1]);
                         ((node*)n->operators[0])->value = test;
@@ -335,6 +340,7 @@ treeNode *evaluate(treeNode* tree) {
                     }
                     return t;
                     break;
+                }
             }
             break;
     }
