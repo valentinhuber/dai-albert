@@ -135,7 +135,6 @@ int getWidth(table *t) {
     return width;
 }
 
-
 /**
  * Creates a number node in the AST
  * @param number
@@ -158,13 +157,12 @@ struct syntaxTreeNode *newNumberNode(int number) {
 treeNode *newStringNode(char *s) {
     treeNode *node = malloc(sizeof (treeNode));
     node->string.str = malloc(sizeof (stringNode));
-    
+
     node->nodeType = 's';
     node->string.str = s;
 
     return node;
 }
-
 
 /**
  * Creates a variable node in the AST
@@ -214,44 +212,57 @@ struct syntaxTreeNode *newOperationNode(int operation, int numberOfOperators, ..
  * @param tree
  * @return 
  */
-int evaluate(struct syntaxTreeNode* tree) {
+treeNode *evaluate(struct syntaxTreeNode* tree) {
 
     struct operationNode *n = malloc(sizeof (struct operationNode));
+    treeNode *t = malloc(sizeof (treeNode));
 
-    if (!tree || !tree->nodeType) return 0;
+
+    if (!tree || !tree->nodeType) return t;
 
     switch (tree->nodeType) {
 
-        case 'i': return ((integerNode *) tree)->number;
+        case 'i': t->integer.number = ((integerNode *) tree)->number;
+            return t;
             break;
-        case 's': return findNode(((struct variableNode*) tree)->name, currentTable)->value;
+        case 's': t->string.str = ((stringNode *) tree)->str;
             break;
         case 'o':
             n = ((struct operationNode*) tree);
             switch (n->operation) {
 
-                    /* artimetic operations */
-                case '+': return evaluate(n->operators[0]) + evaluate(n->operators[1]);
+                    /* arithmetic operations */
+                case '+': t->integer.number = ((treeNode *)evaluate(n->operators[0]))->integer.number + ((treeNode *)evaluate(n->operators[1]))->integer.number;
+                    return t;
                     break;
-                case '-': return evaluate(n->operators[0]) - evaluate(n->operators[1]);
+                case '-': t->integer.number = ((treeNode *)evaluate(n->operators[0]))->integer.number - ((treeNode *)evaluate(n->operators[1]))->integer.number;
+                    return t;
                     break;
-                case '*': return evaluate(n->operators[0]) * evaluate(n->operators[1]);
+                case '*': t->integer.number = ((treeNode *)evaluate(n->operators[0]))->integer.number * ((treeNode *)evaluate(n->operators[1]))->integer.number;
+                    return t;
                     break;
-                case '/': return evaluate(n->operators[0]) / evaluate(n->operators[1]);
+                case '/': t->integer.number = ((treeNode *)evaluate(n->operators[0]))->integer.number / ((treeNode *)evaluate(n->operators[1]))->integer.number;
+                    return t;
                     break;
 
-                case '<': return evaluate(n->operators[0]) < evaluate(n->operators[1]);
+                case '<': t->integer.number = ((treeNode *)evaluate(n->operators[0]))->integer.number < ((treeNode *)evaluate(n->operators[1]))->integer.number;
+                    return t;
                     break;
-                case '>': return evaluate(n->operators[0]) > evaluate(n->operators[1]);
+                case '>': t->integer.number = ((treeNode *)evaluate(n->operators[0]))->integer.number > ((treeNode *)evaluate(n->operators[1]))->integer.number;
+                    return t;
                     break;
 
-                case GE: return evaluate(n->operators[0]) >= evaluate(n->operators[1]);
+                case GE: t->integer.number = ((treeNode *)evaluate(n->operators[0]))->integer.number >= ((treeNode *)evaluate(n->operators[1]))->integer.number;
+                    return t;
                     break;
-                case LE: return evaluate(n->operators[0]) <= evaluate(n->operators[1]);
+                case LE: t->integer.number = ((treeNode *)evaluate(n->operators[0]))->integer.number <= ((treeNode *)evaluate(n->operators[1]))->integer.number;
+                    return t;
                     break;
-                case NE: return evaluate(n->operators[0]) != evaluate(n->operators[1]);
+                case NE: t->integer.number = ((treeNode *)evaluate(n->operators[0]))->integer.number != ((treeNode *)evaluate(n->operators[1]))->integer.number;
+                    return t;
                     break;
-                case EQ: return evaluate(n->operators[0]) == evaluate(n->operators[1]);
+                case EQ: t->integer.number = ((treeNode *)evaluate(n->operators[0]))->integer.number == ((treeNode *)evaluate(n->operators[1]))->integer.number;
+                    return t;
                     break;
 
                     /* IF */
@@ -260,7 +271,7 @@ int evaluate(struct syntaxTreeNode* tree) {
                         evaluate(n->operators[1]);
 
                     leaveProc();
-                    return 0;
+                    return t;
                     break;
 
                     /* IF ELSE */
@@ -272,13 +283,13 @@ int evaluate(struct syntaxTreeNode* tree) {
                         evaluate(n->operators[2]);
 
                     leaveProc();
-                    return 0;
+                    return t;
                     break;
                     /* WHILE */
                 case WHILE:
                     enterProc(currentTable, "while", makeTable(currentTable));
                     while (evaluate(n->operators[0])) evaluate(n->operators[1]);
-                    return 0;
+                    return t;
                     break;
 
                     /* list oft statements */
@@ -288,7 +299,7 @@ int evaluate(struct syntaxTreeNode* tree) {
 
                     /* PRINT */
                 case PRINT: printf("%i\n", evaluate(n->operators[0]));
-                    return 0;
+                    return t;
                     break;
 
                     /* ASSIGNMENT */
@@ -300,7 +311,7 @@ int evaluate(struct syntaxTreeNode* tree) {
                         ((struct variableNode*) n->operators[0])->value = evaluate(n->operators[1]);
                         enter(currentTable, ((struct variableNode*) n->operators[0]));
                     }
-                    return 0;
+                    return t;
                     break;
             }
             break;

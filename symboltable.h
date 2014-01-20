@@ -87,7 +87,7 @@ struct operationNode {
 struct syntaxTreeNode *newNumberNode(int number);
 struct syntaxTreeNode *newVariableNode(char* name, int value, int nodeType, int line);
 struct syntaxTreeNode *newOperationNode(int operation, int numberOfOperators, ...);
-int evaluate(struct syntaxTreeNode* tree);
+treeNode *evaluate(struct syntaxTreeNode* tree);
 void freeNode(struct syntaxTreeNode* node);
   
 /*
