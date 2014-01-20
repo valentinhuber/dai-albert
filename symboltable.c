@@ -326,9 +326,8 @@ treeNode *evaluate(treeNode* tree) {
                 }
                     /* ASSIGNMENT */
                 case '=':
-                    if ((node*) findNode(((node*) n->operators[0])->name, currentTable)->name != NULL) {
-                        findNode(((node*) n->operators[0])->name, currentTable)->value
-                                = (evaluate(n->operators[1]))->integer.number;
+                    if (findNode(((node*) n->operators[0])->name, currentTable)->name != NULL) {
+                        findNode(((node*) n->operators[0])->name, currentTable)->value = evaluate(n->operators[1]);
                     } else {
                         treeNode *test = evaluate(n->operators[1]);
                         ((node*)n->operators[0])->value = test;
