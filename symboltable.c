@@ -236,10 +236,10 @@ treeNode *evaluate(treeNode* tree) {
 
     switch (tree->nodeType) {
 
-        case 'i': t->integer.number = tree->integer.number; //maybe just return t
+        case 'i': t->integer.number = tree->integer.number; t->nodeType = 'i';
             return t;
             break;
-        case 's': t->string.str = tree->string.str; //maybe just return t
+        case 's': t->string.str = tree->string.str; t->nodeType = 's';
             return t;
             break;
         case 'o':
