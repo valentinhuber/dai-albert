@@ -317,11 +317,13 @@ treeNode *evaluate(treeNode* tree) {
 
                     /* PRINT */
                 case PRINT: {
-                    node *result = findNode(((node*) n->operators[0])->name, currentTable);
-                    if(result->name != NULL) {
-                        switch(result->type) {
-                            case 'i': printf("%i\n",result->value->integer.number); break;
-                            case 's': printf("%s\n",result->value->string.str); break;
+                    if(n->operators[0]->nodeType != 'i') {
+                        node *result = findNode(((node*) n->operators[0])->name, currentTable);
+                        if(result->name != NULL) {
+                            switch(result->type) {
+                                case 'i': printf("%i\n",result->value->integer.number); break;
+                                case 's': printf("%s\n",result->value->string.str); break;
+                            }
                         }
                     } else {
                         printf("%i\n",evaluate(n->operators[0])->integer.number);
