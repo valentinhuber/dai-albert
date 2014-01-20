@@ -35,7 +35,7 @@ table *makeTable(table *parent) {
  * @param n 
  * @param type
  */
-void enter(table *t, struct variableNode *n) {
+void enter(table *t, node *n) {
 
     node *p;
 
@@ -47,7 +47,7 @@ void enter(table *t, struct variableNode *n) {
 
     p->name = strdup(n->name);
     p->value = n->value;
-    p->type = n->nodetype;
+    p->type = n->type;
     p->line = n->line;
     p->next = malloc(sizeof (struct node));
 
@@ -171,14 +171,14 @@ treeNode *newStringNode(char *s) {
  * @return 
  */
 struct syntaxTreeNode *newVariableNode(char* name, int value, int nodeType, int line) {
-    struct variableNode *node = malloc(sizeof (struct variableNode));
+    node *n = malloc(sizeof (struct node));
 
-    node->name = strdup(name);
-    node->value = value;
-    node->nodetype = nodeType;
-    node->line = line;
+    n->name = strdup(name);
+    n->value = value;
+    n->type = nodeType;
+    n->line = line;
 
-    return (struct syntaxTreeNode *) node;
+    return (struct syntaxTreeNode *) n;
 }
 
 /**
@@ -225,7 +225,9 @@ treeNode *evaluate(struct syntaxTreeNode* tree) {
         case 'i': t->integer.number = ((integerNode *) tree)->number;
             return t;
             break;
-        case 's': t->string.str = ((stringNode *) tree)->str;
+        case 's': t->string.str = malloc(sizeof (stringNode));
+            t->string.str = ((stringNode *) tree)->str;
+            return t;
             break;
         case 'o':
             n = ((struct operationNode*) tree);
@@ -298,18 +300,18 @@ treeNode *evaluate(struct syntaxTreeNode* tree) {
                     break;
 
                     /* PRINT */
-                case PRINT: printf("%i\n", evaluate(n->operators[0]));
+                case PRINT: printf("%i\n", ((treeNode *)evaluate(n->operators[0]))->integer.number);
                     return t;
                     break;
 
                     /* ASSIGNMENT */
                 case '=':
-                    if ((node*) findNode(((struct variableNode*) n->operators[0])->name, currentTable)->name != NULL) {
-                        findNode(((struct variableNode*) n->operators[0])->name, currentTable)->value
+                    if ((node*) findNode(((struct node*) n->operators[0])->name, currentTable)->name != NULL) {
+                        findNode(((struct node*) n->operators[0])->name, currentTable)->value
                                 = evaluate(n->operators[1]);
                     } else {
-                        ((struct variableNode*) n->operators[0])->value = evaluate(n->operators[1]);
-                        enter(currentTable, ((struct variableNode*) n->operators[0]));
+                        ((struct node*) n->operators[0])->value = evaluate(n->operators[1]);
+                        enter(currentTable, ((struct node*) n->operators[0]));
                     }
                     return t;
                     break;

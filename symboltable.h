@@ -60,17 +60,6 @@ typedef struct syntaxTreeNode {
     
 } treeNode;
 
-
-/**
- * Node for storing Variables(Strings) in the AST
- */
-struct variableNode {
-    int nodetype;
-    char* name;
-    int value;
-    int line;
-};
-
 /**
  * Node for storing  Operations in the AST
  */
@@ -94,7 +83,7 @@ void freeNode(struct syntaxTreeNode* node);
  * Functions for the Symbol table
  */
 table *makeTable(table *parent);
-void enter(table *t, struct variableNode *n);
+void enter(table *t, struct node *n);
 void addWidth(table *t, int width);
 void enterProc(table *t, char *name, table *newTable);
 void leaveProc();
