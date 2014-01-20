@@ -144,7 +144,6 @@ int getWidth(table *t) {
 treeNode *newNumberNode(int number) {
     treeNode *node = malloc(sizeof (treeNode));
     
-    node->name = malloc(sizeof(char *));
     node->nodeType = 'i';
     node->integer.number = number;
 
@@ -158,9 +157,7 @@ treeNode *newNumberNode(int number) {
  */
 treeNode *newStringNode(char *s) {
     treeNode *node = malloc(sizeof (treeNode));
-    //node->string.str = malloc(sizeof (stringNode));
 
-    node->name = malloc(sizeof(char *));
     node->nodeType = 's';
     node->string.str = strdup(s);
 
