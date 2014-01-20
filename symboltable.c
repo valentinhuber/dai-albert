@@ -233,7 +233,8 @@ treeNode *evaluate(treeNode* tree) {
     struct operationNode *n = malloc(sizeof (struct operationNode));
     treeNode *t = malloc(sizeof (treeNode));
 
-
+    t->nodeType = tree->nodeType;
+    
     if (!tree || !tree->nodeType) return t;
 
     switch (tree->nodeType) {
@@ -318,7 +319,7 @@ treeNode *evaluate(treeNode* tree) {
 
                     /* PRINT */
                 case PRINT: {
-                    if(n->operators[0]->nodeType != 'i' && n->operators[0]->nodeType != 's') {
+                    if(n->operators[0]->nodeType == 'v') {
                         node *result = findNode(((node*) n->operators[0])->name, currentTable);
                         if(result->name != NULL) {
                             switch(result->value->nodeType) {
@@ -330,6 +331,7 @@ treeNode *evaluate(treeNode* tree) {
                         switch(evaluate(n->operators[0])->nodeType) {
                          case 'i': printf("%i\n",evaluate(n->operators[0])->integer.number); break;
                          case 's': printf("%s\n",evaluate(n->operators[0])->string.str); break;
+                         case 'o': printf("%i\n",evaluate(n->operators[0])->integer.number); break; //type checking for return value
                         }
                     }
                     return t;

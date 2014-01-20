@@ -1,6 +1,6 @@
 main {
 int k = 3;
 int x = 4;
-k = x;
-print k;
+int y = 5+4;
+print y;
 }
