@@ -57,6 +57,7 @@ struct variableNode {
     int nodetype;
     char* name;
     int value;
+    int line;
 };
 
 /**
@@ -74,7 +75,7 @@ struct operationNode {
  */
 struct syntaxTreeNode *newSyntaxTreeNode(int nodetype, struct syntaxTreeNode *left, struct syntaxTreeNode *right);
 struct syntaxTreeNode *newNumberNode(int number);
-struct syntaxTreeNode *newVariableNode(char* name, int value);
+struct syntaxTreeNode *newVariableNode(char* name, int value, int nodeType, int line);
 struct syntaxTreeNode *newOperationNode(int operation, int numberOfOperators, ...);
 int evaluate(struct syntaxTreeNode* tree);
 void freeNode(struct syntaxTreeNode* node);
@@ -83,7 +84,7 @@ void freeNode(struct syntaxTreeNode* node);
  * Functions for the Symbol table
  */
 table *makeTable(table *parent);
-void enter(table *t, struct variableNode *n, int type);
+void enter(table *t, struct variableNode *n);
 void addWidth(table *t, int width);
 void enterProc(table *t, char *name, table *newTable);
 void leaveProc();

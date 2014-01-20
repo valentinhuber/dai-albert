@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <stdarg.h>
 #include "symboltable.h"
+#include "lineCounter.h"
 
 /* prototypes */
 int yylex(void);
@@ -27,12 +28,12 @@ void yyerror(char *s);
 %nonassoc IFX
 %nonassoc ELSE
 
-%token <type> INT
-%token <type> FLOAT
-%token <type> BOOL
-%token <type> STRING
+%token <node> INT
+%token <node> FLOAT
+%token <node> BOOL
+%token <node> STRING
+%type <node> expr stmt scope stmts function init assignment declaration
 
-%type <node> expr stmt scope stmts function init
 
 %left GE LE EQ NE '>' '<'
 %left '+' '-'
@@ -56,27 +57,30 @@ function:
 scope:   '{' stmts '}'           { evaluate($2); }
         ;
 
-stmts:   
-         stmt                   { $$ = $1; } //freeNode($2);
+stmts:  stmt                   { $$ = $1; } //freeNode($2);
         | stmts stmt            { $$ = newOperationNode('l', 2, $1, $2); }
         ;
 
 stmt:    PRINT expr ';'                  { $$ = newOperationNode(PRINT, 1, $2);}
-        | VARIABLE '=' expr ';'          { $$ = newOperationNode('=', 2, newVariableNode($1,0), $3);}
+        /*| VARIABLE '=' expr ';'          { $$ = newOperationNode('=', 2, newVariableNode($1,0), $3);}*/
                                          
         | WHILE '(' expr ')' stmt        { $$ = newOperationNode(WHILE, 2, $3, $5); }
         | IF '(' expr ')' stmt %prec IFX { $$ = newOperationNode(IF, 2, $3, $5); }
         | IF '(' expr ')' stmt ELSE stmt { $$ = newOperationNode(ELSE, 3, $3, $5, $7); }
         | '{' stmts '}'                  { $$ = $2; } 
-    /*  | declaration ';'                { printf("declaration\n"); } */
+        | declaration ';'                { $$ = $1; } 
         ;
 
-/* declaration: INT { $<type>$ = 'i'; } expr ';' */
+declaration: INT { $<type>$ = 'i'; } assignment              { $$ = $3; }
+        ;
 
+assignment: VARIABLE                        { $$ = newOperationNode('=', 1, newVariableNode($1,0,$<type>0, lineCount)); }
+            | VARIABLE '=' expr             { $$ = newOperationNode('=', 2, newVariableNode($1,0,$<type>0, lineCount), $3);}
+            ;
 
 expr:
           INTEGER               { $$ = newNumberNode($1); }
-        | VARIABLE              { $$ = newVariableNode($1,0); }
+        | VARIABLE              { $$ = newVariableNode($1,0,$<type>0, lineCount); }
         | expr '+' expr         { $$ = newOperationNode('+', 2 ,$1, $3); }
         | expr '-' expr         { $$ = newOperationNode('-', 2 ,$1, $3); }
         | expr '*' expr         { $$ = newOperationNode('*', 2 ,$1, $3); }

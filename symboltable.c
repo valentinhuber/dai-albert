@@ -35,7 +35,7 @@ table *makeTable(table *parent) {
  * @param n 
  * @param type
  */
-void enter(table *t, struct variableNode *n, int type) {
+void enter(table *t, struct variableNode *n) {
     
     node *p;
     
@@ -47,7 +47,8 @@ void enter(table *t, struct variableNode *n, int type) {
     
     p->name = strdup(n->name);
     p->value = n->value;
-    p->type = type;
+    p->type = n->nodetype;
+    p->line = n->line;
     p->next = malloc(sizeof(struct node));
     
     currentTable = t;
@@ -171,12 +172,13 @@ struct syntaxTreeNode *newNumberNode(int number) {
  * @param value
  * @return 
  */
-struct syntaxTreeNode *newVariableNode(char* name, int value) {
+struct syntaxTreeNode *newVariableNode(char* name, int value, int nodeType, int line) {
      struct variableNode *node = malloc(sizeof(struct variableNode));
  
-     node->nodetype = 's';
      node->name = strdup(name);
      node->value = value;
+     node->nodetype = nodeType;
+     node->line = line;
      
      return (struct syntaxTreeNode *) node;
 }
@@ -273,11 +275,12 @@ int evaluate(struct syntaxTreeNode* tree) {
                 
                 /* ASSIGNMENT */
                 case '=': 
-                    if(findNode(((struct variableNode*)n->operators[0])->name,currentTable) != NULL) {
+                    if((node*)findNode(((struct variableNode*)n->operators[0])->name,currentTable)->name != NULL) {
                       findNode(((struct variableNode*)n->operators[0])->name,currentTable)->value = evaluate(n->operators[1]);
                     }
                     else {
-                        ((struct variableNode*)n->operators[0])->value = evaluate(n->operators[1]); enter(currentTable, ((struct variableNode*)n->operators[0]), 0); 
+                        ((struct variableNode*)n->operators[0])->value = evaluate(n->operators[1]); 
+                        enter(currentTable, ((struct variableNode*)n->operators[0])); 
                    }
                     return 0; break;
             }

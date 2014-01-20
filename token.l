@@ -1,7 +1,8 @@
 %{
 #include <stdlib.h>
-#include "symboltable.h"
+#include <string.h>
 #include "y.tab.h"
+
 void yyerror(char *);
 %}
 
@@ -32,7 +33,9 @@ void yyerror(char *);
 
 [a-z][A-z0-9]*      { yylval.variableNode = strdup(yytext); return VARIABLE; }
 
-[ \t\n]+            ;   /* ignore whitespace */
+[ \t]           ; /* ignore whitespace */
+
+[\n]            ;   /*{ lineCount++; }*/
 
 "//".*"\n"          ;   /* ignore single line comments */
 "/*"(.|"\n")*"*/\n" ;   /* ignore multi line comments */
