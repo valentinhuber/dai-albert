@@ -330,7 +330,7 @@ treeNode *evaluate(treeNode* tree) {
                     /* ASSIGNMENT */
                 case '=': {
                     node *result = findNode(((node*) n->operators[0])->name, currentTable);
-                    if (result->name != NULL ) {
+                    if (result->name != NULL && result->type == ((treeNode*)evaluate(n->operators[1]))->nodeType) {
                        if(result->type == ((treeNode*)evaluate(n->operators[1]))->nodeType)
                                 result->value = evaluate(n->operators[1]);      // VALUE ASSIGNMENT
                         else if (result->name != NULL && ((node*) n->operators[1])->name != NULL) {
@@ -342,9 +342,12 @@ treeNode *evaluate(treeNode* tree) {
                         }else 
                             yyerror("dai albert error");
                     } else {
-                        treeNode *test = evaluate(n->operators[1]);
-                        ((node*)n->operators[0])->value = test;
-                        enter(currentTable, (node *) n->operators[0]);
+                        if (result->name == NULL){
+                                treeNode *test = evaluate(n->operators[1]);
+                                ((node*)n->operators[0])->value = test;
+                                enter(currentTable, (node *) n->operators[0]);
+                        } else 
+                            yyerror("variable of type  already declared as");
                     }
                     return t;
                     break;
