@@ -514,8 +514,8 @@ static const yytype_uint8 yyrline[] =
 {
        0,    47,    47,    49,    53,    57,    60,    61,    64,    65,
       67,    68,    69,    70,    71,    74,    74,    75,    75,    78,
-      79,    82,    83,    84,    85,    86,    87,    88,    89,    90,
-      91,    92,    93,    94,    95
+      79,    83,    84,    85,    86,    87,    88,    89,    90,    91,
+      92,    93,    94,    95,    96
 };
 #endif
 
@@ -1579,85 +1579,85 @@ yyreduce:
 
   case 21:
 /* Line 1787 of yacc.c  */
-#line 82 "token.y"
+#line 83 "token.y"
     { (yyval.node) = newNumberNode((yyvsp[(1) - (1)].iValue)); }
     break;
 
   case 22:
 /* Line 1787 of yacc.c  */
-#line 83 "token.y"
+#line 84 "token.y"
     { (yyval.node) = newStringNode((yyvsp[(1) - (1)].sValue)); }
     break;
 
   case 23:
 /* Line 1787 of yacc.c  */
-#line 84 "token.y"
+#line 85 "token.y"
     { (yyval.node) = newVariableNode((yyvsp[(1) - (1)].variableNode), 0, yylineno); }
     break;
 
   case 24:
 /* Line 1787 of yacc.c  */
-#line 85 "token.y"
+#line 86 "token.y"
     { (yyval.node) = newOperationNode('+', 2 ,(yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node)); }
     break;
 
   case 25:
 /* Line 1787 of yacc.c  */
-#line 86 "token.y"
+#line 87 "token.y"
     { (yyval.node) = newOperationNode('-', 2 ,(yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node)); }
     break;
 
   case 26:
 /* Line 1787 of yacc.c  */
-#line 87 "token.y"
+#line 88 "token.y"
     { (yyval.node) = newOperationNode('*', 2 ,(yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node)); }
     break;
 
   case 27:
 /* Line 1787 of yacc.c  */
-#line 88 "token.y"
+#line 89 "token.y"
     { (yyval.node) = newOperationNode('/', 2 ,(yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node)); }
     break;
 
   case 28:
 /* Line 1787 of yacc.c  */
-#line 89 "token.y"
+#line 90 "token.y"
     { (yyval.node) = newOperationNode('<', 2 ,(yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node)); }
     break;
 
   case 29:
 /* Line 1787 of yacc.c  */
-#line 90 "token.y"
+#line 91 "token.y"
     { (yyval.node) = newOperationNode('>', 2 ,(yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node)); }
     break;
 
   case 30:
 /* Line 1787 of yacc.c  */
-#line 91 "token.y"
+#line 92 "token.y"
     { (yyval.node) = newOperationNode(GE, 2 ,(yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node)); }
     break;
 
   case 31:
 /* Line 1787 of yacc.c  */
-#line 92 "token.y"
+#line 93 "token.y"
     { (yyval.node) = newOperationNode(LE, 2 ,(yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node)); }
     break;
 
   case 32:
 /* Line 1787 of yacc.c  */
-#line 93 "token.y"
+#line 94 "token.y"
     { (yyval.node) = newOperationNode(NE, 2 ,(yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node)); }
     break;
 
   case 33:
 /* Line 1787 of yacc.c  */
-#line 94 "token.y"
+#line 95 "token.y"
     { (yyval.node) = newOperationNode(EQ, 2 ,(yyvsp[(1) - (3)].node), (yyvsp[(3) - (3)].node)); }
     break;
 
   case 34:
 /* Line 1787 of yacc.c  */
-#line 95 "token.y"
+#line 96 "token.y"
     { (yyval.node) = (yyvsp[(2) - (3)].node); }
     break;
 
@@ -1895,7 +1895,7 @@ yyreturn:
 
 
 /* Line 2050 of yacc.c  */
-#line 97 "token.y"
+#line 98 "token.y"
 
 
 extern int yy_flex_debug;

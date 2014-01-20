@@ -95,6 +95,7 @@ node* findNode(char *name, table *tbl) {
     char *r = name;
 
     if (t == NULL) {
+        p->name = malloc(sizeof(char *));
         return p;
     }
 
@@ -143,7 +144,7 @@ int getWidth(table *t) {
 treeNode *newNumberNode(int number) {
     treeNode *node = malloc(sizeof (treeNode));
     
-   
+    node->name = malloc(sizeof(char *));
     node->nodeType = 'i';
     node->integer.number = number;
 
@@ -159,6 +160,7 @@ treeNode *newStringNode(char *s) {
     treeNode *node = malloc(sizeof (treeNode));
     //node->string.str = malloc(sizeof (stringNode));
 
+    node->name = malloc(sizeof(char *));
     node->nodeType = 's';
     node->string.str = strdup(s);
 
@@ -172,26 +174,29 @@ treeNode *newStringNode(char *s) {
  * @return 
  */
 treeNode *newVariableNode(char* name, int nodeType, int line) {
+    
     node *n = malloc(sizeof (struct node));
 
     n->name = strdup(name);
     n->value = malloc(sizeof (treeNode));
-    n->type = nodeType;
     
     switch (nodeType) {
-
         case 'i': 
+            n->value->name = strdup(name);
             n->value->nodeType = nodeType;
             n->value->integer.number = 0;
             break;
-        case 's': n->value->string.str = malloc(sizeof (stringNode));
+        case 's': 
+            n->value->name = strdup(name);
+            n->value->nodeType = nodeType;
+            n->value->string.str = malloc(sizeof (stringNode));
             n->value->string.str = "";
             break;
     }
     
     n->type = nodeType;
     n->line = line;
-
+    
     return ((treeNode *)n); //->nodeType = nodeType
 }
 
@@ -242,6 +247,7 @@ treeNode *evaluate(treeNode* tree) {
         case 's': t->string.str = tree->string.str; t->nodeType = 's';
             return t;
             break;
+      //  case 'v':  return evaluate(((node *)tree)->value); break;
         case 'o':
             n = ((struct operationNode*) tree);
             switch (n->operation) {
@@ -327,11 +333,16 @@ treeNode *evaluate(treeNode* tree) {
                     /* ASSIGNMENT */
                 case '=': {
                     node *result = findNode(((node*) n->operators[0])->name, currentTable);
-                    if (result->name != NULL) {
-                        treeNode *assignment = evaluate(n->operators[1]);
-                        if(result->type == assignment->nodeType)
-                                result->value = evaluate(n->operators[1]);
-                        else
+                    if (result->name != NULL ) {
+                       if(result->type == ((treeNode*)evaluate(n->operators[1]))->nodeType)
+                                result->value = evaluate(n->operators[1]);      // VALUE ASSIGNMENT
+                        else if (result->name != NULL && ((node*) n->operators[1])->name != NULL) {
+                                node *assignment = findNode(((node*) n->operators[1])->name, currentTable);
+                                if(assignment->name != NULL && result->type == assignment->type)
+                                        result->value = assignment->value;          //VARIABLE ASSIGNEMNT
+                                else 
+                                        yyerror("dai albert error");
+                        }else 
                             yyerror("dai albert error");
                     } else {
                         treeNode *test = evaluate(n->operators[1]);
