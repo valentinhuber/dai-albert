@@ -35,7 +35,7 @@ table *makeTable(table *parent) {
  * @param n 
  * @param type
  */
-void enter(table *t, treeNode *n) {
+void enter(table *t, node *n) {
 
     node *p;
 
@@ -45,13 +45,11 @@ void enter(table *t, treeNode *n) {
         p = p->next;
     }
     
-    p->value = malloc(sizeof (treeNode));
-    p->name = n->name;
-    p->value->integer.number = n->integer.number;
-    p->value->string.str = n->string.str;
-    p->type = n->nodeType;
     p->line = n->line;
-    p->next = malloc(sizeof (struct node));
+    p->name = n->name;
+    p->type = n->type;
+    p->value = n->value; //maybe add n.value.type
+    p->next = malloc(sizeof (node));
 
     currentTable = t;
 }
@@ -144,7 +142,8 @@ int getWidth(table *t) {
  */
 treeNode *newNumberNode(int number) {
     treeNode *node = malloc(sizeof (treeNode));
-
+    
+   
     node->nodeType = 'i';
     node->integer.number = number;
 
@@ -158,10 +157,10 @@ treeNode *newNumberNode(int number) {
  */
 treeNode *newStringNode(char *s) {
     treeNode *node = malloc(sizeof (treeNode));
-    node->string.str = malloc(sizeof (stringNode));
+    //node->string.str = malloc(sizeof (stringNode));
 
     node->nodeType = 's';
-    node->string.str = s;
+    node->string.str = strdup(s);
 
     return node;
 }
@@ -177,6 +176,7 @@ treeNode *newVariableNode(char* name, int nodeType, int line) {
 
     n->name = strdup(name);
     n->value = malloc(sizeof (treeNode));
+    n->type = nodeType;
     
     switch (nodeType) {
 
@@ -192,7 +192,7 @@ treeNode *newVariableNode(char* name, int nodeType, int line) {
     n->type = nodeType;
     n->line = line;
 
-    return (treeNode *) n;
+    return ((treeNode *)n); //->nodeType = nodeType
 }
 
 /**
@@ -236,11 +236,10 @@ treeNode *evaluate(treeNode* tree) {
 
     switch (tree->nodeType) {
 
-        case 'i': t->integer.number = ((integerNode *) tree)->number;
+        case 'i': t->integer.number = tree->integer.number; //maybe just return t
             return t;
             break;
-        case 's': t->string.str = malloc(sizeof (stringNode));
-            t->string.str = ((stringNode *) tree)->str;
+        case 's': t->string.str = tree->string.str; //maybe just return t
             return t;
             break;
         case 'o':
@@ -315,10 +314,12 @@ treeNode *evaluate(treeNode* tree) {
 
                     /* PRINT */
                 case PRINT: {
-                    treeNode *result = evaluate(n->operators[0]); 
-                    switch(result->nodeType) {
-                        case 'i': printf("%i\n",result->integer.number); break;
-                        case 's': printf("%s\n",result->string.str); break;
+                    node *result = findNode(((node*) n->operators[0])->name, currentTable);
+                    if(result->name != NULL) {
+                        switch(result->type) {
+                            case 'i': printf("%i\n",result->value->integer.number); break;
+                            case 's': printf("%s\n",result->value->string.str); break;
+                        }
                     }
                     return t;
                     break;
@@ -329,8 +330,9 @@ treeNode *evaluate(treeNode* tree) {
                         findNode(((node*) n->operators[0])->name, currentTable)->value
                                 = (evaluate(n->operators[1]))->integer.number;
                     } else {
-                        ((node*) n->operators[0])->value = ((treeNode *)evaluate(n->operators[1]));
-                        enter(currentTable, ((treeNode *) n->operators[0]));
+                        treeNode *test = evaluate(n->operators[1]);
+                        ((node*)n->operators[0])->value = test;
+                        enter(currentTable, (node *) n->operators[0]);
                     }
                     return t;
                     break;

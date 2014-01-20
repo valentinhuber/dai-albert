@@ -86,7 +86,7 @@ void freeNode(struct syntaxTreeNode* node);
  * Functions for the Symbol table
  */
 table *makeTable(table *parent);
-void enter(table *t, treeNode *n);
+void enter(table *t, node *n);
 void addWidth(table *t, int width);
 void enterProc(table *t, char *name, table *newTable);
 void leaveProc();
