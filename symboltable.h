@@ -43,8 +43,8 @@ typedef struct {
  */
 typedef struct syntaxTreeNode {
     int nodeType;
-    char* name;
     int line; 
+    char* name;
     
     union {
         integerNode integer;

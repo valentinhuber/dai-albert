@@ -80,6 +80,7 @@ assignment: VARIABLE                        { $$ = newOperationNode('=', 1, newV
 
 
 expr:    INTEGER                { $$ = newNumberNode($1); }
+        | STRING_LITERAL        { $$ = newStringNode($1); }
         | VARIABLE              { $$ = newVariableNode($1, 0, yylineno); }
         | expr '+' expr         { $$ = newOperationNode('+', 2 ,$1, $3); }
         | expr '-' expr         { $$ = newOperationNode('-', 2 ,$1, $3); }
@@ -91,7 +92,6 @@ expr:    INTEGER                { $$ = newNumberNode($1); }
         | expr LE expr          { $$ = newOperationNode(LE, 2 ,$1, $3); }
         | expr NE expr          { $$ = newOperationNode(NE, 2 ,$1, $3); }
         | expr EQ expr          { $$ = newOperationNode(EQ, 2 ,$1, $3); }
-        | STRING_LITERAL        { $$ = newStringNode($1); }
         | '(' expr ')'          { $$ = $2; }
         ;
 %%

@@ -180,19 +180,28 @@ treeNode *newVariableNode(char* name, int nodeType, int line) {
     switch (nodeType) {
         case 'i': 
             n->value->name = strdup(name);
-            n->value->nodeType = nodeType;
+            n->value->line = line;
+            n->value->nodeType = 'i';
             n->value->integer.number = 0;
             break;
         case 's': 
             n->value->name = strdup(name);
-            n->value->nodeType = nodeType;
+            n->value->nodeType = 's';
             n->value->string.str = malloc(sizeof (stringNode));
             n->value->string.str = "";
             break;
+        default: 
+            n->value->name = strdup(name);
+            n->value->line = line;
+            n->value->nodeType = 'i'; 
+            n->value->integer.number = 0;
+            
+            break;
     }
     
-    n->type = 'v';
+    
     n->line = line;
+    n->type = 'v';
     
     return ((treeNode *)n); //->nodeType = nodeType
 }
@@ -219,7 +228,8 @@ treeNode *newOperationNode(int operation, int numberOfOperators, ...) {
         node->operators[i] = va_arg(operatorList, treeNode*);
     }
     va_end(operatorList);
-    return (treeNode *) node;
+    treeNode *test = (treeNode *) node;
+    return test;
 }
 
 /**
@@ -232,8 +242,6 @@ treeNode *evaluate(treeNode* tree) {
 
     struct operationNode *n = malloc(sizeof (struct operationNode));
     treeNode *t = malloc(sizeof (treeNode));
-
-    t->nodeType = tree->nodeType;
     
     if (!tree || !tree->nodeType) return t;
 
@@ -249,8 +257,8 @@ treeNode *evaluate(treeNode* tree) {
         case 'v': return evaluate(((node *)tree)->value); break;
         case 'o':
             n = ((struct operationNode*) tree);
+            t->nodeType = 'i';
             switch (n->operation) {
-
                     /* arithmetic operations */
                 case '+': t->integer.number = evaluate(n->operators[0])->integer.number + evaluate(n->operators[1])->integer.number;
                     return t;
@@ -319,8 +327,9 @@ treeNode *evaluate(treeNode* tree) {
 
                     /* PRINT */
                 case PRINT: {
-                    if(n->operators[0]->nodeType == 'v') {
-                        node *result = findNode(((node*) n->operators[0])->name, currentTable);
+                    node *var = (node *)n->operators[0];
+                    if(var->type == 'v') {
+                        node *result = findNode(var->name, currentTable);
                         if(result->name != NULL) {
                             switch(result->value->nodeType) {
                                 case 'i': printf("%i\n",result->value->integer.number); break;
@@ -328,10 +337,11 @@ treeNode *evaluate(treeNode* tree) {
                             }
                         }
                     } else {
+                        treeNode *oper = n->operators[0];
+                        struct operationNode *operTest = (struct operationNode*)oper;
                         switch(evaluate(n->operators[0])->nodeType) {
                          case 'i': printf("%i\n",evaluate(n->operators[0])->integer.number); break;
                          case 's': printf("%s\n",evaluate(n->operators[0])->string.str); break;
-                         case 'o': printf("%i\n",evaluate(n->operators[0])->integer.number); break; //type checking for return value
                         }
                     }
                     return t;
