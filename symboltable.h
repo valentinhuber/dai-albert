@@ -66,10 +66,10 @@ struct operationNode {
  * Node for the Symbol table
  */
 typedef struct node {
-    char *name;
     int type;
-    treeNode *value;
     int line;
+    char *name;
+    treeNode *value;
     struct node *next;
 } node;
 

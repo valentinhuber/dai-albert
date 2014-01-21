@@ -172,8 +172,9 @@ treeNode *newStringNode(char *s) {
  */
 treeNode *newVariableNode(char* name, int nodeType, int line) {
     
-    node *n = malloc(sizeof (struct node));
-
+    node *n = malloc(sizeof (node));
+    
+    n->next = malloc(sizeof (node));
     n->name = strdup(name);
     n->value = malloc(sizeof (treeNode));
     
@@ -195,6 +196,8 @@ treeNode *newVariableNode(char* name, int nodeType, int line) {
             n->value->line = line;
             n->value->nodeType = 'i'; 
             n->value->integer.number = 0;
+            n->value->string.str = malloc(sizeof (stringNode));
+            n->value->string.str = "";
             
             break;
     }
@@ -254,10 +257,19 @@ treeNode *evaluate(treeNode* tree) {
         case 's': t->string.str = tree->string.str; t->nodeType = 's';
             return t;
             break;
-        case 'v': return evaluate(((node *)tree)->value); break;
+        case 'v': {
+            node *result = findNode(tree->name, currentTable);
+            return evaluate(result->value); break;
+        }
         case 'o':
             n = ((struct operationNode*) tree);
             t->nodeType = 'i';
+            /*
+            if(n->operators[0]->nodeType != 'i' && n->operators[0]->nodeType != 's')
+                       n->operators[0]->nodeType = 'v';
+            if(n->operators[1]->nodeType != 'i' && n->operators[1]->nodeType != 's')
+                       n->operators[1]->nodeType = 'v';
+            */
             switch (n->operation) {
                     /* arithmetic operations */
                 case '+': t->integer.number = evaluate(n->operators[0])->integer.number + evaluate(n->operators[1])->integer.number;
