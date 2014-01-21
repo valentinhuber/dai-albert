@@ -328,7 +328,8 @@ treeNode *evaluate(treeNode* tree) {
                     /* WHILE */
                 case WHILE:
                     enterProc(currentTable, "while", makeTable(currentTable));
-                    while (evaluate(n->operators[0])) evaluate(n->operators[1]);
+                    while (evaluate(n->operators[0])->integer.number != 0) 
+                        evaluate(n->operators[1]);
                     return t;
                     break;
 
